@@ -58,7 +58,7 @@ namespace IniFile
 
             async Task IIniItem.Write(TextWriter writer)
             {
-                await writer.WriteLineAsync($"#{Text ?? ""}");
+                await writer.WriteLineAsync($";{Text ?? ""}");
             }
         }
     }
