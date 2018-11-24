@@ -54,11 +54,11 @@ namespace IniFile
                 return new Property(match.Groups[1].Value, match.Groups[2].Value);
             }
 
-            private static readonly Regex PropertyPattern = new Regex(@"^\s*(\w[\w\s]+\w)\s*=(.*)$");
+            private static readonly Regex PropertyPattern = new Regex(@"^\s*(\w[\w\s]+\w)\s*=\s*(.*)\s*$");
 
             async Task IIniItem.Write(TextWriter writer)
             {
-                await writer.WriteLineAsync($"{Key}={Value}");
+                await writer.WriteLineAsync($"{Key} = {Value}");
             }
         }
     }

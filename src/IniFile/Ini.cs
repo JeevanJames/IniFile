@@ -221,12 +221,12 @@ namespace IniFile
 
         private void InternalSave(TextWriter writer)
         {
-            foreach (ITopLevelIniItem topLevelIniItem in _items)
+            foreach (ITopLevelIniItem topLevelIniItem in AllItems)
             {
                 topLevelIniItem.Write(writer);
                 if (topLevelIniItem is Section section)
                 {
-                    foreach (ISectionItem sectionItem in section)
+                    foreach (ISectionItem sectionItem in section.AllItems)
                         sectionItem.Write(writer);
                 }
             }
@@ -234,12 +234,12 @@ namespace IniFile
 
         private async Task InternalSaveAsync(TextWriter writer)
         {
-            foreach (ITopLevelIniItem topLevelIniItem in _items)
+            foreach (ITopLevelIniItem topLevelIniItem in AllItems)
             {
                 await topLevelIniItem.Write(writer);
                 if (topLevelIniItem is Section section)
                 {
-                    foreach (ISectionItem sectionItem in section)
+                    foreach (ISectionItem sectionItem in section.AllItems)
                         await sectionItem.Write(writer);
                 }
             }

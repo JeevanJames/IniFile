@@ -48,6 +48,8 @@ namespace IniFile
 
             public string Name { get; }
 
+            public IList<ISectionItem> AllItems => _items;
+
             public T Add<T>(T item)
                 where T : ISectionItem
             {
