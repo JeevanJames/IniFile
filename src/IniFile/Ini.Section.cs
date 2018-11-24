@@ -18,6 +18,7 @@ limitations under the License.
 */
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,6 +36,7 @@ namespace IniFile
         [DebuggerDisplay("[{Name}]")]
         public sealed class Section : IReadOnlyList<Property>, ITopLevelIniItem
         {
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
             private readonly List<ISectionItem> _items = new List<ISectionItem>();
 
             internal Section()
@@ -50,17 +52,31 @@ namespace IniFile
 
             public IList<ISectionItem> AllItems => _items;
 
-            public T Add<T>(T item)
+            public T Add<T>(T item, ISectionItem beforeItem = null)
                 where T : ISectionItem
             {
                 if (item == null)
                     throw new System.ArgumentNullException(nameof(item));
-                _items.Add(item);
+                if (beforeItem != null)
+                {
+                    int index = _items.IndexOf(beforeItem);
+                    if (index < 0)
+                        throw new ArgumentException($"Cannot find location to insert the new item.", nameof(beforeItem));
+                    _items.Insert(index, item);
+                }
+                else
+                    _items.Add(item);
                 return item;
             }
 
-            public Property AddProperty<T>(string key, T value) =>
-                Add(new Property(key, value?.ToString() ?? string.Empty));
+            public Property AddProperty<T>(string key, T value, ISectionItem beforeItem = null) =>
+                Add(new Property(key, value?.ToString() ?? string.Empty), beforeItem);
+
+            public Comment AddComment(string text, ISectionItem beforeItem = null) =>
+                Add(new Comment(text), beforeItem);
+
+            public BlankLine AddBlankLine(ISectionItem beforeItem = null) =>
+                Add(new BlankLine(), beforeItem);
 
             IIniItem IIniItem.TryCreate(string line)
             {

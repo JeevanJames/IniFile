@@ -239,7 +239,6 @@ namespace IniFile
         public Comment AddComment(string text, ITopLevelIniItem beforeItem = null) =>
             Add(new Comment(text), beforeItem);
 
-
         public void SaveTo(string filePath)
         {
             using (StreamWriter writer = File.CreateText(filePath))
