@@ -18,6 +18,7 @@ limitations under the License.
 */
 #endregion
 
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -29,19 +30,27 @@ namespace IniFile
 {
     public sealed partial class Ini
     {
-        [DebuggerDisplay(";{Text}")]
         public sealed class Comment : ITopLevelIniItem, ISectionItem
         {
+            [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+            private string _text;
+
             internal Comment()
             {
             }
 
             public Comment(string text)
             {
+                if (text == null)
+                    throw new ArgumentNullException(nameof(text));
                 Text = text;
             }
 
-            public string Text { get; set; }
+            public string Text
+            {
+                get => _text;
+                set => _text = value ?? throw new ArgumentNullException(nameof(value));
+            }
 
             IIniItem IIniItem.TryCreate(string line)
             {
@@ -58,8 +67,11 @@ namespace IniFile
 
             async Task IIniItem.Write(TextWriter writer)
             {
-                await writer.WriteLineAsync($";{Text ?? ""}");
+                await writer.WriteLineAsync($";{Text}");
             }
+
+            public override string ToString() =>
+                $";{Text}";
         }
     }
 }

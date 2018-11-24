@@ -202,9 +202,8 @@ namespace IniFile
         /// <summary>
         ///     <para>Adds a section, comment or blank line to the Ini object.</para>
         ///     <para>
-        ///         Adds at the end of the collection, unless the <see cref="beforeItem"/> parameter
-        ///         is specified, in which case the new item is inserted before the
-        ///         <see cref="beforeItem"/> item.
+        ///         Adds at the end of the collection, unless the <c>beforeItem</c> parameter is
+        ///         specified, in which case the new item is inserted before the <c>beforeItem</c> item.
         ///     </para>
         /// </summary>
         /// <typeparam name="T">The type of the new item being added.</typeparam>

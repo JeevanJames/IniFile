@@ -33,7 +33,6 @@ namespace IniFile
 {
     public sealed partial class Ini
     {
-        [DebuggerDisplay("[{Name}]")]
         public sealed class Section : IReadOnlyList<Property>, ITopLevelIniItem
         {
             [DebuggerBrowsable(DebuggerBrowsableState.Never)]
@@ -45,6 +44,8 @@ namespace IniFile
 
             public Section(string name)
             {
+                if (string.IsNullOrWhiteSpace(name))
+                    throw new ArgumentException("message", nameof(name));
                 Name = name;
             }
 
@@ -117,6 +118,9 @@ namespace IniFile
                         matchingProperty.Value = value;
                 }
             }
+
+            public override string ToString() =>
+                $"[{Name}]";
         }
     }
 }
