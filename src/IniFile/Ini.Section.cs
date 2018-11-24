@@ -18,7 +18,9 @@ limitations under the License.
 */
 #endregion
 
-using System.Collections.ObjectModel;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -30,8 +32,11 @@ namespace IniFile
 {
     public sealed partial class Ini
     {
-        public sealed class Section : Collection<ISectionItem>, ITopLevelIniItem
+        [DebuggerDisplay("[{Name}]")]
+        public sealed class Section : IReadOnlyList<Property>, ITopLevelIniItem
         {
+            private readonly List<ISectionItem> _items = new List<ISectionItem>();
+
             internal Section()
             {
             }
@@ -43,19 +48,17 @@ namespace IniFile
 
             public string Name { get; }
 
-            //public bool Remove(string key)
-            //{
-            //    for (int i = 0; i < Count; i++)
-            //    {
-            //        Property property = this[i];
-            //        if (key == property.Key)
-            //        {
-            //            RemoveAt(i);
-            //            return true;
-            //        }
-            //    }
-            //    return false;
-            //}
+            public T Add<T>(T item)
+                where T : ISectionItem
+            {
+                if (item == null)
+                    throw new System.ArgumentNullException(nameof(item));
+                _items.Add(item);
+                return item;
+            }
+
+            public Property AddProperty<T>(string key, T value) =>
+                Add(new Property(key, value?.ToString() ?? string.Empty));
 
             IIniItem IIniItem.TryCreate(string line)
             {
@@ -72,18 +75,26 @@ namespace IniFile
                 await writer.WriteLineAsync($"[{Name}]");
             }
 
+            public IEnumerator<Property> GetEnumerator() =>
+                _items.OfType<Property>().GetEnumerator();
+
+            IEnumerator IEnumerable.GetEnumerator() =>
+                GetEnumerator();
+
+            public int Count =>
+                _items.OfType<Property>().Count();
+
+            public Property this[int index] =>
+                _items.OfType<Property>().ElementAt(index);
+
             public string this[string key]
             {
-                get
-                {
-                    Property matchingProperty = this.OfType<Property>().FirstOrDefault(p => p.Key == key);
-                    return matchingProperty?.Value;
-                }
+                get => this.OfType<Property>().FirstOrDefault(p => p.Key == key)?.Value;
                 set
                 {
                     Property matchingProperty = this.OfType<Property>().FirstOrDefault(p => p.Key == key);
                     if (matchingProperty == null)
-                        Add(new Property(key, value));
+                        _items.Add(new Property(key, value));
                     else
                         matchingProperty.Value = value;
                 }

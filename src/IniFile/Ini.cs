@@ -25,6 +25,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using IniFile.Items;
 
 namespace IniFile
@@ -41,7 +42,6 @@ namespace IniFile
         public Ini(IniLoadSettings settings)
         {
             settings = settings ?? IniLoadSettings.Default;
-            _items = new List<ITopLevelIniItem>();
             _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
         }
 
@@ -87,28 +87,21 @@ namespace IniFile
                 ParseIniFile(reader);
         }
 
-        public static Ini Load(string content, IniLoadSettings settings)
+        public Ini(TextReader reader, IniLoadSettings settings)
         {
-            settings = settings ?? IniLoadSettings.Default;
-            Encoding encoding = settings.Encoding ?? Encoding.UTF8;
+            if (reader == null)
+                throw new ArgumentNullException(nameof(reader));
 
-            byte[] contentBytes = encoding.GetBytes(content);
-            var stream = new MemoryStream(contentBytes.Length);
-            stream.Write(contentBytes, 0, contentBytes.Length);
-            stream.Seek(0, SeekOrigin.Begin);
-            return new Ini(stream, settings);
+            settings = settings ?? IniLoadSettings.Default;
+            _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            ParseIniFile(reader);
         }
 
-        private IIniItem CreateIniItem(string line)
+        public static Ini Load(string content, IniLoadSettings settings)
         {
-            foreach (IIniItem factory in ItemFactories)
-            {
-                IIniItem item = factory.TryCreate(line);
-                if (item != null)
-                    return item;
-            }
-
-            return null;
+            using (var reader = new StringReader(content))
+                return new Ini(reader, settings);
         }
 
         private void ParseIniFile(TextReader reader)
@@ -132,6 +125,18 @@ namespace IniFile
             }
         }
 
+        private static IIniItem CreateIniItem(string line)
+        {
+            foreach (IIniItem factory in ItemFactories)
+            {
+                IIniItem item = factory.TryCreate(line);
+                if (item != null)
+                    return item;
+            }
+
+            return null;
+        }
+
         private static readonly List<IIniItem> ItemFactories = new List<IIniItem>
         {
             new Property(),
@@ -140,21 +145,23 @@ namespace IniFile
             new BlankLine()
         };
 
-        public void Add(ITopLevelIniItem item)
+        public T Add<T>(T item)
+            where T : ITopLevelIniItem
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
             _items.Add(item);
+            return item;
         }
 
-        public Section AddSection(string name)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("message", nameof(name));
-            var section = new Section(name);
-            _items.Add(section);
-            return section;
-        }
+        public Section AddSection(string name) =>
+            Add(new Section(name));
+
+        public BlankLine AddBlankLine() =>
+            Add(new BlankLine());
+
+        public Comment AddComment(string text) =>
+            Add(new Comment(text));  
 
         public void SaveTo(string filePath)
         {

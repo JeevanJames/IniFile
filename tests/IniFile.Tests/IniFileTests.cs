@@ -1,5 +1,7 @@
 ﻿using IniFile;
+
 using Shouldly;
+
 using Xunit;
 
 namespace CodeBits.Tests

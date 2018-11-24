@@ -18,17 +18,29 @@ limitations under the License.
 */
 #endregion
 
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using IniFile.Items;
 
 namespace IniFile
 {
     public sealed partial class Ini
     {
+        [DebuggerDisplay(";{Text}")]
         public sealed class Comment : ITopLevelIniItem, ISectionItem
         {
+            internal Comment()
+            {
+            }
+
+            public Comment(string text)
+            {
+                Text = text;
+            }
+
             public string Text { get; set; }
 
             IIniItem IIniItem.TryCreate(string line)

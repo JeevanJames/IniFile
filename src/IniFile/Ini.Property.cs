@@ -18,15 +18,18 @@ limitations under the License.
 */
 #endregion
 
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+
 using IniFile.Items;
 
 namespace IniFile
 {
     public sealed partial class Ini
     {
+        [DebuggerDisplay("{Key}={Value}")]
         public sealed class Property : ISectionItem
         {
             internal Property()

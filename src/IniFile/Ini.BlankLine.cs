@@ -18,6 +18,7 @@ limitations under the License.
 */
 #endregion
 
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -27,6 +28,7 @@ namespace IniFile
 {
     public sealed partial class Ini
     {
+        [DebuggerDisplay("----------")]
         public sealed class BlankLine : ITopLevelIniItem, ISectionItem
         {
             IIniItem IIniItem.TryCreate(string line)
