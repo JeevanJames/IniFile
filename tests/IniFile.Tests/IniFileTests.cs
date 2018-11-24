@@ -52,5 +52,25 @@ namespace IniFile.Tests
 
             ini.SaveTo(@"D:\Temp\Test.ini");
         }
+
+        [Theory]
+        [EmbeddedResourceData("IniFile.Tests.Players.ini")]
+        public void Add_Inserts_at_correct_position(string iniContent)
+        {
+            Ini ini = Ini.Load(iniContent);
+
+            Ini.Section jeevanSection = ini["Jeevan"];
+
+            var ryanSection = new Ini.Section("Ryan")
+            {
+                new Ini.Property("Level", "5"),
+                new Ini.Property("Karma", "7.33"),
+                new Ini.Property("Weapons", "BFG7000,Fists")
+            };
+            ini.Add(ryanSection, beforeItem: jeevanSection);
+
+            ini[1].ShouldBeSameAs(ryanSection);
+            ini[2].ShouldBeSameAs(jeevanSection);
+        }
     }
 }

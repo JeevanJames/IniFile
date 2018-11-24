@@ -21,6 +21,7 @@ limitations under the License.
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,21 +31,44 @@ using IniFile.Items;
 
 namespace IniFile
 {
+    /// <summary>
+    ///     <para>In-memory object representation of an INI file.</para>
+    ///     <para>This class is a read-only collection of <see cref="Section"/> objects.</para>
+    /// </summary>
+    [DebuggerDisplay("INI file - {Count} sections")]
     public sealed partial class Ini : IReadOnlyList<Ini.Section>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly List<ITopLevelIniItem> _items = new List<ITopLevelIniItem>();
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly StringComparison _comparison;
 
+        /// <summary>
+        ///     Initializes a new empty instance of the <see cref="Ini"/> class with the default
+        ///     settings.
+        /// </summary>
         public Ini() : this(null)
         {
         }
 
+        /// <summary>
+        ///     Initializes a new empty instance of the <see cref="Ini"/> class with the specified
+        ///     settings.
+        /// </summary>
+        /// <param name="settings">The Ini file settings.</param>
         public Ini(IniLoadSettings settings)
         {
             settings = settings ?? IniLoadSettings.Default;
             _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Ini"/> class and loads the data from
+        ///     the specified file.
+        /// </summary>
+        /// <param name="iniFile">The .ini file to load from.</param>
+        /// <param name="settings">Optional Ini file settings.</param>
         public Ini(FileInfo iniFile, IniLoadSettings settings = null)
         {
             if (iniFile == null)
@@ -59,6 +83,12 @@ namespace IniFile
                 ParseIniFile(reader);
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Ini"/> class and loads the data from
+        ///     the specified file.
+        /// </summary>
+        /// <param name="iniFilePath">The path to the .ini file.</param>
+        /// <param name="settings">Optional Ini file settings.</param>
         public Ini(string iniFilePath, IniLoadSettings settings = null)
         {
             if (iniFilePath == null)
@@ -73,6 +103,12 @@ namespace IniFile
                 ParseIniFile(reader);
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Ini"/> class and loads the data from
+        ///     the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to load from.</param>
+        /// <param name="settings">Optional Ini file settings.</param>
         public Ini(Stream stream, IniLoadSettings settings = null)
         {
             if (stream == null)
@@ -87,6 +123,12 @@ namespace IniFile
                 ParseIniFile(reader);
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Ini"/> class and loads the data from
+        ///     the specified <see cref="TextReader"/>.
+        /// </summary>
+        /// <param name="reader">The <see cref="TextReader"/> to load from.</param>
+        /// <param name="settings">Optional Ini file settings.</param>
         public Ini(TextReader reader, IniLoadSettings settings = null)
         {
             if (reader == null)
@@ -98,6 +140,13 @@ namespace IniFile
             ParseIniFile(reader);
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Ini"/> class and loads the data from
+        ///     the specified string.
+        /// </summary>
+        /// <param name="content">The string representing the Ini content.</param>
+        /// <param name="settings">Optional Ini file settings.</param>
+        /// <returns>An instance of the <see cref="Ini"/> class.</returns>
         public static Ini Load(string content, IniLoadSettings settings = null)
         {
             using (var reader = new StringReader(content))
@@ -145,25 +194,51 @@ namespace IniFile
             new BlankLine()
         };
 
+        /// <summary>
+        ///     Collection of all items in the Ini.
+        /// </summary>
         public IList<ITopLevelIniItem> AllItems => _items;
 
-        public T Add<T>(T item)
+        /// <summary>
+        ///     <para>Adds a section, comment or blank line to the Ini object.</para>
+        ///     <para>
+        ///         Adds at the end of the collection, unless the <see cref="beforeItem"/> parameter
+        ///         is specified, in which case the new item is inserted before the
+        ///         <see cref="beforeItem"/> item.
+        ///     </para>
+        /// </summary>
+        /// <typeparam name="T">The type of the new item being added.</typeparam>
+        /// <param name="item">The new item to insert.</param>
+        /// <param name="beforeItem">
+        ///     The existing item in the Ini file before which the new item should be inserted.
+        /// </param>
+        /// <returns>The newly added item.</returns>
+        public T Add<T>(T item, ITopLevelIniItem beforeItem = null)
             where T : ITopLevelIniItem
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
-            _items.Add(item);
+            if (beforeItem != null)
+            {
+                int index = _items.IndexOf(beforeItem);
+                if (index < 0)
+                    throw new ArgumentException($"Cannot find location to insert the new item.", nameof(beforeItem));
+                _items.Insert(index, item);
+            }
+            else
+                _items.Add(item);
             return item;
         }
 
-        public Section AddSection(string name) =>
-            Add(new Section(name));
+        public Section AddSection(string name, ITopLevelIniItem beforeItem = null) =>
+            Add(new Section(name), beforeItem);
 
-        public BlankLine AddBlankLine() =>
-            Add(new BlankLine());
+        public BlankLine AddBlankLine(ITopLevelIniItem beforeItem = null) =>
+            Add(new BlankLine(), beforeItem);
 
-        public Comment AddComment(string text) =>
-            Add(new Comment(text));  
+        public Comment AddComment(string text, ITopLevelIniItem beforeItem = null) =>
+            Add(new Comment(text), beforeItem);
+
 
         public void SaveTo(string filePath)
         {
