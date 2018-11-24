@@ -45,7 +45,7 @@ namespace IniFile
             _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
         }
 
-        public Ini(FileInfo iniFile, IniLoadSettings settings)
+        public Ini(FileInfo iniFile, IniLoadSettings settings = null)
         {
             if (iniFile == null)
                 throw new ArgumentNullException(nameof(iniFile));
@@ -59,7 +59,7 @@ namespace IniFile
                 ParseIniFile(reader);
         }
 
-        public Ini(string iniFilePath, IniLoadSettings settings)
+        public Ini(string iniFilePath, IniLoadSettings settings = null)
         {
             if (iniFilePath == null)
                 throw new ArgumentNullException(nameof(iniFilePath));
@@ -73,7 +73,7 @@ namespace IniFile
                 ParseIniFile(reader);
         }
 
-        public Ini(Stream stream, IniLoadSettings settings)
+        public Ini(Stream stream, IniLoadSettings settings = null)
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
@@ -87,7 +87,7 @@ namespace IniFile
                 ParseIniFile(reader);
         }
 
-        public Ini(TextReader reader, IniLoadSettings settings)
+        public Ini(TextReader reader, IniLoadSettings settings = null)
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
@@ -98,7 +98,7 @@ namespace IniFile
             ParseIniFile(reader);
         }
 
-        public static Ini Load(string content, IniLoadSettings settings)
+        public static Ini Load(string content, IniLoadSettings settings = null)
         {
             using (var reader = new StringReader(content))
                 return new Ini(reader, settings);
@@ -144,6 +144,8 @@ namespace IniFile
             new Comment(),
             new BlankLine()
         };
+
+        public IList<ITopLevelIniItem> AllItems => _items;
 
         public T Add<T>(T item)
             where T : ITopLevelIniItem
