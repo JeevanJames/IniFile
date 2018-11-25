@@ -22,19 +22,39 @@ using System.Text;
 
 namespace IniFile
 {
+    /// <summary>
+    ///     The settings to use when loading INI data from files, streams and text readers.
+    /// </summary>
     public sealed class IniLoadSettings
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="IniLoadSettings"/> class.
+        /// </summary>
         public IniLoadSettings()
         {
             Encoding = Encoding.UTF8;
         }
 
+        /// <summary>
+        ///     Gets or sets the character encoding to use when loading or saving INI data.
+        /// </summary>
         public Encoding Encoding { get; set; }
 
+        /// <summary>
+        ///     Gets or sets whether to automatically detect the character encoding when loading
+        ///     INI data.
+        /// </summary>
         public bool DetectEncoding { get; set; }
 
+        /// <summary>
+        ///     Gets or sets whether to consider section and property key names as case sensitive,
+        ///     when searching for them by name.
+        /// </summary>
         public bool CaseSensitive { get; set; }
 
+        /// <summary>
+        ///     Default settings to use to load INI data.
+        /// </summary>
         public static readonly IniLoadSettings Default = new IniLoadSettings();
     }
 }
