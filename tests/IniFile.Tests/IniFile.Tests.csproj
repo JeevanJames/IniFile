@@ -18,10 +18,12 @@
 
   <ItemGroup>
     <None Remove="Players.ini" />
+    <None Remove="Sample.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Players.ini" />
+    <EmbeddedResource Include="Sample.json" />
   </ItemGroup>
 
   <ItemGroup>

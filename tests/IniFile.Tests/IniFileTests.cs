@@ -19,6 +19,7 @@ limitations under the License.
 #endregion
 
 using Shouldly;
+
 using Xunit;
 
 namespace IniFile.Tests
@@ -26,7 +27,7 @@ namespace IniFile.Tests
     public sealed class IniTests
     {
         [Theory]
-        [EmbeddedResourceDataByPattern(@".+\.ini")]
+        [EmbeddedResourceContent(@".+\.ini", UseAsRegex = true)]
         public void Basic_tests(string validIni)
         {
             var ini = Ini.Load(validIni);
@@ -74,7 +75,7 @@ namespace IniFile.Tests
         }
 
         [Theory]
-        [EmbeddedResourceData("IniFile.Tests.Players.ini")]
+        [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
         public void Add_Inserts_at_correct_position(string iniContent)
         {
             Ini ini = Ini.Load(iniContent);
