@@ -18,6 +18,8 @@ limitations under the License.
 */
 #endregion
 
+using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace IniFile
@@ -25,8 +27,12 @@ namespace IniFile
     /// <summary>
     ///     The settings to use when loading INI data from files, streams and text readers.
     /// </summary>
+    [DebuggerDisplay("Encoding: {Encoding.EncodingName}; Detect: {DetectEncoding}; Case sensitive: {CaseSensitive}")]
     public sealed class IniLoadSettings
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private Encoding _encoding;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="IniLoadSettings"/> class.
         /// </summary>
@@ -38,7 +44,11 @@ namespace IniFile
         /// <summary>
         ///     Gets or sets the character encoding to use when loading or saving INI data.
         /// </summary>
-        public Encoding Encoding { get; set; }
+        public Encoding Encoding
+        {
+            get => _encoding;
+            set => _encoding = value ?? throw new ArgumentNullException(nameof(value));
+        }
 
         /// <summary>
         ///     Gets or sets whether to automatically detect the character encoding when loading

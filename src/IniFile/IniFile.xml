@@ -84,5 +84,37 @@
             </param>
             <returns>The newly added item.</returns>
         </member>
+        <member name="T:IniFile.IniLoadSettings">
+            <summary>
+                The settings to use when loading INI data from files, streams and text readers.
+            </summary>
+        </member>
+        <member name="M:IniFile.IniLoadSettings.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.IniLoadSettings"/> class.
+            </summary>
+        </member>
+        <member name="P:IniFile.IniLoadSettings.Encoding">
+            <summary>
+                Gets or sets the character encoding to use when loading or saving INI data.
+            </summary>
+        </member>
+        <member name="P:IniFile.IniLoadSettings.DetectEncoding">
+            <summary>
+                Gets or sets whether to automatically detect the character encoding when loading
+                INI data.
+            </summary>
+        </member>
+        <member name="P:IniFile.IniLoadSettings.CaseSensitive">
+            <summary>
+                Gets or sets whether to consider section and property key names as case sensitive,
+                when searching for them by name.
+            </summary>
+        </member>
+        <member name="F:IniFile.IniLoadSettings.Default">
+            <summary>
+                Default settings to use to load INI data.
+            </summary>
+        </member>
     </members>
 </doc>
