@@ -21,6 +21,7 @@ limitations under the License.
 using Shouldly;
 
 using Xunit;
+using Xunit.DataAttributes;
 
 namespace IniFile.Tests
 {
