@@ -28,7 +28,7 @@ namespace IniFile.Tests
     public sealed class IniTests
     {
         [Theory]
-        [EmbeddedResourceContent(@".+\.ini", UseAsRegex = true)]
+        [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
         public void Basic_tests(string validIni)
         {
             var ini = Ini.Load(validIni);
@@ -45,7 +45,7 @@ namespace IniFile.Tests
         }
 
         [Theory]
-        [EmbeddedResourceContent(@".+\.ini", UseAsRegex = true)]
+        [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
         public void Ensure_format_is_retained(string validIni)
         {
             var ini = Ini.Load(validIni);
