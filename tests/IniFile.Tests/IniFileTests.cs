@@ -18,6 +18,7 @@ limitations under the License.
 */
 #endregion
 
+using IniFile.Items;
 using Shouldly;
 
 using Xunit;
@@ -38,8 +39,8 @@ namespace IniFile.Tests
             ini[1].Name.ShouldBe("Jeevan");
             ini[2].Name.ShouldBe("Merina");
 
-            Ini.Section section = ini[0];
-            section.Count.ShouldBe(2);
+            Section section = ini[0];
+            section.Properties.Count.ShouldBe(2);
             section["Player1"].ShouldBe("Ryan");
             section["Player2"].ShouldBe("Emma");
         }
@@ -49,27 +50,45 @@ namespace IniFile.Tests
         {
             var ini = new Ini();
 
-            var section = new Ini.Section("Test")
+            var section = new Section("Test")
             {
-                new Ini.Comment("Player definitions"),
-                new Ini.Property("Player1", "Jeevan"),
-                new Ini.Property("Player2", "Merina"),
-                new Ini.BlankLine()
+                Properties =
+                {
+                    new Property("Player1", "Jeevan")
+                    {
+                        MinorItems =
+                        {
+                            new Comment("First player")
+                        }
+                    },
+                    new Property("Player2", "Merina")
+                    {
+                        MinorItems =
+                        {
+                            new BlankLine(),
+                            new Comment("Second player")
+                        }
+                    }
+                }
             };
             ini.Add(section);
 
-            ini.Add(new Ini.Section("Jeevan")
+            ini.Add(new Section("Jeevan")
             {
-                new Ini.Property("Powers", "Superspeed,Super strength"),
-                new Ini.Property("Costume", "Scarlet"),
-                new Ini.BlankLine()
+                Properties =
+                {
+                    new Property("Powers", "Superspeed,Super strength"),
+                    new Property("Costume", "Scarlet")
+                }
             });
 
-            ini.Add(new Ini.Section("Merina")
+            ini.Add(new Section("Merina")
             {
-                new Ini.Property("Powers", "Stretchability, Invisibility"),
-                new Ini.Property("Costume", "Blue"),
-                new Ini.BlankLine()
+                Properties =
+                {
+                    new Property("Powers", "Stretchability, Invisibility"),
+                    new Property("Costume", "Blue")
+                }
             });
 
             ini.SaveTo(@"D:\Temp\Test.ini");
@@ -79,17 +98,20 @@ namespace IniFile.Tests
         [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
         public void Add_Inserts_at_correct_position(string iniContent)
         {
-            Ini ini = Ini.Load(iniContent);
+            var ini = Ini.Load(iniContent);
 
-            Ini.Section jeevanSection = ini["Jeevan"];
+            Section jeevanSection = ini["Jeevan"];
 
-            var ryanSection = new Ini.Section("Ryan")
+            var ryanSection = new Section("Ryan")
             {
-                new Ini.Property("Level", "5"),
-                new Ini.Property("Karma", "7.33"),
-                new Ini.Property("Weapons", "BFG7000,Fists")
+                Properties =
+                {
+                    new Property("Level", "5"),
+                    new Property("Karma", "7.33"),
+                    new Property("Weapons", "BFG7000,Fists")
+                }
             };
-            ini.Add(ryanSection, beforeItem: jeevanSection);
+            ini.Insert(1, ryanSection);
 
             ini[1].ShouldBeSameAs(ryanSection);
             ini[2].ShouldBeSameAs(jeevanSection);

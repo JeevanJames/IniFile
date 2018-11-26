@@ -36,11 +36,8 @@ namespace IniFile
     ///     <para>This class is a read-only collection of <see cref="Section"/> objects.</para>
     /// </summary>
     [DebuggerDisplay("INI file - {Count} sections")]
-    public sealed partial class Ini : IReadOnlyList<Ini.Section>
+    public sealed partial class Ini : MajorIniItemCollection<Section>
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly List<ITopLevelIniItem> _items = new List<ITopLevelIniItem>();
-
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly StringComparison _comparison;
 
@@ -155,90 +152,13 @@ namespace IniFile
 
         private void ParseIniFile(TextReader reader)
         {
-            Section currentSection = null;
+            var allItems = new List<IniItem>();
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-            {
-                IniItem item1 = IniItemFactory.CreateItem(line);
+                allItems.Add(IniItemFactory.CreateItem(line));
 
-                IIniItem item = CreateIniItem(line);
-                if (item == null)
-                    throw new FormatException($"Invalid line in .INI file - '{line}'.");
-
-                if (item is Section section)
-                {
-                    _items.Add(section);
-                    currentSection = section;
-                }
-                else if (currentSection != null && item is ISectionItem sectionItem)
-                    currentSection.Add(sectionItem);
-                else if (item is ITopLevelIniItem topLevelItem)
-                    _items.Add(topLevelItem);
-            }
+            foreach (Items.Section section in allItems.OfType<Items.Section>())
+                Add(section);
         }
-
-        private static IIniItem CreateIniItem(string line)
-        {
-            foreach (IIniItem factory in ItemFactories)
-            {
-                IIniItem item = factory.TryCreate(line);
-                if (item != null)
-                    return item;
-            }
-
-            return null;
-        }
-
-        private static readonly List<IIniItem> ItemFactories = new List<IIniItem>
-        {
-            new Property(),
-            new Section(),
-            new Comment(),
-            new BlankLine()
-        };
-
-        /// <summary>
-        ///     Collection of all items in the Ini.
-        /// </summary>
-        public IList<ITopLevelIniItem> AllItems => _items;
-
-        /// <summary>
-        ///     <para>Adds a section, comment or blank line to the Ini object.</para>
-        ///     <para>
-        ///         Adds at the end of the collection, unless the <c>beforeItem</c> parameter is
-        ///         specified, in which case the new item is inserted before the <c>beforeItem</c> item.
-        ///     </para>
-        /// </summary>
-        /// <typeparam name="T">The type of the new item being added.</typeparam>
-        /// <param name="item">The new item to insert.</param>
-        /// <param name="beforeItem">
-        ///     The existing item in the Ini file before which the new item should be inserted.
-        /// </param>
-        /// <returns>The newly added item.</returns>
-        public T Add<T>(T item, ITopLevelIniItem beforeItem = null)
-            where T : ITopLevelIniItem
-        {
-            if (item == null)
-                throw new ArgumentNullException(nameof(item));
-            if (beforeItem != null)
-            {
-                int index = _items.IndexOf(beforeItem);
-                if (index < 0)
-                    throw new ArgumentException($"Cannot find location to insert the new item.", nameof(beforeItem));
-                _items.Insert(index, item);
-            }
-            else
-                _items.Add(item);
-            return item;
-        }
-
-        public Section AddSection(string name, ITopLevelIniItem beforeItem = null) =>
-            Add(new Section(name), beforeItem);
-
-        public BlankLine AddBlankLine(ITopLevelIniItem beforeItem = null) =>
-            Add(new BlankLine(), beforeItem);
-
-        public Comment AddComment(string text, ITopLevelIniItem beforeItem = null) =>
-            Add(new Comment(text), beforeItem);
 
         public void SaveTo(string filePath)
         {
@@ -296,43 +216,34 @@ namespace IniFile
 
         private void InternalSave(TextWriter writer)
         {
-            foreach (ITopLevelIniItem topLevelIniItem in AllItems)
+            foreach (Items.Section section in this)
             {
-                topLevelIniItem.Write(writer);
-                if (topLevelIniItem is Section section)
+                foreach (MinorIniItem minorItem in section.MinorItems)
+                    writer.WriteLine(minorItem.ToString());
+                writer.WriteLine(section.ToString());
+                foreach (Items.Property property in section.Properties)
                 {
-                    foreach (ISectionItem sectionItem in section.AllItems)
-                        sectionItem.Write(writer);
+                    foreach (MinorIniItem minorItem in property.MinorItems)
+                        writer.WriteLine(minorItem.ToString());
+                    writer.WriteLine(property.ToString());
                 }
             }
         }
 
         private async Task InternalSaveAsync(TextWriter writer)
         {
-            foreach (ITopLevelIniItem topLevelIniItem in AllItems)
+            foreach (Items.Section section in this)
             {
-                await topLevelIniItem.Write(writer);
-                if (topLevelIniItem is Section section)
+                foreach (MinorIniItem minorItem in section.MinorItems)
+                    await writer.WriteLineAsync(minorItem.ToString());
+                writer.WriteLine(section.ToString());
+                foreach (Items.Property property in section.Properties)
                 {
-                    foreach (ISectionItem sectionItem in section.AllItems)
-                        await sectionItem.Write(writer);
+                    foreach (MinorIniItem minorItem in property.MinorItems)
+                        await writer.WriteLineAsync(minorItem.ToString());
+                    writer.WriteLine(property.ToString());
                 }
             }
         }
-
-        public IEnumerator<Section> GetEnumerator() =>
-            _items.OfType<Section>().GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator() =>
-            GetEnumerator();
-
-        public int Count =>
-            _items.OfType<Section>().Count();
-
-        public Section this[int index] =>
-            _items.OfType<Section>().ElementAt(index);
-
-        public Section this[string name] =>
-            _items.OfType<Section>().FirstOrDefault(s => s.Name.Equals(name, _comparison));
     }
 }

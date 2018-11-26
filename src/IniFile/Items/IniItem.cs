@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 
@@ -28,6 +29,7 @@ namespace IniFile.Items
         }
     }
 
+    [DebuggerDisplay("{Value}")]
     public readonly struct PaddingValue : IEquatable<PaddingValue>
     {
         public PaddingValue(int value)
@@ -112,13 +114,32 @@ namespace IniFile.Items
         }
     }
 
+    public abstract class MajorIniItemCollection<TItem> : KeyedCollection<string, TItem>
+        where TItem : MajorIniItem
+    {
+        protected MajorIniItemCollection() : base(StringComparer.Ordinal)
+        {
+        }
+
+        protected override string GetKeyForItem(TItem item) =>
+            item.Name;
+    }
+
     public sealed class Section : MajorIniItem, IPaddedItem<SectionPadding>
     {
         public Section(string name) : base(name)
         {
         }
 
+        public PropertyCollection Properties { get; } = new PropertyCollection();
+
         public SectionPadding Padding { get; } = new SectionPadding();
+
+        public string this[string name]
+        {
+            get => Properties[name].Value;
+            set => Properties[name].Value = value;
+        }
 
         public override string ToString() =>
             $"{Padding.Left.ToString()}[{Padding.InsideLeft.ToString()}{Name}{Padding.InsideRight.ToString()}]{Padding.Right.ToString()}";
@@ -154,7 +175,7 @@ namespace IniFile.Items
             set => _value = value ?? string.Empty;
         }
 
-        public PropertyPadding Padding { get; }
+        public PropertyPadding Padding { get; } = new PropertyPadding();
 
         public override string ToString() =>
             $"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}{Value}{Padding.Right.ToString()}";
@@ -171,6 +192,13 @@ namespace IniFile.Items
             base.Reset();
             InsideLeft = 1;
             InsideRight = 1;
+        }
+    }
+
+    public sealed class PropertyCollection : MajorIniItemCollection<Property>
+    {
+        public PropertyCollection()
+        {
         }
     }
 

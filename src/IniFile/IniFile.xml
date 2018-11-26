@@ -7,7 +7,7 @@
         <member name="T:IniFile.Ini">
             <summary>
                 <para>In-memory object representation of an INI file.</para>
-                <para>This class is a read-only collection of <see cref="T:IniFile.Ini.Section"/> objects.</para>
+                <para>This class is a read-only collection of <see cref="T:IniFile.Items.Section"/> objects.</para>
             </summary>
         </member>
         <member name="M:IniFile.Ini.#ctor">
@@ -63,26 +63,6 @@
             <param name="content">The string representing the Ini content.</param>
             <param name="settings">Optional Ini file settings.</param>
             <returns>An instance of the <see cref="T:IniFile.Ini"/> class.</returns>
-        </member>
-        <member name="P:IniFile.Ini.AllItems">
-            <summary>
-                Collection of all items in the Ini.
-            </summary>
-        </member>
-        <member name="M:IniFile.Ini.Add``1(``0,IniFile.Items.ITopLevelIniItem)">
-            <summary>
-                <para>Adds a section, comment or blank line to the Ini object.</para>
-                <para>
-                    Adds at the end of the collection, unless the <c>beforeItem</c> parameter is
-                    specified, in which case the new item is inserted before the <c>beforeItem</c> item.
-                </para>
-            </summary>
-            <typeparam name="T">The type of the new item being added.</typeparam>
-            <param name="item">The new item to insert.</param>
-            <param name="beforeItem">
-                The existing item in the Ini file before which the new item should be inserted.
-            </param>
-            <returns>The newly added item.</returns>
         </member>
         <member name="T:IniFile.IniLoadSettings">
             <summary>
