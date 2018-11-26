@@ -20,6 +20,7 @@ limitations under the License.
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,11 +36,8 @@ namespace IniFile
     ///     <para>This class is a read-only collection of <see cref="Section"/> objects.</para>
     /// </summary>
     [DebuggerDisplay("INI file - {Count} sections")]
-    public sealed partial class Ini : MajorIniItemCollection<Section>
+    public sealed partial class Ini
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly StringComparison _comparison;
-
         /// <summary>
         ///     Initializes a new empty instance of the <see cref="Ini"/> class with the default
         ///     settings.
@@ -53,10 +51,8 @@ namespace IniFile
         ///     settings.
         /// </summary>
         /// <param name="settings">The Ini file settings.</param>
-        public Ini(IniLoadSettings settings)
+        public Ini(IniLoadSettings settings) : base(GetEqualityComparer(settings))
         {
-            settings = settings ?? IniLoadSettings.Default;
-            _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
         }
 
         /// <summary>
@@ -65,15 +61,12 @@ namespace IniFile
         /// </summary>
         /// <param name="iniFile">The .ini file to load from.</param>
         /// <param name="settings">Optional Ini file settings.</param>
-        public Ini(FileInfo iniFile, IniLoadSettings settings = null)
+        public Ini(FileInfo iniFile, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (iniFile == null)
                 throw new ArgumentNullException(nameof(iniFile));
             if (!iniFile.Exists)
                 throw new FileNotFoundException($"INI file '{iniFile.FullName}' does not exist", iniFile.FullName);
-
-            settings = settings ?? IniLoadSettings.Default;
-            _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
             using (var reader = new StreamReader(iniFile.FullName, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
                 ParseIniFile(reader);
@@ -85,15 +78,12 @@ namespace IniFile
         /// </summary>
         /// <param name="iniFilePath">The path to the .ini file.</param>
         /// <param name="settings">Optional Ini file settings.</param>
-        public Ini(string iniFilePath, IniLoadSettings settings = null)
+        public Ini(string iniFilePath, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (iniFilePath == null)
                 throw new ArgumentNullException(nameof(iniFilePath));
             if (!File.Exists(iniFilePath))
                 throw new FileNotFoundException($"INI file '{iniFilePath}' does not exist", iniFilePath);
-
-            settings = settings ?? IniLoadSettings.Default;
-            _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
             using (var reader = new StreamReader(iniFilePath, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
                 ParseIniFile(reader);
@@ -105,15 +95,12 @@ namespace IniFile
         /// </summary>
         /// <param name="stream">The stream to load from.</param>
         /// <param name="settings">Optional Ini file settings.</param>
-        public Ini(Stream stream, IniLoadSettings settings = null)
+        public Ini(Stream stream, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (stream == null)
                 throw new ArgumentNullException("stream");
             if (!stream.CanRead)
                 throw new ArgumentException("Cannot read from specified stream", nameof(stream));
-
-            settings = settings ?? IniLoadSettings.Default;
-            _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
             using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
                 ParseIniFile(reader);
@@ -125,13 +112,10 @@ namespace IniFile
         /// </summary>
         /// <param name="reader">The <see cref="TextReader"/> to load from.</param>
         /// <param name="settings">Optional Ini file settings.</param>
-        public Ini(TextReader reader, IniLoadSettings settings = null)
+        public Ini(TextReader reader, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
-
-            settings = settings ?? IniLoadSettings.Default;
-            _comparison = settings.CaseSensitive ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
             ParseIniFile(reader);
         }
@@ -217,12 +201,12 @@ namespace IniFile
         {
             foreach (Section section in this)
             {
-                foreach (MinorIniItem minorItem in section.MinorItems)
+                foreach (MinorIniItem minorItem in section.Items)
                     writer.WriteLine(minorItem.ToString());
                 writer.WriteLine(section.ToString());
                 foreach (Property property in section)
                 {
-                    foreach (MinorIniItem minorItem in property.MinorItems)
+                    foreach (MinorIniItem minorItem in property.Items)
                         writer.WriteLine(minorItem.ToString());
                     writer.WriteLine(property.ToString());
                 }
@@ -233,16 +217,28 @@ namespace IniFile
         {
             foreach (Section section in this)
             {
-                foreach (MinorIniItem minorItem in section.MinorItems)
+                foreach (MinorIniItem minorItem in section.Items)
                     await writer.WriteLineAsync(minorItem.ToString());
                 writer.WriteLine(section.ToString());
                 foreach (Property property in section)
                 {
-                    foreach (MinorIniItem minorItem in property.MinorItems)
+                    foreach (MinorIniItem minorItem in property.Items)
                         await writer.WriteLineAsync(minorItem.ToString());
                     writer.WriteLine(property.ToString());
                 }
             }
+        }
+    }
+
+    public sealed partial class Ini : KeyedCollection<string, Section>
+    {
+        protected override string GetKeyForItem(Section item) =>
+            item.Name;
+
+        private static IEqualityComparer<string> GetEqualityComparer(IniLoadSettings settings)
+        {
+            settings = settings ?? IniLoadSettings.Default;
+            return settings.CaseSensitive ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
         }
     }
 }

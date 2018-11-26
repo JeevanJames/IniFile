@@ -23,14 +23,14 @@ using System.Collections.ObjectModel;
 
 namespace IniFile.Items
 {
-    public abstract class MajorIniItemCollection<TItem> : KeyedCollection<string, TItem>
-        where TItem : MajorIniItem
-    {
-        protected MajorIniItemCollection() : base(StringComparer.Ordinal)
-        {
-        }
+    //public abstract class MajorIniItemCollection<TItem> : KeyedCollection<string, TItem>
+    //    where TItem : MajorIniItem
+    //{
+    //    protected MajorIniItemCollection() : base(StringComparer.Ordinal)
+    //    {
+    //    }
 
-        protected override string GetKeyForItem(TItem item) =>
-            item.Name;
-    }
+    //    protected override string GetKeyForItem(TItem item) =>
+    //        item.Name;
+    //}
 }

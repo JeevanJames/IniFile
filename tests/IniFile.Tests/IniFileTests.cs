@@ -54,14 +54,14 @@ namespace IniFile.Tests
             {
                 new Property("Player1", "Jeevan")
                 {
-                    MinorItems =
+                    Items =
                     {
                         new Comment("First player")
                     }
                 },
                 new Property("Player2", "Merina")
                 {
-                    MinorItems =
+                    Items =
                     {
                         new BlankLine(),
                         new Comment("Second player")

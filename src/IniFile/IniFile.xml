@@ -7,7 +7,7 @@
         <member name="T:IniFile.Ini">
             <summary>
                 <para>In-memory object representation of an INI file.</para>
-                <para>This class is a read-only collection of <see cref="T:IniFile.Items.Section"/> objects.</para>
+                <para>This class is a read-only collection of <see cref="T:IniFile.Section"/> objects.</para>
             </summary>
         </member>
         <member name="M:IniFile.Ini.#ctor">

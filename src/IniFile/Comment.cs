@@ -19,19 +19,34 @@ limitations under the License.
 #endregion
 
 using System.Diagnostics;
+using IniFile.Items;
 
-namespace IniFile.Items
+namespace IniFile
 {
-    [DebuggerDisplay("----------")]
-    public sealed class BlankLine : MinorIniItem, IPaddedItem<Padding>
+    public sealed class Comment : MinorIniItem, IPaddedItem<CommentPadding>
     {
-        public BlankLine()
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string _text;
+
+        public Comment()
         {
+            Text = string.Empty;
         }
 
-        public Padding Padding { get; } = new Padding();
+        public Comment(string text)
+        {
+            Text = text;
+        }
+
+        public string Text
+        {
+            get => _text;
+            set => _text = value ?? string.Empty;
+        }
+
+        public CommentPadding Padding { get; } = new CommentPadding();
 
         public override string ToString() =>
-            $"{Padding.Left.ToString()}{Padding.Right.ToString()}";
+            $"{Padding.Left.ToString()};{Padding.Inside.ToString()}{Text}{Padding.Right.ToString()}";
     }
 }

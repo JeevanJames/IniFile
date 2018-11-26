@@ -21,8 +21,9 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using IniFile.Items;
 
-namespace IniFile.Items
+namespace IniFile
 {
     public sealed partial class Section : MajorIniItem, IPaddedItem<SectionPadding>
     {

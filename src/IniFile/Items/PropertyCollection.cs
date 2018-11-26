@@ -21,10 +21,10 @@ limitations under the License.
 
 namespace IniFile.Items
 {
-    public sealed class PropertyCollection : MajorIniItemCollection<Property>
-    {
-        public PropertyCollection()
-        {
-        }
-    }
+    //public sealed class PropertyCollection : MajorIniItemCollection<Property>
+    //{
+    //    public PropertyCollection()
+    //    {
+    //    }
+    //}
 }

@@ -45,19 +45,19 @@ namespace IniFile.Items
             }
         }
 
-        public IList<MinorIniItem> MinorItems { get; } = new List<MinorIniItem>();
+        public IList<MinorIniItem> Items { get; } = new List<MinorIniItem>();
 
         public Comment AddComment(string text)
         {
             var comment = new Comment(text);
-            MinorItems.Add(comment);
+            Items.Add(comment);
             return comment;
         }
 
         public BlankLine AddBlankLine()
         {
             var blankLine = new BlankLine();
-            MinorItems.Add(blankLine);
+            Items.Add(blankLine);
             return blankLine;
         }
     }

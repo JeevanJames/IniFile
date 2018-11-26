@@ -19,8 +19,9 @@ limitations under the License.
 #endregion
 
 using System.Diagnostics;
+using IniFile.Items;
 
-namespace IniFile.Items
+namespace IniFile
 {
     public sealed partial class Property : MajorIniItem, IPaddedItem<PropertyPadding>
     {
