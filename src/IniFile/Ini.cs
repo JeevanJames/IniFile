@@ -19,7 +19,6 @@ limitations under the License.
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -156,7 +155,7 @@ namespace IniFile
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
                 allItems.Add(IniItemFactory.CreateItem(line));
 
-            foreach (Items.Section section in allItems.OfType<Items.Section>())
+            foreach (Section section in allItems.OfType<Section>())
                 Add(section);
         }
 
@@ -216,12 +215,12 @@ namespace IniFile
 
         private void InternalSave(TextWriter writer)
         {
-            foreach (Items.Section section in this)
+            foreach (Section section in this)
             {
                 foreach (MinorIniItem minorItem in section.MinorItems)
                     writer.WriteLine(minorItem.ToString());
                 writer.WriteLine(section.ToString());
-                foreach (Items.Property property in section.Properties)
+                foreach (Property property in section)
                 {
                     foreach (MinorIniItem minorItem in property.MinorItems)
                         writer.WriteLine(minorItem.ToString());
@@ -232,12 +231,12 @@ namespace IniFile
 
         private async Task InternalSaveAsync(TextWriter writer)
         {
-            foreach (Items.Section section in this)
+            foreach (Section section in this)
             {
                 foreach (MinorIniItem minorItem in section.MinorItems)
                     await writer.WriteLineAsync(minorItem.ToString());
                 writer.WriteLine(section.ToString());
-                foreach (Items.Property property in section.Properties)
+                foreach (Property property in section)
                 {
                     foreach (MinorIniItem minorItem in property.MinorItems)
                         await writer.WriteLineAsync(minorItem.ToString());

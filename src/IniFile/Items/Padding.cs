@@ -18,9 +18,19 @@ limitations under the License.
 */
 #endregion
 
+
 namespace IniFile.Items
 {
-    public abstract class IniItem
+    public class Padding
     {
+        public PaddingValue Left { get; set; }
+
+        public PaddingValue Right { get; set; }
+
+        public virtual void Reset()
+        {
+            Left = 0;
+            Right = 0;
+        }
     }
 }

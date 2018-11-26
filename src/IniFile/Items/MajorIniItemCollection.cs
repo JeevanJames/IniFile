@@ -18,9 +18,19 @@ limitations under the License.
 */
 #endregion
 
+using System;
+using System.Collections.ObjectModel;
+
 namespace IniFile.Items
 {
-    public abstract class IniItem
+    public abstract class MajorIniItemCollection<TItem> : KeyedCollection<string, TItem>
+        where TItem : MajorIniItem
     {
+        protected MajorIniItemCollection() : base(StringComparer.Ordinal)
+        {
+        }
+
+        protected override string GetKeyForItem(TItem item) =>
+            item.Name;
     }
 }

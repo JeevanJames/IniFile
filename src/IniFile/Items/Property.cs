@@ -18,9 +18,29 @@ limitations under the License.
 */
 #endregion
 
+using System.Diagnostics;
+
 namespace IniFile.Items
 {
-    public abstract class IniItem
+    public sealed partial class Property : MajorIniItem, IPaddedItem<PropertyPadding>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string _value;
+
+        public Property(string name, string value) : base(name)
+        {
+            Value = value;
+        }
+
+        public string Value
+        {
+            get => _value;
+            set => _value = value ?? string.Empty;
+        }
+
+        public PropertyPadding Padding { get; } = new PropertyPadding();
+
+        public override string ToString() =>
+            $"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}{Value}{Padding.Right.ToString()}";
     }
 }

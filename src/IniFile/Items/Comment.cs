@@ -18,9 +18,34 @@ limitations under the License.
 */
 #endregion
 
+using System.Diagnostics;
+
 namespace IniFile.Items
 {
-    public abstract class IniItem
+    public sealed class Comment : MinorIniItem, IPaddedItem<CommentPadding>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private string _text;
+
+        public Comment()
+        {
+            Text = string.Empty;
+        }
+
+        public Comment(string text)
+        {
+            Text = text;
+        }
+
+        public string Text
+        {
+            get => _text;
+            set => _text = value ?? string.Empty;
+        }
+
+        public CommentPadding Padding { get; } = new CommentPadding();
+
+        public override string ToString() =>
+            $"{Padding.Left.ToString()};{Padding.Inside.ToString()}{Text}{Padding.Right.ToString()}";
     }
 }

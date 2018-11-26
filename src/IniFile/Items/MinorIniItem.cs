@@ -18,9 +18,13 @@ limitations under the License.
 */
 #endregion
 
+
 namespace IniFile.Items
 {
-    public abstract class IniItem
+    public abstract class MinorIniItem : IniItem
     {
+        protected MinorIniItem()
+        {
+        }
     }
 }

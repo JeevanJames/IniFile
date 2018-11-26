@@ -18,9 +18,20 @@ limitations under the License.
 */
 #endregion
 
+using System.Diagnostics;
+
 namespace IniFile.Items
 {
-    public abstract class IniItem
+    [DebuggerDisplay("----------")]
+    public sealed class BlankLine : MinorIniItem, IPaddedItem<Padding>
     {
+        public BlankLine()
+        {
+        }
+
+        public Padding Padding { get; } = new Padding();
+
+        public override string ToString() =>
+            $"{Padding.Left.ToString()}{Padding.Right.ToString()}";
     }
 }

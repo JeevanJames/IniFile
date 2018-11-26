@@ -18,9 +18,12 @@ limitations under the License.
 */
 #endregion
 
+
 namespace IniFile.Items
 {
-    public abstract class IniItem
+    public interface IPaddedItem<TPadding>
+        where TPadding : Padding
     {
+        TPadding Padding { get; }
     }
 }

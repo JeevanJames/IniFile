@@ -18,9 +18,13 @@ limitations under the License.
 */
 #endregion
 
+
 namespace IniFile.Items
 {
-    public abstract class IniItem
+    public sealed class PropertyCollection : MajorIniItemCollection<Property>
     {
+        public PropertyCollection()
+        {
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace IniFile.Tests
             ini[2].Name.ShouldBe("Merina");
 
             Section section = ini[0];
-            section.Properties.Count.ShouldBe(2);
+            section.Count.ShouldBe(2);
             section["Player1"].ShouldBe("Ryan");
             section["Player2"].ShouldBe("Emma");
         }
@@ -52,22 +52,19 @@ namespace IniFile.Tests
 
             var section = new Section("Test")
             {
-                Properties =
+                new Property("Player1", "Jeevan")
                 {
-                    new Property("Player1", "Jeevan")
+                    MinorItems =
                     {
-                        MinorItems =
-                        {
-                            new Comment("First player")
-                        }
-                    },
-                    new Property("Player2", "Merina")
+                        new Comment("First player")
+                    }
+                },
+                new Property("Player2", "Merina")
+                {
+                    MinorItems =
                     {
-                        MinorItems =
-                        {
-                            new BlankLine(),
-                            new Comment("Second player")
-                        }
+                        new BlankLine(),
+                        new Comment("Second player")
                     }
                 }
             };
@@ -75,20 +72,14 @@ namespace IniFile.Tests
 
             ini.Add(new Section("Jeevan")
             {
-                Properties =
-                {
-                    new Property("Powers", "Superspeed,Super strength"),
-                    new Property("Costume", "Scarlet")
-                }
+                new Property("Powers", "Superspeed,Super strength"),
+                new Property("Costume", "Scarlet")
             });
 
             ini.Add(new Section("Merina")
             {
-                Properties =
-                {
-                    new Property("Powers", "Stretchability, Invisibility"),
-                    new Property("Costume", "Blue")
-                }
+                new Property("Powers", "Stretchability, Invisibility"),
+                new Property("Costume", "Blue")
             });
 
             ini.SaveTo(@"D:\Temp\Test.ini");
@@ -104,12 +95,9 @@ namespace IniFile.Tests
 
             var ryanSection = new Section("Ryan")
             {
-                Properties =
-                {
-                    new Property("Level", "5"),
-                    new Property("Karma", "7.33"),
-                    new Property("Weapons", "BFG7000,Fists")
-                }
+                new Property("Level", "5"),
+                new Property("Karma", "7.33"),
+                new Property("Weapons", "BFG7000,Fists")
             };
             ini.Insert(1, ryanSection);
 
