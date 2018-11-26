@@ -139,8 +139,32 @@ namespace IniFile
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
                 allItems.Add(IniItemFactory.CreateItem(line));
 
-            foreach (Section section in allItems.OfType<Section>())
-                Add(section);
+            Section currentSection = null;
+            var minorItems = new List<MinorIniItem>();
+            foreach (IniItem item in allItems)
+            {
+                if (item is Property prop && currentSection == null)
+                    throw new FormatException($"Property '{prop.Name}' is not in a section.");
+
+                if (item is MinorIniItem minorItem)
+                {
+                    minorItems.Add(minorItem);
+                }
+                else if (item is Section section)
+                {
+                    currentSection = section;
+                    currentSection.Items.AddRangeAndClear(minorItems);
+                    Add(currentSection);
+                }
+                else if (item is Property property)
+                {
+                    property.Items.AddRangeAndClear(minorItems);
+                    currentSection.Add(property);
+                }
+            }
+
+            if (minorItems.Count > 0)
+                TrailingItems.AddRangeAndClear(minorItems);
         }
 
         public void SaveTo(string filePath)
@@ -211,6 +235,9 @@ namespace IniFile
                     writer.WriteLine(property.ToString());
                 }
             }
+
+            foreach (MinorIniItem trailingItem in TrailingItems)
+                writer.WriteLine(trailingItem.ToString());
         }
 
         private async Task InternalSaveAsync(TextWriter writer)
@@ -226,6 +253,47 @@ namespace IniFile
                         await writer.WriteLineAsync(minorItem.ToString());
                     writer.WriteLine(property.ToString());
                 }
+            }
+
+            foreach (MinorIniItem trailingItem in TrailingItems)
+                await writer.WriteLineAsync(trailingItem.ToString());
+        }
+
+        public IList<MinorIniItem> TrailingItems { get; } = new List<MinorIniItem>();
+
+        public void Format()
+        {
+            foreach (Section section in this)
+            {
+                foreach (MinorIniItem minorItem in section.Items)
+                {
+                    if (minorItem is BlankLine blankLine)
+                        blankLine.Padding.Reset();
+                    else if (minorItem is Comment comment)
+                        comment.Padding.Reset();
+                }
+
+                section.Padding.Reset();
+
+                foreach (Property property in section)
+                {
+                    foreach (MinorIniItem minorItem in property.Items)
+                    {
+                        if (minorItem is BlankLine blankLine)
+                            blankLine.Padding.Reset();
+                        else if (minorItem is Comment comment)
+                            comment.Padding.Reset();
+                    }
+                    property.Padding.Reset();
+                }
+            }
+
+            foreach (MinorIniItem trailingItem in TrailingItems)
+            {
+                if (trailingItem is BlankLine blankLine)
+                    blankLine.Padding.Reset();
+                else if (trailingItem is Comment comment)
+                    comment.Padding.Reset();
             }
         }
     }

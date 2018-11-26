@@ -18,7 +18,6 @@ limitations under the License.
 */
 #endregion
 
-using IniFile.Items;
 using Shouldly;
 
 using Xunit;
@@ -43,6 +42,15 @@ namespace IniFile.Tests
             section.Count.ShouldBe(2);
             section["Player1"].ShouldBe("Ryan");
             section["Player2"].ShouldBe("Emma");
+        }
+
+        [Theory]
+        [EmbeddedResourceContent(@".+\.ini", UseAsRegex = true)]
+        public void Ensure_format_is_retained(string validIni)
+        {
+            var ini = Ini.Load(validIni);
+            string iniContent = ini.ToString();
+            iniContent.ShouldBe(validIni);
         }
 
         [Fact]
@@ -80,6 +88,12 @@ namespace IniFile.Tests
             {
                 new Property("Powers", "Stretchability, Invisibility"),
                 new Property("Costume", "Blue")
+            });
+
+            ini.Add(new Section("Ryan")
+            {
+                ["Powers"] = "Healing power",
+                ["Costume"] = "Red"
             });
 
             ini.SaveTo(@"D:\Temp\Test.ini");

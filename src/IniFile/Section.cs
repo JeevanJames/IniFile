@@ -20,7 +20,9 @@ limitations under the License.
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+
 using IniFile.Items;
 
 namespace IniFile
@@ -39,6 +41,7 @@ namespace IniFile
 
     public sealed partial class Section : IList<Property>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly List<Property> _properties = new List<Property>();
 
         public Property this[int index]
@@ -49,8 +52,18 @@ namespace IniFile
 
         public string this[string name]
         {
-            get => _properties.FirstOrDefault()?.Value;
-            set => _properties.FirstOrDefault().Value = value;
+            get => _properties.FirstOrDefault(p => p.Name == name)?.Value;
+            set
+            {
+                Property property = _properties.FirstOrDefault(p => p.Name == name);
+                if (property == null)
+                {
+                    property = new Property(name, value);
+                    _properties.Add(property);
+                }
+                else
+                    property.Value = value;
+            }
         }
 
         public int Count => _properties.Count;
