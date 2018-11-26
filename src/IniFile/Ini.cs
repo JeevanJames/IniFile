@@ -158,6 +158,8 @@ namespace IniFile
             Section currentSection = null;
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
             {
+                IniItem item1 = IniItemFactory.CreateItem(line);
+
                 IIniItem item = CreateIniItem(line);
                 if (item == null)
                     throw new FormatException($"Invalid line in .INI file - '{line}'.");

@@ -244,6 +244,14 @@ namespace IniFile.Items
             if (item != null)
                 return item;
 
+            item = TryCreateComment(line);
+            if (item != null)
+                return item;
+
+            item = TryCreateBlankLine(line);
+            if (item != null)
+                return item;
+
             throw new FormatException($"Unrecognized line in INI file{Environment.NewLine}{line}");
         }
 
@@ -260,7 +268,7 @@ namespace IniFile.Items
             return section;
         }
 
-        private static readonly Regex SectionPattern = new Regex(@"^(\s*)\[(\s*)([\w_-]+)(\s*)\](\s*)$");
+        private static readonly Regex SectionPattern = new Regex(@"^(\s*)\[(\s*)([\w_-][\s\w_-]+)(\s*)\](\s*)$");
 
         private static Property TryCreateProperty(string line)
         {
@@ -275,6 +283,31 @@ namespace IniFile.Items
             return property;
         }
 
-        private static readonly Regex PropertyPattern = new Regex(@"^(\s*)([\w_-]+)(\s*)=(\s*)(\.*)(\s*)$");
+        private static readonly Regex PropertyPattern = new Regex(@"^(\s*)([\w_-]+)(\s*)=(\s*)(.*)(\s*)$");
+
+        private static Comment TryCreateComment(string line)
+        {
+            Match match = CommentPattern.Match(line);
+            if (!match.Success)
+                return null;
+            var comment = new Comment(match.Groups[3].Value);
+            comment.Padding.Left = match.Groups[1].Length;
+            comment.Padding.Inside = match.Groups[2].Length;
+            comment.Padding.Right = match.Groups[4].Length;
+            return comment;
+        }
+
+        private static readonly Regex CommentPattern = new Regex(@"^(\s*);(\s*)(.+)(\s*)$");
+
+        private static BlankLine TryCreateBlankLine(string line)
+        {
+            if (line.Trim().Length == 0)
+            {
+                var blankLine = new BlankLine();
+                blankLine.Padding.Left = line.Length;
+                return blankLine;
+            }
+            return null;
+        }
     }
 }
