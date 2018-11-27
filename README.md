@@ -40,29 +40,30 @@ This code:
 ```cs
 var ini = new Ini(@"Players.ini")
 {
-    new Ini.Comment("This section defines the players"),
-    new Ini.Section("Players")
+    new Comment("This section defines the players"),
+    new Section("Players")
     {
-        new Ini.Property("Player1", "The Flash"),
-        new Ini.Property("Player2", "Superman")
+        new Property("Player1", "The Flash"),
+        new Property("Player2", "Superman")
     },
-    new Ini.BlankLine(),
-    new Ini.Section("The Flash")
+    new Section("The Flash")
     {
-        new Ini.Property("Level", "9"),
-        new Ini.Property("Power", "Superspeed")
+        ["Level"] = "9",
+        ["Power"] = "Superspeed"
     },
-    new Ini.BlankLine(),
-    new Ini.Section("Superman")
+    new Section("Superman")
     {
-        new Ini.Property("Level", "9"),
-        new Ini.Property("Power", "Superstrength,heat vision")
+        ["Level"] = "9",
+        ["Power"] = "Superstrength,heat vision"
     }
 };
+ini["Players"].AddComment("This section defines the players");
+ini["The Flash"].AddBlankLine();
+ini["Superman"].AddBlankLine();
 ```
 produces the following INI data:
 ```ini
-;This section defines the players
+; This section defines the players
 [Players]
 Player1 = The Flash
 Player2 = Superman
@@ -74,4 +75,12 @@ Power = Superspeed
 [Superman]
 Level = 9
 Power = Superstrength,heat vision
+```
+
+## Formatting the INI content
+The `Ini` class retains the exact formatting from the source .INI file content. It provides a `Format` method to correctly format the contents.
+```cs
+var ini = new Ini(iniFilePath);
+ini.Format();
+ini.SaveTo(iniFilePath);
 ```
