@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -301,6 +302,18 @@ namespace IniFile
                 }
             }
 
+            // Remove any trailing blank lines
+            for (int i = TrailingItems.Count - 1; i >= 0; i--)
+            {
+                // Non blank lines are fine, so when we encounter the first non blank line, exit
+                // this loop.
+                if (!(TrailingItems[i] is BlankLine))
+                    break;
+                if (TrailingItems[i] is BlankLine)
+                    TrailingItems.RemoveAt(i);
+            }
+
+            // Format any remaining trailing items
             foreach (MinorIniItem trailingItem in TrailingItems)
             {
                 if (trailingItem is BlankLine blankLine)
