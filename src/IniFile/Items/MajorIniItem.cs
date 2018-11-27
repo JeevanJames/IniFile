@@ -40,9 +40,14 @@ namespace IniFile.Items
         ///     Initializes a new instance of the <see cref="MajorIniItem"/> class.
         /// </summary>
         /// <param name="name">The unique name of the INI item.</param>
-        protected MajorIniItem(string name)
+        /// <param name="items">Comments and blank lines to be added for this item.</param>
+        protected MajorIniItem(string name, params MinorIniItem[] items)
         {
+            if (items == null)
+                throw new ArgumentNullException(nameof(items));
             Name = name;
+            foreach (MinorIniItem item in items)
+                Items.Add(item);
         }
 
         /// <summary>

@@ -37,7 +37,8 @@ namespace IniFile
         ///     Initializes a new instance of the <see cref="Section"/> class.
         /// </summary>
         /// <param name="name">The name of the section.</param>
-        public Section(string name) : base(name)
+        /// <param name="items">The comments and blank lines to be added to the section.</param>
+        public Section(string name, params MinorIniItem[] items) : base(name, items)
         {
         }
 

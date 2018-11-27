@@ -38,7 +38,8 @@ namespace IniFile
         /// </summary>
         /// <param name="name">The name of the property.</param>
         /// <param name="value">The value of the property.</param>
-        public Property(string name, string value) : base(name)
+        /// <param name="items">Comments and blank lines to be added to the property.</param>
+        public Property(string name, string value, params MinorIniItem[] items) : base(name, items)
         {
             Value = value;
         }

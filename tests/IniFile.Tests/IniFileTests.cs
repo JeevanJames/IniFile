@@ -60,21 +60,10 @@ namespace IniFile.Tests
 
             var section = new Section("Test")
             {
-                new Property("Player1", "Jeevan")
-                {
-                    Items =
-                    {
-                        new Comment("First player")
-                    }
-                },
-                new Property("Player2", "Merina")
-                {
-                    Items =
-                    {
-                        new BlankLine(),
-                        new Comment("Second player")
-                    }
-                }
+                new Property("Player1", "Jeevan",
+                    new Comment("First player")),
+                new Property("Player2", "Merina",
+                    new BlankLine(), new Comment("Second player"))
             };
             ini.Add(section);
 
