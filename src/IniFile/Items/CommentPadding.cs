@@ -21,10 +21,17 @@ limitations under the License.
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     Represents the padding details for an INI comment.
+    /// </summary>
     public sealed class CommentPadding : Padding
     {
+        /// <summary>
+        ///     Amount of space between the comment ; and the start of the comment text.
+        /// </summary>
         public PaddingValue Inside { get; set; } = 1;
 
+        /// <inheritdoc/>
         public override void Reset()
         {
             base.Reset();

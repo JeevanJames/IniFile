@@ -23,16 +23,22 @@ using System.Diagnostics;
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     Represents the size of padding - the number of spaces in the padding.
+    /// </summary>
     [DebuggerDisplay("{Value}")]
     public readonly struct PaddingValue : IEquatable<PaddingValue>
     {
-        public PaddingValue(int value)
+        internal PaddingValue(int value)
         {
             if (value < 0)
                 throw new ArgumentOutOfRangeException(nameof(value));
             Value = value;
         }
 
+        /// <summary>
+        ///     The number of spaces in the padding.
+        /// </summary>
         public int Value { get; }
 
         public override bool Equals(object obj)
@@ -50,6 +56,10 @@ namespace IniFile.Items
             return -1937169414 + Value.GetHashCode();
         }
 
+        /// <summary>
+        ///     Converts this <see cref="PaddingValue"/> to a padded string.
+        /// </summary>
+        /// <returns>The padded string containing the equal number of spaces.</returns>
         public override string ToString() =>
             Value == 0 ? string.Empty : new string(' ', Value);
 

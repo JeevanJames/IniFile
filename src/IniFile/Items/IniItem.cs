@@ -20,6 +20,9 @@ limitations under the License.
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     Base class for all INI item classes.
+    /// </summary>
     public abstract class IniItem
     {
     }

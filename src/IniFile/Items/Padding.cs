@@ -21,12 +21,30 @@ limitations under the License.
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     <para>
+    ///         Represents details of the padding of an INI item, such as a <see cref="Section"/>,
+    ///         <see cref="Property"/>, <see cref="Comment"/> and a <see cref="BlankLine"/>.
+    ///     </para>
+    ///     <para>
+    ///         Padding is used to represent the exact formatting of the INI item in the object model.
+    ///     </para>
+    /// </summary>
     public class Padding
     {
+        /// <summary>
+        ///     The amount of space to the left of the INI item.
+        /// </summary>
         public PaddingValue Left { get; set; }
 
+        /// <summary>
+        ///     The amount of space to the right of the INI item.
+        /// </summary>
         public PaddingValue Right { get; set; }
 
+        /// <summary>
+        ///     Resets the padding values to the defaults.
+        /// </summary>
         public virtual void Reset()
         {
             Left = 0;

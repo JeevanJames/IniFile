@@ -21,12 +21,22 @@ limitations under the License.
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     Represents the padding details for a INI property.
+    /// </summary>
     public sealed class PropertyPadding : Padding
     {
+        /// <summary>
+        ///     The amount of space between the property name and the equal symbol.
+        /// </summary>
         public PaddingValue InsideLeft { get; set; } = 1;
 
+        /// <summary>
+        ///     The amount of space between the equal symbol and the property value.
+        /// </summary>
         public PaddingValue InsideRight { get; set; } = 1;
 
+        /// <inheritdoc/>
         public override void Reset()
         {
             base.Reset();

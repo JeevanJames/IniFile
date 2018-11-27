@@ -23,7 +23,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -133,38 +132,52 @@ namespace IniFile
                 return new Ini(reader, settings);
         }
 
+        /// <summary>
+        ///     Transforms the INI content into an in-memory object model.
+        /// </summary>
+        /// <param name="reader">The INI content.</param>
         private void ParseIniFile(TextReader reader)
         {
+            // Read all lines from the INI content and transform to one of the registered objects -
+            // section, property, comment or blank line.
             var allItems = new List<IniItem>();
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
                 allItems.Add(IniItemFactory.CreateItem(line));
 
+            // Go through each line object and construct a hierarchical object model, with properties
+            // under sections and comments/blank lines under respective sections and properties.
             Section currentSection = null;
             var minorItems = new List<MinorIniItem>();
             foreach (IniItem item in allItems)
             {
+                // If the current line is a property, but we're not in a section, then this is invalid.
                 if (item is Property prop && currentSection == null)
                     throw new FormatException($"Property '{prop.Name}' is not in a section.");
 
                 if (item is MinorIniItem minorItem)
-                {
                     minorItems.Add(minorItem);
-                }
                 else if (item is Section section)
                 {
                     currentSection = section;
-                    currentSection.Items.AddRangeAndClear(minorItems);
+                    AddRangeAndClear(currentSection.Items, minorItems);
                     Add(currentSection);
                 }
                 else if (item is Property property)
                 {
-                    property.Items.AddRangeAndClear(minorItems);
+                    AddRangeAndClear(property.Items, minorItems);
                     currentSection.Add(property);
                 }
             }
 
             if (minorItems.Count > 0)
-                TrailingItems.AddRangeAndClear(minorItems);
+                AddRangeAndClear(TrailingItems, minorItems);
+        }
+
+        private static void AddRangeAndClear(IList<MinorIniItem> source, IList<MinorIniItem> minorItems)
+        {
+            foreach (MinorIniItem item in minorItems)
+                source.Add(item);
+            minorItems.Clear();
         }
 
         public void SaveTo(string filePath)

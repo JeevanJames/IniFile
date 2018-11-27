@@ -23,9 +23,9 @@ using System.Text.RegularExpressions;
 
 namespace IniFile.Items
 {
-    public static class IniItemFactory
+    internal static class IniItemFactory
     {
-        public static IniItem CreateItem(string line)
+        internal static IniItem CreateItem(string line)
         {
             IniItem item = TryCreateProperty(line);
             if (item != null)

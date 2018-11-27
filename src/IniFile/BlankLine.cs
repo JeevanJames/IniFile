@@ -19,19 +19,30 @@ limitations under the License.
 #endregion
 
 using System.Diagnostics;
+
 using IniFile.Items;
 
 namespace IniFile
 {
+    /// <summary>
+    ///     Represents a blank line object in an INI.
+    /// </summary>
     [DebuggerDisplay("----------")]
     public sealed class BlankLine : MinorIniItem, IPaddedItem<Padding>
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="BlankLine"/> class.
+        /// </summary>
         public BlankLine()
         {
         }
 
+        /// <summary>
+        ///     Padding details of this <see cref="BlankLine"/>.
+        /// </summary>
         public Padding Padding { get; } = new Padding();
 
+        /// <inheritdoc/>
         public override string ToString() =>
             $"{Padding.Left.ToString()}{Padding.Right.ToString()}";
     }

@@ -21,12 +21,22 @@ limitations under the License.
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     Represents the padding details for an INI section.
+    /// </summary>
     public sealed class SectionPadding : Padding
     {
+        /// <summary>
+        ///     The amount of space between the left brace of the section and the section text.
+        /// </summary>
         public PaddingValue InsideLeft { get; set; }
 
+        /// <summary>
+        ///     The amount of space between the right brace of the section and the section text.
+        /// </summary>
         public PaddingValue InsideRight { get; set; }
 
+        /// <inheritdoc/>
         public override void Reset()
         {
             base.Reset();

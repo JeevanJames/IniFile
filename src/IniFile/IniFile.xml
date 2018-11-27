@@ -4,6 +4,53 @@
         <name>IniFile</name>
     </assembly>
     <members>
+        <member name="T:IniFile.BlankLine">
+            <summary>
+                Represents a blank line object in an INI.
+            </summary>
+        </member>
+        <member name="M:IniFile.BlankLine.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.BlankLine"/> class.
+            </summary>
+        </member>
+        <member name="P:IniFile.BlankLine.Padding">
+            <summary>
+                Padding details of this <see cref="T:IniFile.BlankLine"/>.
+            </summary>
+        </member>
+        <member name="M:IniFile.BlankLine.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:IniFile.Comment">
+            <summary>
+                Represents a comment object in an INI.
+            </summary>
+        </member>
+        <member name="M:IniFile.Comment.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Comment"/> class with an empty comment.
+            </summary>
+        </member>
+        <member name="M:IniFile.Comment.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Comment"/> class with the specified text.
+            </summary>
+            <param name="text"></param>
+        </member>
+        <member name="P:IniFile.Comment.Text">
+            <summary>
+                The comment text.
+            </summary>
+        </member>
+        <member name="P:IniFile.Comment.Padding">
+            <summary>
+                Padding details of this <see cref="T:IniFile.Comment"/>.
+            </summary>
+        </member>
+        <member name="M:IniFile.Comment.ToString">
+            <inheritdoc/>
+        </member>
         <member name="T:IniFile.Ini">
             <summary>
                 <para>In-memory object representation of an INI file.</para>
@@ -64,6 +111,12 @@
             <param name="settings">Optional Ini file settings.</param>
             <returns>An instance of the <see cref="T:IniFile.Ini"/> class.</returns>
         </member>
+        <member name="M:IniFile.Ini.ParseIniFile(System.IO.TextReader)">
+            <summary>
+                Transforms the INI content into an in-memory object model.
+            </summary>
+            <param name="reader">The INI content.</param>
+        </member>
         <member name="T:IniFile.IniLoadSettings">
             <summary>
                 The settings to use when loading INI data from files, streams and text readers.
@@ -94,6 +147,217 @@
         <member name="F:IniFile.IniLoadSettings.Default">
             <summary>
                 Default settings to use to load INI data.
+            </summary>
+        </member>
+        <member name="T:IniFile.Items.CommentPadding">
+            <summary>
+                Represents the padding details for an INI comment.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.CommentPadding.Inside">
+            <summary>
+                Amount of space between the comment ; and the start of the comment text.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.CommentPadding.Reset">
+            <inheritdoc/>
+        </member>
+        <member name="T:IniFile.Items.IniItem">
+            <summary>
+                Base class for all INI item classes.
+            </summary>
+        </member>
+        <member name="T:IniFile.Items.IPaddedItem`1">
+            <summary>
+                Represents a INI item that has padding.
+            </summary>
+            <typeparam name="TPadding">The type of padding for the item.</typeparam>
+        </member>
+        <member name="T:IniFile.Items.MajorIniItem">
+            <summary>
+                <para>
+                    Base class for the major INI items, namely the <see cref="T:IniFile.Section"/> and
+                    <see cref="T:IniFile.Property"/>.
+                </para>
+                <para>Each major INI item can have zero or more comments and blank lines.</para>
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.MajorIniItem.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Items.MajorIniItem"/> class.
+            </summary>
+            <param name="name">The unique name of the INI item.</param>
+        </member>
+        <member name="P:IniFile.Items.MajorIniItem.Name">
+            <summary>
+                The unique name of the <see cref="T:IniFile.Section"/> or the <see cref="T:IniFile.Property"/>.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.MajorIniItem.Items">
+            <summary>
+                The collection of comments and blank lines that are associated with this major INI item.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.MajorIniItem.AddComment(System.String)">
+            <summary>
+                Shortcut method to adding a <see cref="T:IniFile.Comment"/> class to the <see cref="P:IniFile.Items.MajorIniItem.Items"/>
+                property.
+            </summary>
+            <param name="text">The comment text.</param>
+            <returns>The newly-added comment.</returns>
+        </member>
+        <member name="M:IniFile.Items.MajorIniItem.AddBlankLine">
+            <summary>
+                Shortcut method to adding a <see cref="T:IniFile.BlankLine"/> class to the <see cref="P:IniFile.Items.MajorIniItem.Items"/>
+                property.
+            </summary>
+            <returns>The newly-adding blank line.</returns>
+        </member>
+        <member name="T:IniFile.Items.MinorIniItem">
+            <summary>
+                Base class for the minor INI items, namely the <see cref="T:IniFile.Comment"/> and
+                <see cref="T:IniFile.BlankLine"/>.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.MinorIniItem.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Items.MinorIniItem"/> class.
+            </summary>
+        </member>
+        <member name="T:IniFile.Items.Padding">
+            <summary>
+                <para>
+                    Represents details of the padding of an INI item, such as a <see cref="T:IniFile.Section"/>,
+                    <see cref="T:IniFile.Property"/>, <see cref="T:IniFile.Comment"/> and a <see cref="T:IniFile.BlankLine"/>.
+                </para>
+                <para>
+                    Padding is used to represent the exact formatting of the INI item in the object model.
+                </para>
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.Padding.Left">
+            <summary>
+                The amount of space to the left of the INI item.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.Padding.Right">
+            <summary>
+                The amount of space to the right of the INI item.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.Padding.Reset">
+            <summary>
+                Resets the padding values to the defaults.
+            </summary>
+        </member>
+        <member name="T:IniFile.Items.PaddingValue">
+            <summary>
+                Represents the size of padding - the number of spaces in the padding.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.PaddingValue.Value">
+            <summary>
+                The number of spaces in the padding.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.PaddingValue.ToString">
+            <summary>
+                Converts this <see cref="T:IniFile.Items.PaddingValue"/> to a padded string.
+            </summary>
+            <returns>The padded string containing the equal number of spaces.</returns>
+        </member>
+        <member name="T:IniFile.Items.PropertyPadding">
+            <summary>
+                Represents the padding details for a INI property.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.PropertyPadding.InsideLeft">
+            <summary>
+                The amount of space between the property name and the equal symbol.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.PropertyPadding.InsideRight">
+            <summary>
+                The amount of space between the equal symbol and the property value.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.PropertyPadding.Reset">
+            <inheritdoc/>
+        </member>
+        <member name="T:IniFile.Items.SectionPadding">
+            <summary>
+                Represents the padding details for an INI section.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.SectionPadding.InsideLeft">
+            <summary>
+                The amount of space between the left brace of the section and the section text.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.SectionPadding.InsideRight">
+            <summary>
+                The amount of space between the right brace of the section and the section text.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.SectionPadding.Reset">
+            <inheritdoc/>
+        </member>
+        <member name="T:IniFile.Property">
+            <summary>
+                Represents a property object in an INI.
+            </summary>
+        </member>
+        <member name="M:IniFile.Property.#ctor(System.String,System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Property"/> class with the specified
+                name and value.
+            </summary>
+            <param name="name">The name of the property.</param>
+            <param name="value">The value of the property.</param>
+        </member>
+        <member name="P:IniFile.Property.Value">
+            <summary>
+                The value of the property.
+            </summary>
+        </member>
+        <member name="P:IniFile.Property.Padding">
+            <summary>
+                Padding details of this <see cref="T:IniFile.Property"/>.
+            </summary>
+        </member>
+        <member name="M:IniFile.Property.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:IniFile.Section">
+            <summary>
+                <para>Represents a section object in an INI.</para>
+                <para>A section is also a collection of <see cref="T:IniFile.Property"/> instances.</para>
+            </summary>
+        </member>
+        <member name="M:IniFile.Section.#ctor(System.String)">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Section"/> class.
+            </summary>
+            <param name="name">The name of the section.</param>
+        </member>
+        <member name="P:IniFile.Section.Padding">
+            <summary>
+                Padding details of this <see cref="T:IniFile.Section"/>.
+            </summary>
+        </member>
+        <member name="M:IniFile.Section.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:IniFile.Section.Item(System.String)">
+            <summary>
+                Gets or sets the value of the property given its name.
+            </summary>
+            <param name="name">The name of the property to get or set.</param>
+            <returns>The value of the property.</returns>
+        </member>
+        <member name="P:IniFile.Section.Count">
+            <summary>
+                The number of properties in this section.
             </summary>
         </member>
     </members>

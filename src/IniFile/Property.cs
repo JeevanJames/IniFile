@@ -19,28 +19,45 @@ limitations under the License.
 #endregion
 
 using System.Diagnostics;
+
 using IniFile.Items;
 
 namespace IniFile
 {
+    /// <summary>
+    ///     Represents a property object in an INI.
+    /// </summary>
     public sealed partial class Property : MajorIniItem, IPaddedItem<PropertyPadding>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _value;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Property"/> class with the specified
+        ///     name and value.
+        /// </summary>
+        /// <param name="name">The name of the property.</param>
+        /// <param name="value">The value of the property.</param>
         public Property(string name, string value) : base(name)
         {
             Value = value;
         }
 
+        /// <summary>
+        ///     The value of the property.
+        /// </summary>
         public string Value
         {
             get => _value;
             set => _value = value ?? string.Empty;
         }
 
+        /// <summary>
+        ///     Padding details of this <see cref="Property"/>.
+        /// </summary>
         public PropertyPadding Padding { get; } = new PropertyPadding();
 
+        /// <inheritdoc/>
         public override string ToString() =>
             $"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}{Value}{Padding.Right.ToString()}";
     }

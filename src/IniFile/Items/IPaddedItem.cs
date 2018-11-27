@@ -21,6 +21,10 @@ limitations under the License.
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     Represents a INI item that has padding.
+    /// </summary>
+    /// <typeparam name="TPadding">The type of padding for the item.</typeparam>
     public interface IPaddedItem<TPadding>
         where TPadding : Padding
     {

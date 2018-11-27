@@ -27,14 +27,26 @@ using IniFile.Items;
 
 namespace IniFile
 {
+    /// <summary>
+    ///     <para>Represents a section object in an INI.</para>
+    ///     <para>A section is also a collection of <see cref="Property"/> instances.</para>
+    /// </summary>
     public sealed partial class Section : MajorIniItem, IPaddedItem<SectionPadding>
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Section"/> class.
+        /// </summary>
+        /// <param name="name">The name of the section.</param>
         public Section(string name) : base(name)
         {
         }
 
+        /// <summary>
+        ///     Padding details of this <see cref="Section"/>.
+        /// </summary>
         public SectionPadding Padding { get; } = new SectionPadding();
 
+        /// <inheritdoc/>
         public override string ToString() =>
             $"{Padding.Left.ToString()}[{Padding.InsideLeft.ToString()}{Name}{Padding.InsideRight.ToString()}]{Padding.Right.ToString()}";
     }
@@ -50,6 +62,11 @@ namespace IniFile
             set => _properties[index] = value;
         }
 
+        /// <summary>
+        ///     Gets or sets the value of the property given its name.
+        /// </summary>
+        /// <param name="name">The name of the property to get or set.</param>
+        /// <returns>The value of the property.</returns>
         public string this[string name]
         {
             get => _properties.FirstOrDefault(p => p.Name == name)?.Value;
@@ -66,6 +83,9 @@ namespace IniFile
             }
         }
 
+        /// <summary>
+        ///     The number of properties in this section.
+        /// </summary>
         public int Count => _properties.Count;
 
         public bool IsReadOnly => false;

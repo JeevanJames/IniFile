@@ -19,33 +19,51 @@ limitations under the License.
 #endregion
 
 using System.Diagnostics;
+
 using IniFile.Items;
 
 namespace IniFile
 {
+    /// <summary>
+    ///     Represents a comment object in an INI.
+    /// </summary>
     public sealed class Comment : MinorIniItem, IPaddedItem<CommentPadding>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _text;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Comment"/> class with an empty comment.
+        /// </summary>
         public Comment()
         {
             Text = string.Empty;
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="Comment"/> class with the specified text.
+        /// </summary>
+        /// <param name="text"></param>
         public Comment(string text)
         {
             Text = text;
         }
 
+        /// <summary>
+        ///     The comment text.
+        /// </summary>
         public string Text
         {
             get => _text;
             set => _text = value ?? string.Empty;
         }
 
+        /// <summary>
+        ///     Padding details of this <see cref="Comment"/>.
+        /// </summary>
         public CommentPadding Padding { get; } = new CommentPadding();
 
+        /// <inheritdoc/>
         public override string ToString() =>
             $"{Padding.Left.ToString()};{Padding.Inside.ToString()}{Text}{Padding.Right.ToString()}";
     }

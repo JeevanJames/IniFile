@@ -21,8 +21,15 @@ limitations under the License.
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     Base class for the minor INI items, namely the <see cref="Comment"/> and
+    ///     <see cref="BlankLine"/>.
+    /// </summary>
     public abstract class MinorIniItem : IniItem
     {
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MinorIniItem"/> class.
+        /// </summary>
         protected MinorIniItem()
         {
         }

@@ -24,16 +24,30 @@ using System.Diagnostics;
 
 namespace IniFile.Items
 {
+    /// <summary>
+    ///     <para>
+    ///         Base class for the major INI items, namely the <see cref="Section"/> and
+    ///         <see cref="Property"/>.
+    ///     </para>
+    ///     <para>Each major INI item can have zero or more comments and blank lines.</para>
+    /// </summary>
     public abstract class MajorIniItem : IniItem
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private string _name;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="MajorIniItem"/> class.
+        /// </summary>
+        /// <param name="name">The unique name of the INI item.</param>
         protected MajorIniItem(string name)
         {
             Name = name;
         }
 
+        /// <summary>
+        ///     The unique name of the <see cref="Section"/> or the <see cref="Property"/>.
+        /// </summary>
         public string Name
         {
             get => _name;
@@ -45,8 +59,17 @@ namespace IniFile.Items
             }
         }
 
+        /// <summary>
+        ///     The collection of comments and blank lines that are associated with this major INI item.
+        /// </summary>
         public IList<MinorIniItem> Items { get; } = new List<MinorIniItem>();
 
+        /// <summary>
+        ///     Shortcut method to adding a <see cref="Comment"/> class to the <see cref="Items"/>
+        ///     property.
+        /// </summary>
+        /// <param name="text">The comment text.</param>
+        /// <returns>The newly-added comment.</returns>
         public Comment AddComment(string text)
         {
             var comment = new Comment(text);
@@ -54,6 +77,11 @@ namespace IniFile.Items
             return comment;
         }
 
+        /// <summary>
+        ///     Shortcut method to adding a <see cref="BlankLine"/> class to the <see cref="Items"/>
+        ///     property.
+        /// </summary>
+        /// <returns>The newly-adding blank line.</returns>
         public BlankLine AddBlankLine()
         {
             var blankLine = new BlankLine();
