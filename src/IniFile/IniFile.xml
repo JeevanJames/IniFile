@@ -117,6 +117,41 @@
             </summary>
             <param name="reader">The INI content.</param>
         </member>
+        <member name="P:IniFile.Ini.TrailingItems">
+            <summary>
+                Any trailing comments and blank lines at the end of the INI.
+            </summary>
+        </member>
+        <member name="M:IniFile.Ini.Format(IniFile.IniFormatOptions)">
+            <summary>
+                Formats the INI content by resetting all padding and applying any formatting rules
+                as per the <c>options</c> parameter.
+            </summary>
+            <param name="options">
+                Optional rules for formatting the INI content. Uses default rules
+                (<see cref="F:IniFile.IniFormatOptions.Default"/>) if not specified.
+            </param>
+        </member>
+        <member name="T:IniFile.IniFormatOptions">
+            <summary>
+                Options for formatting the contents of the INI.
+            </summary>
+        </member>
+        <member name="P:IniFile.IniFormatOptions.EnsureBlankLineBetweenSections">
+            <summary>
+                Inserts blank lines between sections, if there isn't any.
+            </summary>
+        </member>
+        <member name="P:IniFile.IniFormatOptions.EnsureBlankLineBetweenProperties">
+            <summary>
+                Inserts blank lines between properties, if there isn't any.
+            </summary>
+        </member>
+        <member name="F:IniFile.IniFormatOptions.Default">
+            <summary>
+                Default formatting options for INI content.
+            </summary>
+        </member>
         <member name="T:IniFile.IniLoadSettings">
             <summary>
                 The settings to use when loading INI data from files, streams and text readers.

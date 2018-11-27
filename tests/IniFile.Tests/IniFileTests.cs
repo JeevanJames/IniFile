@@ -63,7 +63,7 @@ namespace IniFile.Tests
                 new Property("Player1", "Jeevan",
                     new Comment("First player")),
                 new Property("Player2", "Merina",
-                    new BlankLine(), new Comment("Second player"))
+                    new Comment("Second player"))
             };
             ini.Add(section);
 
@@ -85,7 +85,16 @@ namespace IniFile.Tests
                 ["Costume"] = "Red"
             });
 
-            ini.SaveTo(@"D:\Temp\Test.ini");
+            ini.TrailingItems.Add(new BlankLine());
+            ini.TrailingItems.Add(new Comment("This is a trailing comment"));
+            ini.TrailingItems.Add(new BlankLine());
+            ini.TrailingItems.Add(new BlankLine());
+
+            ini.Format();
+
+            string content = ini.ToString();
+
+            content.ShouldNotBeNullOrWhiteSpace();
         }
 
         [Theory]

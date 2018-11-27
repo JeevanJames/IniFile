@@ -273,12 +273,28 @@ namespace IniFile
                 await writer.WriteLineAsync(trailingItem.ToString());
         }
 
+        /// <summary>
+        ///     Any trailing comments and blank lines at the end of the INI.
+        /// </summary>
         public IList<MinorIniItem> TrailingItems { get; } = new List<MinorIniItem>();
 
-        public void Format()
+        /// <summary>
+        ///     Formats the INI content by resetting all padding and applying any formatting rules
+        ///     as per the <c>options</c> parameter.
+        /// </summary>
+        /// <param name="options">
+        ///     Optional rules for formatting the INI content. Uses default rules
+        ///     (<see cref="IniFormatOptions.Default"/>) if not specified.
+        /// </param>
+        public void Format(IniFormatOptions options = null)
         {
-            foreach (Section section in this)
+            options = options ?? IniFormatOptions.Default;
+
+            for (int s = 0; s < this.Count; s++)
             {
+                Section section = this[s];
+
+                // Reset padding for each minor item in the section
                 foreach (MinorIniItem minorItem in section.Items)
                 {
                     if (minorItem is BlankLine blankLine)
@@ -287,10 +303,21 @@ namespace IniFile
                         comment.Padding.Reset();
                 }
 
+                // Insert blank line between sections, if specified by options
+                if (options.EnsureBlankLineBetweenSections)
+                {
+                    if (s > 0 && (!section.Items.Any() || !(section.Items[0] is BlankLine)))
+                        section.Items.Insert(0, new BlankLine());
+                }
+
+                // Reset padding for the section itself
                 section.Padding.Reset();
 
-                foreach (Property property in section)
+                for (int p = 0; p < section.Count; p++)
                 {
+                    Property property = section[p];
+
+                    // Reset padding for each minor item in the property
                     foreach (MinorIniItem minorItem in property.Items)
                     {
                         if (minorItem is BlankLine blankLine)
@@ -298,6 +325,15 @@ namespace IniFile
                         else if (minorItem is Comment comment)
                             comment.Padding.Reset();
                     }
+
+                    // Insert blank line between properties, if specified
+                    if (options.EnsureBlankLineBetweenProperties)
+                    {
+                        if (p > 0 && (!property.Items.Any() || !(property.Items[0] is BlankLine)))
+                            property.Items.Insert(0, new BlankLine());
+                    }
+
+                    // Reset padding for the property itself
                     property.Padding.Reset();
                 }
             }
