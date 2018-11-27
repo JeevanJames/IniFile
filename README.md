@@ -40,7 +40,6 @@ This code:
 ```cs
 var ini = new Ini(@"Players.ini")
 {
-    new Comment("This section defines the players"),
     new Section("Players")
     {
         new Property("Player1", "The Flash"),
