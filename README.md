@@ -40,25 +40,22 @@ This code:
 ```cs
 var ini = new Ini(@"Players.ini")
 {
-    new Section("Players")
+    new Section("Players", new Comment("This section defines the players"))
     {
         new Property("Player1", "The Flash"),
         new Property("Player2", "Superman")
     },
-    new Section("The Flash")
+    new Section("The Flash", new BlankLine())
     {
         ["Level"] = "9",
         ["Power"] = "Superspeed"
     },
-    new Section("Superman")
+    new Section("Superman", new BlankLine())
     {
         ["Level"] = "9",
         ["Power"] = "Superstrength,heat vision"
     }
 };
-ini["Players"].AddComment("This section defines the players");
-ini["The Flash"].AddBlankLine();
-ini["Superman"].AddBlankLine();
 ```
 produces the following INI data:
 ```ini
