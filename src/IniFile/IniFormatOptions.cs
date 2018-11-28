@@ -28,12 +28,12 @@ namespace IniFile
         /// <summary>
         ///     Inserts blank lines between sections, if there isn't any.
         /// </summary>
-        public bool EnsureBlankLineBetweenSections { get; set; } = true;
+        public bool EnsureBlankLineBetweenSections { get; set; }
 
         /// <summary>
         ///     Inserts blank lines between properties, if there isn't any.
         /// </summary>
-        public bool EnsureBlankLineBetweenProperties { get; set; } = true;
+        public bool EnsureBlankLineBetweenProperties { get; set; }
 
         /// <summary>
         ///     Default formatting options for INI content.
