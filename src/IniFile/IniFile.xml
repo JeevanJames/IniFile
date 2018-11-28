@@ -77,6 +77,8 @@
             </summary>
             <param name="iniFile">The .ini file to load from.</param>
             <param name="settings">Optional Ini file settings.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the <c>iniFile</c> is null.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown if the specified file does not exist.</exception>
         </member>
         <member name="M:IniFile.Ini.#ctor(System.String,IniFile.IniLoadSettings)">
             <summary>
@@ -85,6 +87,8 @@
             </summary>
             <param name="iniFilePath">The path to the .ini file.</param>
             <param name="settings">Optional Ini file settings.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the <c>iniFilePath</c> is null.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">Thrown if the specified file does not exist.</exception>
         </member>
         <member name="M:IniFile.Ini.#ctor(System.IO.Stream,IniFile.IniLoadSettings)">
             <summary>
@@ -93,6 +97,8 @@
             </summary>
             <param name="stream">The stream to load from.</param>
             <param name="settings">Optional Ini file settings.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be read.</exception>
         </member>
         <member name="M:IniFile.Ini.#ctor(System.IO.TextReader,IniFile.IniLoadSettings)">
             <summary>
@@ -101,6 +107,7 @@
             </summary>
             <param name="reader">The <see cref="T:System.IO.TextReader"/> to load from.</param>
             <param name="settings">Optional Ini file settings.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified text reader is null.</exception>
         </member>
         <member name="M:IniFile.Ini.Load(System.String,IniFile.IniLoadSettings)">
             <summary>
@@ -116,6 +123,72 @@
                 Transforms the INI content into an in-memory object model.
             </summary>
             <param name="reader">The INI content.</param>
+        </member>
+        <member name="M:IniFile.Ini.SaveTo(System.String)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to a file at the specified file path.
+            </summary>
+            <param name="filePath">The path of the file to save to.</param>
+        </member>
+        <member name="M:IniFile.Ini.SaveTo(System.IO.FileInfo)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified file.
+            </summary>
+            <param name="file">The <see cref="T:System.IO.FileInfo"/> object that represents the file to save to.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified file is null.</exception>
+        </member>
+        <member name="M:IniFile.Ini.SaveTo(System.IO.Stream)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream.
+            </summary>
+            <param name="stream">The stream to save to.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
+        </member>
+        <member name="M:IniFile.Ini.SaveToAsync(System.IO.Stream)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream asynchronously.
+            </summary>
+            <param name="stream">The stream to save to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
+        </member>
+        <member name="M:IniFile.Ini.SaveTo(System.IO.TextWriter)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer.
+            </summary>
+            <param name="writer">The text writer to save to.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
+        </member>
+        <member name="M:IniFile.Ini.SaveToAsync(System.IO.TextWriter)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer asynchronously.
+            </summary>
+            <param name="writer">The text writer to save to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
+        </member>
+        <member name="M:IniFile.Ini.ToString">
+            <summary>
+                Constructs a string representing the <see cref="T:IniFile.Ini"/> instance data.
+            </summary>
+            <returns>A string representing the <see cref="T:IniFile.Ini"/> instance data.</returns>
+        </member>
+        <member name="M:IniFile.Ini.InternalSave(System.IO.TextWriter)">
+            <summary>
+                Common method called to save the <see cref="T:IniFile.Ini"/> instance data to various destinations
+                such as streams, strings, files and text writers.
+            </summary>
+            <param name="writer">The text writer to write the data to.</param>
+        </member>
+        <member name="M:IniFile.Ini.InternalSaveAsync(System.IO.TextWriter)">
+            <summary>
+                Common method called to asynchronously  save the <see cref="T:IniFile.Ini"/> instance data to
+                various destinations such as streams, strings, files and text writers.
+            </summary>
+            <param name="writer">The text writer to write the data to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
         </member>
         <member name="P:IniFile.Ini.TrailingItems">
             <summary>
@@ -201,6 +274,14 @@
             <summary>
                 Base class for all INI item classes.
             </summary>
+        </member>
+        <member name="M:IniFile.Items.IniItemFactory.CreateItem(System.String)">
+            <summary>
+                Creates the correct <see cref="T:IniFile.Items.IniItem"/> object from the given line. If the line
+                does not match any INI item object, an exception is thrown.
+            </summary>
+            <param name="line">A line from the INI file.</param>
+            <returns>The <see cref="T:IniFile.Items.IniItem"/> object that matches the line format.</returns>
         </member>
         <member name="T:IniFile.Items.IPaddedItem`1">
             <summary>

@@ -61,6 +61,8 @@ namespace IniFile
         /// </summary>
         /// <param name="iniFile">The .ini file to load from.</param>
         /// <param name="settings">Optional Ini file settings.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the <c>iniFile</c> is null.</exception>
+        /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
         public Ini(FileInfo iniFile, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (iniFile == null)
@@ -78,6 +80,8 @@ namespace IniFile
         /// </summary>
         /// <param name="iniFilePath">The path to the .ini file.</param>
         /// <param name="settings">Optional Ini file settings.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the <c>iniFilePath</c> is null.</exception>
+        /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
         public Ini(string iniFilePath, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (iniFilePath == null)
@@ -95,6 +99,8 @@ namespace IniFile
         /// </summary>
         /// <param name="stream">The stream to load from.</param>
         /// <param name="settings">Optional Ini file settings.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the specified stream is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if the stream cannot be read.</exception>
         public Ini(Stream stream, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (stream == null)
@@ -112,6 +118,7 @@ namespace IniFile
         /// </summary>
         /// <param name="reader">The <see cref="TextReader"/> to load from.</param>
         /// <param name="settings">Optional Ini file settings.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the specified text reader is null.</exception>
         public Ini(TextReader reader, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (reader == null)
@@ -181,12 +188,21 @@ namespace IniFile
             minorItems.Clear();
         }
 
+        /// <summary>
+        ///     Saves the <see cref="Ini"/> instance to a file at the specified file path.
+        /// </summary>
+        /// <param name="filePath">The path of the file to save to.</param>
         public void SaveTo(string filePath)
         {
             using (StreamWriter writer = File.CreateText(filePath))
                 SaveTo(writer);
         }
 
+        /// <summary>
+        ///     Saves the <see cref="Ini"/> instance to the specified file.
+        /// </summary>
+        /// <param name="file">The <see cref="FileInfo"/> object that represents the file to save to.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the specified file is null.</exception>
         public void SaveTo(FileInfo file)
         {
             if (file == null)
@@ -195,22 +211,44 @@ namespace IniFile
                 SaveTo(writer);
         }
 
+        /// <summary>
+        ///     Saves the <see cref="Ini"/> instance to the specified stream.
+        /// </summary>
+        /// <param name="stream">The stream to save to.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the specified stream is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if the stream cannot be written to.</exception>
         public void SaveTo(Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
+            if (!stream.CanWrite)
+                throw new ArgumentException("Cannot write to the specified stream.", nameof(stream));
             using (var writer = new StreamWriter(stream))
                 SaveTo(writer);
         }
 
+        /// <summary>
+        ///     Saves the <see cref="Ini"/> instance to the specified stream asynchronously.
+        /// </summary>
+        /// <param name="stream">The stream to save to.</param>
+        /// <returns>A task representing the asynchronous save operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the specified stream is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if the stream cannot be written to.</exception>
         public async Task SaveToAsync(Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
+            if (!stream.CanWrite)
+                throw new ArgumentException("Cannot write to the specified stream.", nameof(stream));
             using (var writer = new StreamWriter(stream))
                 await SaveToAsync(writer);
         }
 
+        /// <summary>
+        ///     Saves the <see cref="Ini"/> instance to the specified text writer.
+        /// </summary>
+        /// <param name="writer">The text writer to save to.</param>
+        /// <exception cref="ArgumentNullException">Thrown if the specified text writer is null.</exception>
         public void SaveTo(TextWriter writer)
         {
             if (writer == null)
@@ -219,6 +257,12 @@ namespace IniFile
             writer.Flush();
         }
 
+        /// <summary>
+        ///     Saves the <see cref="Ini"/> instance to the specified text writer asynchronously.
+        /// </summary>
+        /// <param name="writer">The text writer to save to.</param>
+        /// <returns>A task representing the asynchronous save operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the specified text writer is null.</exception>
         public async Task SaveToAsync(TextWriter writer)
         {
             if (writer == null)
@@ -227,6 +271,10 @@ namespace IniFile
             writer.Flush();
         }
 
+        /// <summary>
+        ///     Constructs a string representing the <see cref="Ini"/> instance data.
+        /// </summary>
+        /// <returns>A string representing the <see cref="Ini"/> instance data.</returns>
         public override string ToString()
         {
             var sb = new StringBuilder();
@@ -235,6 +283,11 @@ namespace IniFile
             return sb.ToString();
         }
 
+        /// <summary>
+        ///     Common method called to save the <see cref="Ini"/> instance data to various destinations
+        ///     such as streams, strings, files and text writers.
+        /// </summary>
+        /// <param name="writer">The text writer to write the data to.</param>
         private void InternalSave(TextWriter writer)
         {
             foreach (Section section in this)
@@ -254,6 +307,12 @@ namespace IniFile
                 writer.WriteLine(trailingItem.ToString());
         }
 
+        /// <summary>
+        ///     Common method called to asynchronously  save the <see cref="Ini"/> instance data to
+        ///     various destinations such as streams, strings, files and text writers.
+        /// </summary>
+        /// <param name="writer">The text writer to write the data to.</param>
+        /// <returns>A task representing the asynchronous save operation.</returns>
         private async Task InternalSaveAsync(TextWriter writer)
         {
             foreach (Section section in this)
