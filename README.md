@@ -16,7 +16,7 @@ const iniStr = File.ReadAllText(@"Settings.ini");
 Ini ini = Ini.Load(iniStr);
 ```
 
-## `IniLoadSettings`
+### `IniLoadSettings`
 All `Ini` constructors and the `Load` static factory method accept an optional `IniLoadSettings` object to control how the .INI data is loaded and handled.
 
 |Property|Description|Default|
