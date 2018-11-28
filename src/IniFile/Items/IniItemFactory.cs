@@ -25,28 +25,26 @@ namespace IniFile.Items
 {
     internal static class IniItemFactory
     {
+        /// <summary>
+        ///     Creates the correct <see cref="IniItem"/> object from the given line. If the line
+        ///     does not match any INI item object, an exception is thrown.
+        /// </summary>
+        /// <param name="line">A line from the INI file.</param>
+        /// <returns>The <see cref="IniItem"/> object that matches the line format.</returns>
         internal static IniItem CreateItem(string line)
         {
-            IniItem item = TryCreateProperty(line);
-            if (item != null)
-                return item;
+            IniItem item = TryCreateProperty(line)
+               ?? TryCreateSection(line)
+               ?? TryCreateComment(line)
+               ?? TryCreateBlankLine(line);
 
-            item = TryCreateSection(line);
-            if (item != null)
-                return item;
-
-            item = TryCreateComment(line);
-            if (item != null)
-                return item;
-
-            item = TryCreateBlankLine(line);
             if (item != null)
                 return item;
 
             throw new FormatException($"Unrecognized line in INI file{Environment.NewLine}{line}");
         }
 
-        private static Section TryCreateSection(string line)
+        private static IniItem TryCreateSection(string line)
         {
             Match match = SectionPattern.Match(line);
             if (!match.Success)
@@ -61,7 +59,7 @@ namespace IniFile.Items
 
         private static readonly Regex SectionPattern = new Regex(@"^(\s*)\[(\s*)([\w_-][\s\w_-]+)(\s*)\](\s*)$");
 
-        private static Property TryCreateProperty(string line)
+        private static IniItem TryCreateProperty(string line)
         {
             Match match = PropertyPattern.Match(line);
             if (!match.Success)
@@ -76,7 +74,7 @@ namespace IniFile.Items
 
         private static readonly Regex PropertyPattern = new Regex(@"^(\s*)([\w_-]+)(\s*)=(\s*)(.*)(\s*)$");
 
-        private static Comment TryCreateComment(string line)
+        private static IniItem TryCreateComment(string line)
         {
             Match match = CommentPattern.Match(line);
             if (!match.Success)
@@ -90,7 +88,7 @@ namespace IniFile.Items
 
         private static readonly Regex CommentPattern = new Regex(@"^(\s*);(\s*)(.+)(\s*)$");
 
-        private static BlankLine TryCreateBlankLine(string line)
+        private static IniItem TryCreateBlankLine(string line)
         {
             if (line.Trim().Length == 0)
             {
