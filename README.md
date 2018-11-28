@@ -73,6 +73,16 @@ Level = 9
 Power = Superstrength,heat vision
 ```
 
+## Saving the INI content
+The `Ini` class provides several overloads to save the INI content to streams, text writers and files. All these overloads have synchronous and async versions.
+```cs
+// Synchronous call
+ini.SaveTo(@"Setting.ini");
+
+// Asynchronous call
+await ini.SaveToAsync(stream);
+```
+
 ## Formatting the INI content
 The `Ini` class retains the exact formatting from the source .INI file content. It provides a `Format` method to correctly format the contents.
 
