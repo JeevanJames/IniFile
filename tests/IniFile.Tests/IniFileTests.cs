@@ -90,7 +90,11 @@ namespace IniFile.Tests
             ini.TrailingItems.Add(new BlankLine());
             ini.TrailingItems.Add(new BlankLine());
 
-            ini.Format();
+            ini.Format(new IniFormatOptions
+            {
+                EnsureBlankLineBetweenSections = true,
+                EnsureBlankLineBetweenProperties = true
+            });
 
             string content = ini.ToString();
 
