@@ -90,5 +90,17 @@ namespace IniFile.Tests
             ini["Section1"]["Key2"].ShouldBe(string.Empty);
             ini["Section2"]["Key4"].ShouldBe(string.Empty);
         }
+
+        [Theory]
+        [EmbeddedResourceContent("IniFile.Tests.Data.Unformatted.ini")]
+        public void Format_ini(string iniContent)
+        {
+            Ini ini = Ini.Load(iniContent);
+
+            ini.Format(new IniFormatOptions { RemoveSuccessiveBlankLines = true });
+            string formatted = ini.ToString();
+
+            formatted.ShouldNotBeNull();
+        }
     }
 }

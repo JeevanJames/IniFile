@@ -36,6 +36,11 @@ namespace IniFile
         public bool EnsureBlankLineBetweenProperties { get; set; }
 
         /// <summary>
+        ///     Removes successive blank lines
+        /// </summary>
+        public bool RemoveSuccessiveBlankLines { get; set; }
+
+        /// <summary>
         ///     Default formatting options for INI content.
         /// </summary>
         public static readonly IniFormatOptions Default = new IniFormatOptions();

@@ -354,13 +354,7 @@ namespace IniFile
                 Section section = this[s];
 
                 // Reset padding for each minor item in the section
-                foreach (MinorIniItem minorItem in section.Items)
-                {
-                    if (minorItem is BlankLine blankLine)
-                        blankLine.Padding.Reset();
-                    else if (minorItem is Comment comment)
-                        comment.Padding.Reset();
-                }
+                FormatMinorItems(section.Items, options.RemoveSuccessiveBlankLines);
 
                 // Insert blank line between sections, if specified by options
                 if (options.EnsureBlankLineBetweenSections)
@@ -377,13 +371,7 @@ namespace IniFile
                     Property property = section[p];
 
                     // Reset padding for each minor item in the property
-                    foreach (MinorIniItem minorItem in property.Items)
-                    {
-                        if (minorItem is BlankLine blankLine)
-                            blankLine.Padding.Reset();
-                        else if (minorItem is Comment comment)
-                            comment.Padding.Reset();
-                    }
+                    FormatMinorItems(property.Items, options.RemoveSuccessiveBlankLines);
 
                     // Insert blank line between properties, if specified
                     if (options.EnsureBlankLineBetweenProperties)
@@ -409,12 +397,23 @@ namespace IniFile
             }
 
             // Format any remaining trailing items
-            foreach (MinorIniItem trailingItem in TrailingItems)
+            FormatMinorItems(TrailingItems, options.RemoveSuccessiveBlankLines);
+        }
+
+        private static void FormatMinorItems(IList<MinorIniItem> minorItems, bool removeSuccessiveBlankLines)
+        {
+            foreach (MinorIniItem minorItem in minorItems)
             {
-                if (trailingItem is BlankLine blankLine)
+                if (minorItem is BlankLine blankLine)
                     blankLine.Padding.Reset();
-                else if (trailingItem is Comment comment)
+                else if (minorItem is Comment comment)
                     comment.Padding.Reset();
+            }
+
+            for (int i = minorItems.Count - 1; i > 0; i--)
+            {
+                if (minorItems[i] is BlankLine && minorItems[i - 1] is BlankLine)
+                    minorItems.RemoveAt(i);
             }
         }
     }

@@ -220,6 +220,11 @@
                 Inserts blank lines between properties, if there isn't any.
             </summary>
         </member>
+        <member name="P:IniFile.IniFormatOptions.RemoveSuccessiveBlankLines">
+            <summary>
+                Removes successive blank lines
+            </summary>
+        </member>
         <member name="F:IniFile.IniFormatOptions.Default">
             <summary>
                 Default formatting options for INI content.

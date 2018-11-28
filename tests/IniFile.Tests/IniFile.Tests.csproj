@@ -19,7 +19,9 @@
   <ItemGroup>
     <None Remove="Data\EmptyProperties.ini" />
     <None Remove="Data\EmptySections.ini" />
+    <None Remove="Data\Formatted.ini" />
     <None Remove="Data\PropertyWithoutSection.ini" />
+    <None Remove="Data\Unformatted.ini" />
     <None Remove="Data\UnrecognizedLine.ini" />
     <None Remove="Players.ini" />
     <None Remove="Sample.json" />
@@ -28,7 +30,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\EmptyProperties.ini" />
     <EmbeddedResource Include="Data\EmptySections.ini" />
+    <EmbeddedResource Include="Data\Formatted.ini" />
     <EmbeddedResource Include="Data\PropertyWithoutSection.ini" />
+    <EmbeddedResource Include="Data\Unformatted.ini" />
     <EmbeddedResource Include="Data\UnrecognizedLine.ini" />
     <EmbeddedResource Include="Players.ini" />
   </ItemGroup>
