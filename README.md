@@ -99,12 +99,14 @@ In addition, the `Format` method takes an optional `IniFormatOptions` parameter 
 |------|-----------|-------|
 |`EnsureBlankLinesBetweenSections`|If true, a blank line is inserted between each section.|`false`|
 |`EnsureBlankLinesBetweenProperties`|If true, a blank line is inserted between each property.|`false`|
+|`RemoveSuccessiveBlankLines`|If true, any successive blank lines are removed.|`false`|
 
 ```cs
 var ini = new Ini(iniFilePath);
 ini.Format(new IniFormatOptions
 {
-	EnsureBlankLinesBetweenSections = true
+    EnsureBlankLinesBetweenSections = true,
+    RemoveSuccessiveBlankLines = true
 });
 ini.SaveTo(iniFilePath);
 ```

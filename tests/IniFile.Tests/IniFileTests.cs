@@ -19,6 +19,7 @@ limitations under the License.
 #endregion
 
 using System;
+
 using Shouldly;
 
 using Xunit;
