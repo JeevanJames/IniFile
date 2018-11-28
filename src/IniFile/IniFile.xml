@@ -262,6 +262,11 @@
                 Represents the padding details for an INI comment.
             </summary>
         </member>
+        <member name="P:IniFile.Items.CommentPadding.Right">
+            <summary>
+                The amount of space to the right of the comment text.
+            </summary>
+        </member>
         <member name="P:IniFile.Items.CommentPadding.Inside">
             <summary>
                 Amount of space between the comment ; and the start of the comment text.
@@ -357,11 +362,6 @@
                 The amount of space to the left of the INI item.
             </summary>
         </member>
-        <member name="P:IniFile.Items.Padding.Right">
-            <summary>
-                The amount of space to the right of the INI item.
-            </summary>
-        </member>
         <member name="M:IniFile.Items.Padding.Reset">
             <summary>
                 Resets the padding values to the defaults.
@@ -388,6 +388,11 @@
                 Represents the padding details for a INI property.
             </summary>
         </member>
+        <member name="P:IniFile.Items.PropertyPadding.Right">
+            <summary>
+                The amount of space to the right of the property.
+            </summary>
+        </member>
         <member name="P:IniFile.Items.PropertyPadding.InsideLeft">
             <summary>
                 The amount of space between the property name and the equal symbol.
@@ -404,6 +409,11 @@
         <member name="T:IniFile.Items.SectionPadding">
             <summary>
                 Represents the padding details for an INI section.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.SectionPadding.Right">
+            <summary>
+                The amount of space to the right of the section.
             </summary>
         </member>
         <member name="P:IniFile.Items.SectionPadding.InsideLeft">

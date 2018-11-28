@@ -27,6 +27,11 @@ namespace IniFile.Items
     public sealed class SectionPadding : Padding
     {
         /// <summary>
+        ///     The amount of space to the right of the section.
+        /// </summary>
+        public PaddingValue Right { get; set; }
+
+        /// <summary>
         ///     The amount of space between the left brace of the section and the section text.
         /// </summary>
         public PaddingValue InsideLeft { get; set; }
@@ -40,6 +45,7 @@ namespace IniFile.Items
         public override void Reset()
         {
             base.Reset();
+            Right = 0;
             InsideLeft = 0;
             InsideRight = 0;
         }

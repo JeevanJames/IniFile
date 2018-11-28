@@ -27,6 +27,11 @@ namespace IniFile.Items
     public sealed class CommentPadding : Padding
     {
         /// <summary>
+        ///     The amount of space to the right of the comment text.
+        /// </summary>
+        public PaddingValue Right { get; set; }
+
+        /// <summary>
         ///     Amount of space between the comment ; and the start of the comment text.
         /// </summary>
         public PaddingValue Inside { get; set; } = 1;
@@ -35,6 +40,7 @@ namespace IniFile.Items
         public override void Reset()
         {
             base.Reset();
+            Left = 0;
             Inside = 1;
         }
     }

@@ -38,17 +38,11 @@ namespace IniFile.Items
         public PaddingValue Left { get; set; }
 
         /// <summary>
-        ///     The amount of space to the right of the INI item.
-        /// </summary>
-        public PaddingValue Right { get; set; }
-
-        /// <summary>
         ///     Resets the padding values to the defaults.
         /// </summary>
         public virtual void Reset()
         {
             Left = 0;
-            Right = 0;
         }
     }
 }

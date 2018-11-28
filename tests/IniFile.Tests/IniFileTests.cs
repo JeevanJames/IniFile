@@ -18,6 +18,7 @@ limitations under the License.
 */
 #endregion
 
+using System;
 using Shouldly;
 
 using Xunit;
@@ -53,72 +54,41 @@ namespace IniFile.Tests
             iniContent.ShouldBe(validIni);
         }
 
-        [Fact]
-        public void Save_tests()
+        [Theory]
+        [EmbeddedResourceContent("IniFile.Tests.Data.UnrecognizedLine.ini")]
+        public void Unrecognized_line_throws(string iniContent)
         {
-            var ini = new Ini();
-
-            var section = new Section("Test")
-            {
-                new Property("Player1", "Jeevan",
-                    new Comment("First player")),
-                new Property("Player2", "Merina",
-                    new Comment("Second player"))
-            };
-            ini.Add(section);
-
-            ini.Add(new Section("Jeevan")
-            {
-                new Property("Powers", "Superspeed,Super strength"),
-                new Property("Costume", "Scarlet")
-            });
-
-            ini.Add(new Section("Merina")
-            {
-                new Property("Powers", "Stretchability, Invisibility"),
-                new Property("Costume", "Blue")
-            });
-
-            ini.Add(new Section("Ryan")
-            {
-                ["Powers"] = "Healing power",
-                ["Costume"] = "Red"
-            });
-
-            ini.TrailingItems.Add(new BlankLine());
-            ini.TrailingItems.Add(new Comment("This is a trailing comment"));
-            ini.TrailingItems.Add(new BlankLine());
-            ini.TrailingItems.Add(new BlankLine());
-
-            ini.Format(new IniFormatOptions
-            {
-                EnsureBlankLineBetweenSections = true,
-                EnsureBlankLineBetweenProperties = true
-            });
-
-            string content = ini.ToString();
-
-            content.ShouldNotBeNullOrWhiteSpace();
+            Should.Throw<FormatException>(() => Ini.Load(iniContent));
         }
 
         [Theory]
-        [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
-        public void Add_Inserts_at_correct_position(string iniContent)
+        [EmbeddedResourceContent("IniFile.Tests.Data.PropertyWithoutSection.ini")]
+        public void Property_without_section_throws(string iniContent)
         {
-            var ini = Ini.Load(iniContent);
+            Should.Throw<FormatException>(() => Ini.Load(iniContent));
+        }
 
-            Section jeevanSection = ini["Jeevan"];
+        [Theory]
+        [EmbeddedResourceContent("IniFile.Tests.Data.EmptySections.ini")]
+        public void Empty_sections_are_allowed(string iniContent)
+        {
+            Ini ini = Ini.Load(iniContent);
 
-            var ryanSection = new Section("Ryan")
-            {
-                new Property("Level", "5"),
-                new Property("Karma", "7.33"),
-                new Property("Weapons", "BFG7000,Fists")
-            };
-            ini.Insert(1, ryanSection);
+            ini.ShouldNotBeNull();
+            ini.Count.ShouldBe(3);
+            ini.ShouldAllBe(section => section.Count == 0);
+        }
 
-            ini[1].ShouldBeSameAs(ryanSection);
-            ini[2].ShouldBeSameAs(jeevanSection);
+        [Theory]
+        [EmbeddedResourceContent("IniFile.Tests.Data.EmptyProperties.ini")]
+        public void Empty_properties_are_allowed(string iniContent)
+        {
+            Ini ini = Ini.Load(iniContent);
+
+            ini.ShouldNotBeNull();
+            ini["Section1"]["Key1"].ShouldBe(string.Empty);
+            ini["Section1"]["Key2"].ShouldBe(string.Empty);
+            ini["Section2"]["Key4"].ShouldBe(string.Empty);
         }
     }
 }

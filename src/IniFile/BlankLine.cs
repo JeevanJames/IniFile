@@ -44,6 +44,6 @@ namespace IniFile
 
         /// <inheritdoc/>
         public override string ToString() =>
-            $"{Padding.Left.ToString()}{Padding.Right.ToString()}";
+            Padding.Left.ToString();
     }
 }

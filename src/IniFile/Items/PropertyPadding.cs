@@ -27,6 +27,11 @@ namespace IniFile.Items
     public sealed class PropertyPadding : Padding
     {
         /// <summary>
+        ///     The amount of space to the right of the property.
+        /// </summary>
+        public PaddingValue Right { get; set; }
+
+        /// <summary>
         ///     The amount of space between the property name and the equal symbol.
         /// </summary>
         public PaddingValue InsideLeft { get; set; } = 1;
@@ -40,6 +45,7 @@ namespace IniFile.Items
         public override void Reset()
         {
             base.Reset();
+            Right = 0;
             InsideLeft = 1;
             InsideRight = 1;
         }
