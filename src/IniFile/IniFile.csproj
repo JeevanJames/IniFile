@@ -12,7 +12,7 @@
     <RepositoryUrl>https://github.com/JeevanJames/IniFile.git</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags />
-    <PackageReleaseNotes></PackageReleaseNotes>
+    <PackageReleaseNotes>Release notes are at https://github.com/JeevanJames/IniFile/releases</PackageReleaseNotes>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>IniFile.NET</PackageId>
     <Product>IniFile.NET</Product>
