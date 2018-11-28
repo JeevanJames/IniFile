@@ -75,8 +75,26 @@ Power = Superstrength,heat vision
 
 ## Formatting the INI content
 The `Ini` class retains the exact formatting from the source .INI file content. It provides a `Format` method to correctly format the contents.
+
+By default, the `Format` method resets the padding for all lines in the INI file.
 ```cs
 var ini = new Ini(iniFilePath);
 ini.Format();
+ini.SaveTo(iniFilePath);
+```
+
+In addition, the `Format` method takes an optional `IniFormatOptions` parameter that can specify additional formatting options:
+
+|Option|Description|Default|
+|------|-----------|-------|
+|`EnsureBlankLinesBetweenSections`|If true, a blank line is inserted between each section.|`false`|
+|`EnsureBlankLinesBetweenProperties`|If true, a blank line is inserted between each property.|`false`|
+
+```cs
+var ini = new Ini(iniFilePath);
+ini.Format(new IniFormatOptions
+{
+	EnsureBlankLinesBetweenSections = true
+});
 ini.SaveTo(iniFilePath);
 ```
