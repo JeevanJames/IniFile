@@ -43,7 +43,7 @@ namespace IniFile
         /// <summary>
         ///     Initializes a new instance of the <see cref="Comment"/> class with the specified text.
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">The comment text.</param>
         public Comment(string text)
         {
             Text = text;

@@ -36,7 +36,7 @@
             <summary>
                 Initializes a new instance of the <see cref="T:IniFile.Comment"/> class with the specified text.
             </summary>
-            <param name="text"></param>
+            <param name="text">The comment text.</param>
         </member>
         <member name="P:IniFile.Comment.Text">
             <summary>
