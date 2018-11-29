@@ -42,7 +42,7 @@ var ini = new Ini(stream, loadSettings);
 ## Creating a INI file
 This code:
 ```cs
-var ini = new Ini(@"Players.ini")
+var ini = new Ini()
 {
     new Section("Players", "This section defines the players")
     {
