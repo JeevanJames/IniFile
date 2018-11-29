@@ -96,8 +96,8 @@ namespace IniFile.Tests
             supermanSection["Power"].ShouldBe("Superstrength,heat vision");
         }
 
-        [Theory]
-        [EmbeddedResourceContent("IniFile.Tests.Players.ini", Skip = "Need to handle cross-platform new line characters.")]
+        [Theory(Skip = "Need to handle cross-platform new line characters.")]
+        [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
         public void Ensure_format_is_retained(string validIni)
         {
             var ini = Ini.Load(validIni);
