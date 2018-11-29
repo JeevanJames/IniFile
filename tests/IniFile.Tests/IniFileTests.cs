@@ -46,6 +46,56 @@ namespace IniFile.Tests
             section["Player2"].ShouldBe("Emma");
         }
 
+        [Fact]
+        public void Basic_create_test()
+        {
+            var ini = new Ini()
+            {
+                new Section("Players", "This section defines the players")
+                {
+                    new Property("Player1", "The Flash"),
+                    new Property("Player2", "Superman")
+                },
+                new Section("The Flash", string.Empty)
+                {
+                    ["Level"] = "9",
+                    ["Power"] = "Superspeed"
+                },
+                new Section("Superman", string.Empty)
+                {
+                    ["Level"] = "9",
+                    ["Power"] = "Superstrength,heat vision"
+                }
+            };
+
+            ini.ShouldNotBeNull();
+            ini.Count.ShouldBe(3);
+
+            Section playersSection = ini["Players"];
+            playersSection.ShouldNotBeNull();
+            playersSection.Items.Count.ShouldBe(1);
+            playersSection.Items[0].ShouldBeOfType<Comment>();
+            playersSection.Count.ShouldBe(2);
+            playersSection["Player1"].ShouldBe("The Flash");
+            playersSection["Player2"].ShouldBe("Superman");
+
+            Section flashSection = ini["The Flash"];
+            flashSection.ShouldNotBeNull();
+            flashSection.Items.Count.ShouldBe(1);
+            flashSection.Items[0].ShouldBeOfType<BlankLine>();
+            flashSection.Count.ShouldBe(2);
+            flashSection["Level"].ShouldBe("9");
+            flashSection["Power"].ShouldBe("Superspeed");
+
+            Section supermanSection = ini["Superman"];
+            supermanSection.ShouldNotBeNull();
+            supermanSection.Items.Count.ShouldBe(1);
+            supermanSection.Items[0].ShouldBeOfType<BlankLine>();
+            supermanSection.Count.ShouldBe(2);
+            supermanSection["Level"].ShouldBe("9");
+            supermanSection["Power"].ShouldBe("Superstrength,heat vision");
+        }
+
         [Theory]
         [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
         public void Ensure_format_is_retained(string validIni)

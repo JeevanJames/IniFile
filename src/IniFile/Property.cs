@@ -45,6 +45,7 @@ namespace IniFile
         /// <inheritdoc/>
         public Property(string name, string value, params string[] items) : base(name, items)
         {
+            Value = value;
         }
 
         /// <summary>
