@@ -1,4 +1,4 @@
-# IniFile.NET [![NuGet Version](http://img.shields.io/nuget/v/IniFile.NET.svg?style=flat)](https://www.nuget.org/packages/IniFile.NET/) [![NuGet Downloads](https://img.shields.io/nuget/dt/IniFile.NET.svg)](https://www.nuget.org/packages/IniFile.NET/)
+# IniFile.NET [![Build status](https://img.shields.io/appveyor/ci/JeevanJames/inifile.svg)](https://ci.appveyor.com/project/JeevanJames/inifile/branch/master) [![Test status](https://img.shields.io/appveyor/tests/JeevanJames/inifile.svg)](https://ci.appveyor.com/project/JeevanJames/inifile/branch/master) [![NuGet Version](http://img.shields.io/nuget/v/IniFile.NET.svg?style=flat)](https://www.nuget.org/packages/IniFile.NET/) [![NuGet Downloads](https://img.shields.io/nuget/dt/IniFile.NET.svg)](https://www.nuget.org/packages/IniFile.NET/)
 
 IniFile.NET is a .NET library to open, modify and save .INI files.
 
