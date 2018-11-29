@@ -37,8 +37,13 @@ namespace IniFile
         ///     Initializes a new instance of the <see cref="Section"/> class.
         /// </summary>
         /// <param name="name">The name of the section.</param>
-        /// <param name="items">The comments and blank lines to be added to the section.</param>
-        public Section(string name, params MinorIniItem[] items) : base(name, items)
+        /// <param name="items">
+        ///     Collection of strings that represent the comments and blank lines of the section.
+        ///     If the string is <c>null</c>, an empty string or a whitespace string, then a
+        ///     <see cref="BlankLine"/> object is created, otherwise a <see cref="Comment"/> is created.
+        /// </param>
+        /// <inheritdoc/>
+        public Section(string name, params string[] items) : base(name, items)
         {
         }
 

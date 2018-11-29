@@ -40,14 +40,27 @@ namespace IniFile.Items
         ///     Initializes a new instance of the <see cref="MajorIniItem"/> class.
         /// </summary>
         /// <param name="name">The unique name of the INI item.</param>
-        /// <param name="items">Comments and blank lines to be added for this item.</param>
-        protected MajorIniItem(string name, params MinorIniItem[] items)
+        /// <param name="items">
+        ///     Collection of strings that represent the comments and blank lines of the INI item.
+        ///     If the string is <c>null</c>, an empty string or a whitespace string, then a
+        ///     <see cref="BlankLine"/> object is created, otherwise a <see cref="Comment"/> is created.
+        /// </param>
+        /// <exception cref="ArgumentNullException">Thrown if the specified name is <c>null</c>.</exception>
+        protected MajorIniItem(string name, params string[] items)
         {
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
             Name = name;
-            foreach (MinorIniItem item in items)
-                Items.Add(item);
+            if (items != null)
+            {
+                foreach (string item in items)
+                {
+                    if (string.IsNullOrWhiteSpace(item))
+                        Items.Add(new BlankLine {Padding = {Left = (item ?? string.Empty).Length}});
+                    else
+                        Items.Add(new Comment(item));
+                }
+            }
         }
 
         /// <summary>

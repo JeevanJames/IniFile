@@ -33,15 +33,18 @@ namespace IniFile
         private string _value;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="Property"/> class with the specified
-        ///     name and value.
+        ///     Initializes a new instance of the <see cref="Property"/> class.
         /// </summary>
         /// <param name="name">The name of the property.</param>
         /// <param name="value">The value of the property.</param>
-        /// <param name="items">Comments and blank lines to be added to the property.</param>
-        public Property(string name, string value, params MinorIniItem[] items) : base(name, items)
+        /// <param name="items">
+        ///     Collection of strings that represent the comments and blank lines of the property.
+        ///     If the string is <c>null</c>, an empty string or a whitespace string, then a
+        ///     <see cref="BlankLine"/> object is created, otherwise a <see cref="Comment"/> is created.
+        /// </param>
+        /// <inheritdoc/>
+        public Property(string name, string value, params string[] items) : base(name, items)
         {
-            Value = value;
         }
 
         /// <summary>
