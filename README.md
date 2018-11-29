@@ -3,6 +3,10 @@ IniFile.NET is a .NET library to open, modify and save .INI files.
 
 The `IniFile.Ini` class maintains the structure of an .INI file as an in-memory object model, with objects for sections, properties (key-value pairs), comments and blank lines, allowing it to model the exact structure of a .INI file.
 
+The `IniFile.Ini` class is a collection of `Section` objects (`IList<Section>`). Each `Section` is additionally a collection of `Property` objects (`IList<Property>`).
+
+Both `Section` and `Property` objects contain a collection of minor objects, namely `Comment` and `BlankLine` objects, which are the comments and blank lines that appear before the respective sections and properties.
+
 ## Loading an existing .INI
 The `Ini` class provides several constructor overloads to load .INI data from streams, text readers and files.
 ```cs
@@ -40,17 +44,17 @@ This code:
 ```cs
 var ini = new Ini(@"Players.ini")
 {
-    new Section("Players", new Comment("This section defines the players"))
+    new Section("Players", "This section defines the players")
     {
         new Property("Player1", "The Flash"),
         new Property("Player2", "Superman")
     },
-    new Section("The Flash", new BlankLine())
+    new Section("The Flash", string.Empty)
     {
         ["Level"] = "9",
         ["Power"] = "Superspeed"
     },
-    new Section("Superman", new BlankLine())
+    new Section("Superman", string.Empty)
     {
         ["Level"] = "9",
         ["Power"] = "Superstrength,heat vision"
