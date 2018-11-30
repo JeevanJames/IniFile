@@ -77,7 +77,7 @@
             </summary>
             <param name="iniFile">The .ini file to load from.</param>
             <param name="settings">Optional Ini file settings.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown if the <c>iniFile</c> is null.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown if the <c>iniFile</c> is <c>null</c>.</exception>
             <exception cref="T:System.IO.FileNotFoundException">Thrown if the specified file does not exist.</exception>
         </member>
         <member name="M:IniFile.Ini.#ctor(System.String,IniFile.IniLoadSettings)">
@@ -87,7 +87,7 @@
             </summary>
             <param name="iniFilePath">The path to the .ini file.</param>
             <param name="settings">Optional Ini file settings.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown if the <c>iniFilePath</c> is null.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown if the <c>iniFilePath</c> is <c>null</c>.</exception>
             <exception cref="T:System.IO.FileNotFoundException">Thrown if the specified file does not exist.</exception>
         </member>
         <member name="M:IniFile.Ini.#ctor(System.IO.Stream,IniFile.IniLoadSettings)">

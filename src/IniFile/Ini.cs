@@ -61,7 +61,7 @@ namespace IniFile
         /// </summary>
         /// <param name="iniFile">The .ini file to load from.</param>
         /// <param name="settings">Optional Ini file settings.</param>
-        /// <exception cref="ArgumentNullException">Thrown if the <c>iniFile</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <c>iniFile</c> is <c>null</c>.</exception>
         /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
         public Ini(FileInfo iniFile, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
@@ -80,7 +80,7 @@ namespace IniFile
         /// </summary>
         /// <param name="iniFilePath">The path to the .ini file.</param>
         /// <param name="settings">Optional Ini file settings.</param>
-        /// <exception cref="ArgumentNullException">Thrown if the <c>iniFilePath</c> is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown if the <c>iniFilePath</c> is <c>null</c>.</exception>
         /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
         public Ini(string iniFilePath, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
