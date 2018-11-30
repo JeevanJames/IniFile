@@ -72,7 +72,7 @@ namespace IniFile.Items
             set
             {
                 if (string.IsNullOrWhiteSpace(value))
-                    throw new ArgumentException("Name should contain at least one alpha-numeric character.", nameof(value));
+                    throw new ArgumentException(ErrorMessages.InvalidMajorItemName, nameof(value));
                 _name = value.Trim();
             }
         }

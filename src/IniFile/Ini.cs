@@ -68,7 +68,7 @@ namespace IniFile
             if (iniFile == null)
                 throw new ArgumentNullException(nameof(iniFile));
             if (!iniFile.Exists)
-                throw new FileNotFoundException($"INI file '{iniFile.FullName}' does not exist", iniFile.FullName);
+                throw new FileNotFoundException(string.Format(ErrorMessages.IniFileDoesNotExist, iniFile.FullName), iniFile.FullName);
 
             using (var reader = new StreamReader(iniFile.FullName, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
                 ParseIniFile(reader);
@@ -87,7 +87,7 @@ namespace IniFile
             if (iniFilePath == null)
                 throw new ArgumentNullException(nameof(iniFilePath));
             if (!File.Exists(iniFilePath))
-                throw new FileNotFoundException($"INI file '{iniFilePath}' does not exist", iniFilePath);
+                throw new FileNotFoundException(string.Format(ErrorMessages.IniFileDoesNotExist, iniFilePath), iniFilePath);
 
             using (var reader = new StreamReader(iniFilePath, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
                 ParseIniFile(reader);
@@ -104,9 +104,9 @@ namespace IniFile
         public Ini(Stream stream, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (stream == null)
-                throw new ArgumentNullException("stream");
+                throw new ArgumentNullException(nameof(stream));
             if (!stream.CanRead)
-                throw new ArgumentException("Cannot read from specified stream", nameof(stream));
+                throw new ArgumentException(ErrorMessages.StreamNotReadable, nameof(stream));
 
             using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
                 ParseIniFile(reader);
@@ -160,7 +160,7 @@ namespace IniFile
             {
                 // If the current line is a property, but we're not in a section, then this is invalid.
                 if (item is Property prop && currentSection == null)
-                    throw new FormatException($"Property '{prop.Name}' is not in a section.");
+                    throw new FormatException(string.Format(ErrorMessages.PropertyWithoutSection, prop.Name));
 
                 if (item is MinorIniItem minorItem)
                     minorItems.Add(minorItem);
@@ -222,7 +222,7 @@ namespace IniFile
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
             if (!stream.CanWrite)
-                throw new ArgumentException("Cannot write to the specified stream.", nameof(stream));
+                throw new ArgumentException(ErrorMessages.StreamNotWritable, nameof(stream));
             using (var writer = new StreamWriter(stream))
                 SaveTo(writer);
         }
@@ -239,7 +239,7 @@ namespace IniFile
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
             if (!stream.CanWrite)
-                throw new ArgumentException("Cannot write to the specified stream.", nameof(stream));
+                throw new ArgumentException(ErrorMessages.StreamNotWritable, nameof(stream));
             using (var writer = new StreamWriter(stream))
                 await SaveToAsync(writer);
         }

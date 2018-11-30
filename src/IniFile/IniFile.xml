@@ -51,6 +51,53 @@
         <member name="M:IniFile.Comment.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:IniFile.ErrorMessages">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:IniFile.ErrorMessages.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:IniFile.ErrorMessages.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:IniFile.ErrorMessages.IniFileDoesNotExist">
+            <summary>
+              Looks up a localized string similar to INI file &apos;{0}&apos; does not exist..
+            </summary>
+        </member>
+        <member name="P:IniFile.ErrorMessages.InvalidMajorItemName">
+            <summary>
+              Looks up a localized string similar to Name should contain at least one alpha-numeric character..
+            </summary>
+        </member>
+        <member name="P:IniFile.ErrorMessages.PropertyWithoutSection">
+            <summary>
+              Looks up a localized string similar to Property &apos;{0}&apos; is not in a section..
+            </summary>
+        </member>
+        <member name="P:IniFile.ErrorMessages.StreamNotReadable">
+            <summary>
+              Looks up a localized string similar to Cannot read from specified stream..
+            </summary>
+        </member>
+        <member name="P:IniFile.ErrorMessages.StreamNotWritable">
+            <summary>
+              Looks up a localized string similar to Cannot write to the specified stream..
+            </summary>
+        </member>
+        <member name="P:IniFile.ErrorMessages.UnrecognizedLine">
+             <summary>
+               Looks up a localized string similar to Unrecognized line in INI
+            {0}.
+             </summary>
+        </member>
         <member name="T:IniFile.Ini">
             <summary>
                 <para>In-memory object representation of an INI file.</para>

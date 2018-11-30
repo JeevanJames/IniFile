@@ -41,7 +41,7 @@ namespace IniFile.Items
             if (item != null)
                 return item;
 
-            throw new FormatException($"Unrecognized line in INI file{Environment.NewLine}{line}");
+            throw new FormatException(string.Format(ErrorMessages.UnrecognizedLine, line));
         }
 
         private static IniItem TryCreateSection(string line)
