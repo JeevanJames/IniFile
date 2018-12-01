@@ -35,9 +35,8 @@ namespace IniFile
         /// <summary>
         ///     Initializes a new instance of the <see cref="Comment"/> class with an empty comment.
         /// </summary>
-        public Comment()
+        public Comment() : this(string.Empty)
         {
-            Text = string.Empty;
         }
 
         /// <summary>
@@ -47,6 +46,9 @@ namespace IniFile
         public Comment(string text)
         {
             Text = text;
+            CommentChar = (Ini.Config.HashForComments.Allow && Ini.Config.HashForComments.IsDefault)
+                ? CommentChar.Hash
+                : CommentChar.Semicolon;
         }
 
         /// <summary>
@@ -58,13 +60,24 @@ namespace IniFile
             set => _text = value ?? string.Empty;
         }
 
+        public CommentChar CommentChar { get; set; }
+
         /// <summary>
         ///     Padding details of this <see cref="Comment"/>.
         /// </summary>
         public CommentPadding Padding { get; } = new CommentPadding();
 
         /// <inheritdoc/>
-        public override string ToString() =>
-            $"{Padding.Left.ToString()};{Padding.Inside.ToString()}{Text}{Padding.Right.ToString()}";
+        public override string ToString()
+        {
+            char commentChar = CommentChar == CommentChar.Semicolon ? ';' : '#';
+            return $"{Padding.Left.ToString()}{commentChar}{Padding.Inside.ToString()}{Text}{Padding.Right.ToString()}";
+        }
+    }
+
+    public enum CommentChar
+    {
+        Semicolon,
+        Hash
     }
 }

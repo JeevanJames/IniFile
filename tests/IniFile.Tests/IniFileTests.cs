@@ -33,6 +33,8 @@ namespace IniFile.Tests
         [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
         public void Basic_tests(string validIni)
         {
+            Ini.Config.AllowHashForComments();
+
             var ini = Ini.Load(validIni);
 
             ini.Count.ShouldBe(3);
@@ -49,7 +51,8 @@ namespace IniFile.Tests
         [Fact]
         public void Basic_create_test()
         {
-            var ini = new Ini()
+            Ini.Config.AllowHashForComments(true);
+            var ini = new Ini
             {
                 new Section("Players", "This section defines the players")
                 {

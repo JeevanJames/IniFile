@@ -416,6 +416,8 @@ namespace IniFile
                     minorItems.RemoveAt(i);
             }
         }
+
+        public static readonly IniGlobalConfig Config = new IniGlobalConfig();
     }
 
     public sealed partial class Ini : KeyedCollection<string, Section>

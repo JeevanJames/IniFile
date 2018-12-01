@@ -76,17 +76,21 @@ namespace IniFile.Items
 
         private static IniItem TryCreateComment(string line)
         {
-            Match match = CommentPattern.Match(line);
+            Match match = Ini.Config.HashForComments.Allow
+                ? CommentWithHashPattern.Match(line) : CommentPattern.Match(line);
             if (!match.Success)
                 return null;
-            var comment = new Comment(match.Groups[3].Value);
+            var comment = new Comment(match.Groups[4].Value);
+            comment.CommentChar = match.Groups[2].Value == ";" ? CommentChar.Semicolon : CommentChar.Hash;
             comment.Padding.Left = match.Groups[1].Length;
-            comment.Padding.Inside = match.Groups[2].Length;
-            comment.Padding.Right = match.Groups[4].Length;
+            comment.Padding.Inside = match.Groups[3].Length;
+            comment.Padding.Right = match.Groups[5].Length;
             return comment;
         }
 
-        private static readonly Regex CommentPattern = new Regex(@"^(\s*);(\s*)(.+)(\s*)$");
+        private static readonly Regex CommentPattern = new Regex(@"^(\s*)(;)(\s*)(.+)(\s*)$");
+
+        private static readonly Regex CommentWithHashPattern = new Regex(@"^(\s*)([;|#])(\s*)(.+)(\s*)$");
 
         private static IniItem TryCreateBlankLine(string line)
         {
