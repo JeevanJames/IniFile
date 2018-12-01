@@ -11,3 +11,12 @@
 - [ ] Add more tests.
 - [ ] Implement a INI specification from https://github.com/SemaiCZE/inicpp/wiki/INI-format-specification
 - [ ] Implement typed values for lists, numbers, booleans, etc.
+
+- [ ] Allow multiline values using the UNIX style:
+
+```ini
+Name = <<EOT
+This is line 1
+This is line 2
+EOT
+```
