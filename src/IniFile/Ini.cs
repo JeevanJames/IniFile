@@ -25,7 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-#if !NET35
+#if NETSTANDARD1_3
 using System.Threading.Tasks;
 #endif
 
@@ -280,7 +280,7 @@ namespace IniFile
                 writer.WriteLine(trailingItem.ToString());
         }
 
-#if !NET35
+#if NETSTANDARD1_3
         /// <summary>
         ///     Saves the <see cref="Ini"/> instance to the specified stream asynchronously.
         /// </summary>
