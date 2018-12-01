@@ -40,7 +40,11 @@ namespace IniFile {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
+#if !NET35
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).GetTypeInfo().Assembly);
+#else
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).Assembly);
+#endif
                     resourceMan = temp;
                 }
                 return resourceMan;

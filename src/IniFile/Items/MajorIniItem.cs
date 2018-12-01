@@ -55,7 +55,7 @@ namespace IniFile.Items
             {
                 foreach (string item in items)
                 {
-                    if (string.IsNullOrWhiteSpace(item))
+                    if (string.IsNullOrEmpty(item) || item.Trim().Length == 0)
                         Items.Add(new BlankLine {Padding = {Left = (item ?? string.Empty).Length}});
                     else
                         Items.Add(new Comment(item));
@@ -71,7 +71,7 @@ namespace IniFile.Items
             get => _name;
             set
             {
-                if (string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrEmpty(value) || value.Trim().Length == 0)
                     throw new ArgumentException(ErrorMessages.InvalidMajorItemName, nameof(value));
                 _name = value.Trim();
             }

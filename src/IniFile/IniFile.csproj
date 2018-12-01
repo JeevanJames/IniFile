@@ -1,7 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.3;net35</TargetFrameworks>
     <Version>1.2.0</Version>
     <Authors>Jeevan James</Authors>
     <Company>Jeevan James</Company>
@@ -32,6 +32,10 @@
     <WarningsAsErrors />
     <DocumentationFile>IniFile.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net35'">
+    <DefineConstants>NET35</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

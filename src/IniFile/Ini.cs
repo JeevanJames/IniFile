@@ -25,7 +25,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+#if !NET35
 using System.Threading.Tasks;
+#endif
 
 using IniFile.Items;
 
@@ -230,23 +232,6 @@ namespace IniFile
         }
 
         /// <summary>
-        ///     Saves the <see cref="Ini"/> instance to the specified stream asynchronously.
-        /// </summary>
-        /// <param name="stream">The stream to save to.</param>
-        /// <returns>A task representing the asynchronous save operation.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the specified stream is null.</exception>
-        /// <exception cref="ArgumentException">Thrown if the stream cannot be written to.</exception>
-        public async Task SaveToAsync(Stream stream)
-        {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-            if (!stream.CanWrite)
-                throw new ArgumentException(ErrorMessages.StreamNotWritable, nameof(stream));
-            using (var writer = new StreamWriter(stream))
-                await SaveToAsync(writer);
-        }
-
-        /// <summary>
         ///     Saves the <see cref="Ini"/> instance to the specified text writer.
         /// </summary>
         /// <param name="writer">The text writer to save to.</param>
@@ -256,20 +241,6 @@ namespace IniFile
             if (writer == null)
                 throw new ArgumentNullException(nameof(writer));
             InternalSave(writer);
-            writer.Flush();
-        }
-
-        /// <summary>
-        ///     Saves the <see cref="Ini"/> instance to the specified text writer asynchronously.
-        /// </summary>
-        /// <param name="writer">The text writer to save to.</param>
-        /// <returns>A task representing the asynchronous save operation.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the specified text writer is null.</exception>
-        public async Task SaveToAsync(TextWriter writer)
-        {
-            if (writer == null)
-                throw new ArgumentNullException(nameof(writer));
-            await InternalSaveAsync(writer);
             writer.Flush();
         }
 
@@ -309,6 +280,38 @@ namespace IniFile
                 writer.WriteLine(trailingItem.ToString());
         }
 
+#if !NET35
+        /// <summary>
+        ///     Saves the <see cref="Ini"/> instance to the specified stream asynchronously.
+        /// </summary>
+        /// <param name="stream">The stream to save to.</param>
+        /// <returns>A task representing the asynchronous save operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the specified stream is null.</exception>
+        /// <exception cref="ArgumentException">Thrown if the stream cannot be written to.</exception>
+        public async Task SaveToAsync(Stream stream)
+        {
+            if (stream == null)
+                throw new ArgumentNullException(nameof(stream));
+            if (!stream.CanWrite)
+                throw new ArgumentException(ErrorMessages.StreamNotWritable, nameof(stream));
+            using (var writer = new StreamWriter(stream))
+                await SaveToAsync(writer);
+        }
+
+        /// <summary>
+        ///     Saves the <see cref="Ini"/> instance to the specified text writer asynchronously.
+        /// </summary>
+        /// <param name="writer">The text writer to save to.</param>
+        /// <returns>A task representing the asynchronous save operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the specified text writer is null.</exception>
+        public async Task SaveToAsync(TextWriter writer)
+        {
+            if (writer == null)
+                throw new ArgumentNullException(nameof(writer));
+            await InternalSaveAsync(writer);
+            writer.Flush();
+        }
+
         /// <summary>
         ///     Common method called to asynchronously  save the <see cref="Ini"/> instance data to
         ///     various destinations such as streams, strings, files and text writers.
@@ -333,6 +336,7 @@ namespace IniFile
             foreach (MinorIniItem trailingItem in TrailingItems)
                 await writer.WriteLineAsync(trailingItem.ToString());
         }
+#endif
 
         /// <summary>
         ///     Any trailing comments and blank lines at the end of the INI.
