@@ -57,8 +57,8 @@ namespace IniFile.Items
         private void SetDefaults()
         {
             Left = Ini.Config.Padding.Property.Left;
-            InsideLeft = Ini.Config.Padding.Property.InnerLeft;
-            InsideRight = Ini.Config.Padding.Property.InnerRight;
+            InsideLeft = Ini.Config.Padding.Property.InsideLeft;
+            InsideRight = Ini.Config.Padding.Property.InsideRight;
             Right = Ini.Config.Padding.Property.Right;
         }
     }

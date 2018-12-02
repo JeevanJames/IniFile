@@ -24,6 +24,6 @@ namespace IniFile.Config
 {
     public sealed class CommentPaddingConfig : ItemPaddingConfig
     {
-        public PaddingValue Inner { get; set; }
+        public PaddingValue Inside { get; set; }
     }
 }

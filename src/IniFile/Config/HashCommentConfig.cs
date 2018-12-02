@@ -20,10 +20,24 @@ limitations under the License.
 
 namespace IniFile.Config
 {
+    /// <summary>
+    ///     Configuration on whether the hash symbol (#) can be used for comments.
+    /// </summary>
     public sealed class HashCommentConfig
     {
+        /// <summary>
+        ///     Gets or sets whether comments prefixed with a hash (#) symbol are allowed, in addition
+        ///     to the standard semi-colon ones.
+        /// </summary>
         public bool Allow { get; set; }
 
+        /// <summary>
+        ///     <para>
+        ///         Gets or sets whether comments are to be prefixed with a hash (#) symbol by default,
+        ///         instead of the standard semi-colon.
+        ///     </para>
+        ///     <para>Note that semi-colon prefixed comments will still be allowed.</para>
+        /// </summary>
         public bool IsDefault { get; set; }
     }
 }

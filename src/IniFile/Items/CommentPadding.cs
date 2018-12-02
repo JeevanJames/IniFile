@@ -52,7 +52,7 @@ namespace IniFile.Items
         private void SetDefaults()
         {
             Left = Ini.Config.Padding.Comment.Left;
-            Inside = Ini.Config.Padding.Comment.Inner;
+            Inside = Ini.Config.Padding.Comment.Inside;
             Right = Ini.Config.Padding.Comment.Right;
         }
     }

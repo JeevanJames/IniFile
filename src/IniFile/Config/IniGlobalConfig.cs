@@ -39,8 +39,8 @@ namespace IniFile.Config
             PaddingValue? innerRight = null, PaddingValue? right = null)
         {
             Padding.Section.Left = left ?? 0;
-            Padding.Section.InnerLeft = innerLeft ?? 0;
-            Padding.Section.InnerRight = innerRight ?? 0;
+            Padding.Section.InsideLeft = innerLeft ?? 0;
+            Padding.Section.InsideRight = innerRight ?? 0;
             Padding.Section.Right = right ?? 0;
             return this;
         }
@@ -49,8 +49,8 @@ namespace IniFile.Config
             PaddingValue? innerRight = null, PaddingValue? right = null)
         {
             Padding.Property.Left = left ?? 0;
-            Padding.Property.InnerLeft = innerLeft ?? 1;
-            Padding.Property.InnerRight = innerRight ?? 1;
+            Padding.Property.InsideLeft = innerLeft ?? 1;
+            Padding.Property.InsideRight = innerRight ?? 1;
             Padding.Property.Right = right ?? 1;
             return this;
         }
@@ -59,7 +59,7 @@ namespace IniFile.Config
             PaddingValue? right = null)
         {
             Padding.Comment.Left = left ?? 0;
-            Padding.Comment.Inner = inner ?? 1;
+            Padding.Comment.Inside = inner ?? 1;
             Padding.Comment.Right = right ?? 1;
             return this;
         }

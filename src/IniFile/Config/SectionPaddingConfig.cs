@@ -24,8 +24,8 @@ namespace IniFile.Config
 {
     public sealed class SectionPaddingConfig : ItemPaddingConfig
     {
-        public PaddingValue InnerLeft { get; set; }
+        public PaddingValue InsideLeft { get; set; }
 
-        public PaddingValue InnerRight { get; set; }
+        public PaddingValue InsideRight { get; set; }
     }
 }

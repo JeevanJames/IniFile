@@ -33,7 +33,10 @@ namespace IniFile.Tests
         [EmbeddedResourceContent("IniFile.Tests.Players.ini")]
         public void Basic_tests(string validIni)
         {
-            Ini.Config.AllowHashForComments();
+            Ini.Config
+                .AllowHashForComments()
+                .SetSectionPaddingDefaults(innerLeft: 1, innerRight: 1)
+                .SetPropertyPaddingDefaults(left: 4);
 
             var ini = Ini.Load(validIni);
 
@@ -51,7 +54,11 @@ namespace IniFile.Tests
         [Fact]
         public void Basic_create_test()
         {
-            Ini.Config.AllowHashForComments(true);
+            Ini.Config
+                .AllowHashForComments(true)
+                .SetSectionPaddingDefaults(innerLeft: 1, innerRight: 1)
+                .SetPropertyPaddingDefaults(left: 4);
+
             var ini = new Ini
             {
                 new Section("Players", "This section defines the players")
