@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard1.3;net35;net40;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard1.3;net35;net40;net45</TargetFrameworks>
     <Version>1.3.0</Version>
     <Authors>Jeevan James</Authors>
     <Company>Jeevan James</Company>
@@ -34,8 +34,12 @@
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net35'">
-    <DefineConstants>NET35</DefineConstants>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3'">
+    <DefineConstants>NETSTANDARD1_3</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
