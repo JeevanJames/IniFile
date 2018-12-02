@@ -6,7 +6,8 @@
 - [x] Allow comments starting with `#`.
 - [x] Reduce netstandard level as much as possible.
 - [x] Add support for .NET 3.5, .NET 4.0 and .NET 4.5 targets.
-- [ ] Allow defaults for padding to be specified.
+- [x] Allow defaults for padding to be specified.
+  - [ ] Add doc comments for all padding configs
 - [ ] Handle cross-platform newline characters when formatting. Enable the `Ensure_format_is_retained` test when done.
 - [ ] Document object model with an image in the README.md file.
 - [ ] Add more tests.
