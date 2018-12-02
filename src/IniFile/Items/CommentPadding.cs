@@ -26,6 +26,14 @@ namespace IniFile.Items
     public sealed class CommentPadding : Padding
     {
         /// <summary>
+        ///     Initializes a new instance of the <see cref="CommentPadding"/> class.
+        /// </summary>
+        public CommentPadding()
+        {
+            SetDefaults();
+        }
+
+        /// <summary>
         ///     The amount of space to the right of the comment text.
         /// </summary>
         public PaddingValue Right { get; set; }
@@ -33,14 +41,19 @@ namespace IniFile.Items
         /// <summary>
         ///     Amount of space between the comment ; and the start of the comment text.
         /// </summary>
-        public PaddingValue Inside { get; set; } = 1;
+        public PaddingValue Inside { get; set; }
 
         /// <inheritdoc/>
         public override void Reset()
         {
-            base.Reset();
-            Left = 0;
-            Inside = 1;
+            SetDefaults();
+        }
+
+        private void SetDefaults()
+        {
+            Left = Ini.Config.Padding.Comment.Left;
+            Inside = Ini.Config.Padding.Comment.Inner;
+            Right = Ini.Config.Padding.Comment.Right;
         }
     }
 }

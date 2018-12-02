@@ -26,6 +26,14 @@ namespace IniFile.Items
     public sealed class PropertyPadding : Padding
     {
         /// <summary>
+        ///     Initializes a new instance of the <see cref="PropertyPadding"/> class.
+        /// </summary>
+        public PropertyPadding()
+        {
+            SetDefaults();
+        }
+
+        /// <summary>
         ///     The amount of space to the right of the property.
         /// </summary>
         public PaddingValue Right { get; set; }
@@ -33,20 +41,25 @@ namespace IniFile.Items
         /// <summary>
         ///     The amount of space between the property name and the equal symbol.
         /// </summary>
-        public PaddingValue InsideLeft { get; set; } = 1;
+        public PaddingValue InsideLeft { get; set; }
 
         /// <summary>
         ///     The amount of space between the equal symbol and the property value.
         /// </summary>
-        public PaddingValue InsideRight { get; set; } = 1;
+        public PaddingValue InsideRight { get; set; }
 
         /// <inheritdoc/>
         public override void Reset()
         {
-            base.Reset();
-            Right = 0;
-            InsideLeft = 1;
-            InsideRight = 1;
+            SetDefaults();
+        }
+
+        private void SetDefaults()
+        {
+            Left = Ini.Config.Padding.Property.Left;
+            InsideLeft = Ini.Config.Padding.Property.InnerLeft;
+            InsideRight = Ini.Config.Padding.Property.InnerRight;
+            Right = Ini.Config.Padding.Property.Right;
         }
     }
 }

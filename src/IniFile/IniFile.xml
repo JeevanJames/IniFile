@@ -289,6 +289,11 @@
                 Represents the padding details for an INI comment.
             </summary>
         </member>
+        <member name="M:IniFile.Items.CommentPadding.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Items.CommentPadding"/> class.
+            </summary>
+        </member>
         <member name="P:IniFile.Items.CommentPadding.Right">
             <summary>
                 The amount of space to the right of the comment text.
@@ -420,6 +425,11 @@
                 Represents the padding details for a INI property.
             </summary>
         </member>
+        <member name="M:IniFile.Items.PropertyPadding.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Items.PropertyPadding"/> class.
+            </summary>
+        </member>
         <member name="P:IniFile.Items.PropertyPadding.Right">
             <summary>
                 The amount of space to the right of the property.
@@ -441,6 +451,11 @@
         <member name="T:IniFile.Items.SectionPadding">
             <summary>
                 Represents the padding details for an INI section.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.SectionPadding.#ctor">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Items.SectionPadding"/> class.
             </summary>
         </member>
         <member name="P:IniFile.Items.SectionPadding.Right">

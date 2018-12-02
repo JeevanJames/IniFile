@@ -18,23 +18,12 @@ limitations under the License.
 */
 #endregion
 
-namespace IniFile
+namespace IniFile.Config
 {
-    public sealed class IniGlobalConfig
+    public sealed class HashCommentConfig
     {
-        public HashCommentConfig HashForComments { get; } = new HashCommentConfig();
+        public bool Allow { get; set; }
 
-        public void AllowHashForComments(bool setAsDefault = false)
-        {
-            HashForComments.Allow = true;
-            HashForComments.IsDefault = setAsDefault;
-        }
-
-        public sealed class HashCommentConfig
-        {
-            public bool Allow { get; set; }
-
-            public bool IsDefault { get; set; }
-        }
+        public bool IsDefault { get; set; }
     }
 }

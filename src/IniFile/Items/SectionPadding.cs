@@ -26,6 +26,14 @@ namespace IniFile.Items
     public sealed class SectionPadding : Padding
     {
         /// <summary>
+        ///     Initializes a new instance of the <see cref="SectionPadding"/> class.
+        /// </summary>
+        public SectionPadding()
+        {
+            SetDefaults();
+        }
+
+        /// <summary>
         ///     The amount of space to the right of the section.
         /// </summary>
         public PaddingValue Right { get; set; }
@@ -43,10 +51,15 @@ namespace IniFile.Items
         /// <inheritdoc/>
         public override void Reset()
         {
-            base.Reset();
-            Right = 0;
-            InsideLeft = 0;
-            InsideRight = 0;
+            SetDefaults();
+        }
+
+        private void SetDefaults()
+        {
+            Left = Ini.Config.Padding.Section.Left;
+            InsideLeft = Ini.Config.Padding.Section.InnerLeft;
+            InsideRight = Ini.Config.Padding.Section.InnerRight;
+            Right = Ini.Config.Padding.Section.Right;
         }
     }
 }

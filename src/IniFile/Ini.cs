@@ -25,6 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using IniFile.Config;
 #if NETSTANDARD1_3
 using System.Threading.Tasks;
 #endif
