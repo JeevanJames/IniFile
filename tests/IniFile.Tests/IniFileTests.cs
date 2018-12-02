@@ -35,7 +35,7 @@ namespace IniFile.Tests
         {
             Ini.Config
                 .AllowHashForComments()
-                .SetSectionPaddingDefaults(innerLeft: 1, innerRight: 1)
+                .SetSectionPaddingDefaults(insideLeft: 1, insideRight: 1)
                 .SetPropertyPaddingDefaults(left: 4);
 
             var ini = Ini.Load(validIni);
@@ -56,7 +56,7 @@ namespace IniFile.Tests
         {
             Ini.Config
                 .AllowHashForComments(true)
-                .SetSectionPaddingDefaults(innerLeft: 1, innerRight: 1)
+                .SetSectionPaddingDefaults(insideLeft: 1, insideRight: 1)
                 .SetPropertyPaddingDefaults(left: 4);
 
             var ini = new Ini

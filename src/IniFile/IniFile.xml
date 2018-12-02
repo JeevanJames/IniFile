@@ -51,6 +51,26 @@
         <member name="M:IniFile.Comment.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:IniFile.Config.HashCommentConfig">
+            <summary>
+                Configuration on whether the hash symbol (#) can be used for comments.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.HashCommentConfig.Allow">
+            <summary>
+                Gets or sets whether comments prefixed with a hash (#) symbol are allowed, in addition
+                to the standard semi-colon ones.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.HashCommentConfig.IsDefault">
+            <summary>
+                <para>
+                    Gets or sets whether comments are to be prefixed with a hash (#) symbol by default,
+                    instead of the standard semi-colon.
+                </para>
+                <para>Note that semi-colon prefixed comments will still be allowed.</para>
+            </summary>
+        </member>
         <member name="T:IniFile.ErrorMessages">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
