@@ -57,7 +57,7 @@ namespace IniFile.Items
             return section;
         }
 
-        private static readonly Regex SectionPattern = new Regex(@"^(\s*)\[(\s*)([\w_-][\s\w_-]+)(\s*)\](\s*)$");
+        private static readonly Regex SectionPattern = new Regex(@"^(\s*)\[(\s*)([\w\.\$\:][\w_~\-\.\:\s]*)(\s*)\](\s*)$");
 
         private static IniItem TryCreateProperty(string line)
         {
@@ -72,7 +72,7 @@ namespace IniFile.Items
             return property;
         }
 
-        private static readonly Regex PropertyPattern = new Regex(@"^(\s*)([\w_-]+)(\s*)=(\s*)(.*)(\s*)$");
+        private static readonly Regex PropertyPattern = new Regex(@"^(\s*)([\w\.\$\:][\w_~\-\.\:\s]*)(\s*)=(\s*)(.*)(\s*)$");
 
         private static IniItem TryCreateComment(string line)
         {
