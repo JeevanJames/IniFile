@@ -22,12 +22,26 @@ using IniFile.Items;
 
 namespace IniFile.Config
 {
+    /// <summary>
+    ///     Global configuration for reading and writing to INI files.
+    /// </summary>
     public sealed class IniGlobalConfig
     {
+        /// <summary>
+        ///     Configuration for using hash symbols (#) for comments in INI files.
+        /// </summary>
         public HashCommentConfig HashForComments { get; } = new HashCommentConfig();
 
+        /// <summary>
+        ///     Configuration for padding defaults for sections, properties and comments in INI files.
+        /// </summary>
         public PaddingConfig Padding { get; } = new PaddingConfig();
 
+        /// <summary>
+        ///     Allows the hash symbol (#) to be used to prefix comments.
+        /// </summary>
+        /// <param name="setAsDefault">Sets the default comment prefix to the hash symbol (#).</param>
+        /// <returns>The same <see cref="IniGlobalConfig"/> instance so that multiple calls can be chained.</returns>
         public IniGlobalConfig AllowHashForComments(bool setAsDefault = false)
         {
             HashForComments.Allow = true;
