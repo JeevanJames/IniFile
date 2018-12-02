@@ -71,6 +71,28 @@
                 <para>Note that semi-colon prefixed comments will still be allowed.</para>
             </summary>
         </member>
+        <member name="T:IniFile.Config.IniGlobalConfig">
+            <summary>
+                Global configuration for reading and writing to INI files.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.IniGlobalConfig.HashForComments">
+            <summary>
+                Configuration for using hash symbols (#) for comments in INI files.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.IniGlobalConfig.Padding">
+            <summary>
+                Configuration for padding defaults for sections, properties and comments in INI files.
+            </summary>
+        </member>
+        <member name="M:IniFile.Config.IniGlobalConfig.AllowHashForComments(System.Boolean)">
+            <summary>
+                Allows the hash symbol (#) to be used to prefix comments.
+            </summary>
+            <param name="setAsDefault">Sets the default comment prefix to the hash symbol (#).</param>
+            <returns>The same <see cref="T:IniFile.Config.IniGlobalConfig"/> instance so that multiple calls can be chained.</returns>
+        </member>
         <member name="T:IniFile.ErrorMessages">
             <summary>
               A strongly-typed resource class, for looking up localized strings, etc.
@@ -231,31 +253,6 @@
                 such as streams, strings, files and text writers.
             </summary>
             <param name="writer">The text writer to write the data to.</param>
-        </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.Stream)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream asynchronously.
-            </summary>
-            <param name="stream">The stream to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
-            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
-        </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.TextWriter)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer asynchronously.
-            </summary>
-            <param name="writer">The text writer to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
-        </member>
-        <member name="M:IniFile.Ini.InternalSaveAsync(System.IO.TextWriter)">
-            <summary>
-                Common method called to asynchronously  save the <see cref="T:IniFile.Ini"/> instance data to
-                various destinations such as streams, strings, files and text writers.
-            </summary>
-            <param name="writer">The text writer to write the data to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
         </member>
         <member name="P:IniFile.Ini.TrailingItems">
             <summary>
