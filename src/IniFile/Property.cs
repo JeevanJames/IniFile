@@ -18,8 +18,10 @@ limitations under the License.
 */
 #endregion
 
+using System;
 using System.Diagnostics;
-
+using System.Text;
+using System.Text.RegularExpressions;
 using IniFile.Items;
 
 namespace IniFile
@@ -58,12 +60,32 @@ namespace IniFile
         }
 
         /// <summary>
+        ///     The symbol used to denote the end of a multi-line value.
+        /// </summary>
+        public string MultiLineEndOfText { get; set; } = "EOT";
+
+        /// <summary>
         ///     Padding details of this <see cref="Property"/>.
         /// </summary>
         public PropertyPadding Padding { get; } = new PropertyPadding();
 
         /// <inheritdoc/>
-        public override string ToString() =>
-            $"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}{Value}{Padding.Right.ToString()}";
+        public override string ToString()
+        {
+            string[] lines = NewLinePattern.Split(Value);
+            if (lines.Length == 1)
+                return $"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}{Value}{Padding.Right.ToString()}";
+
+            string eot = string.IsNullOrEmpty(MultiLineEndOfText) || MultiLineEndOfText.Trim().Length == 0
+                ? "EOT" : MultiLineEndOfText.Trim();
+            var sb = new StringBuilder();
+            sb.AppendLine($"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}<<{eot}");
+            foreach (string line in lines)
+                sb.AppendLine(line);
+            sb.AppendLine(eot);
+            return sb.ToString();
+        }
+
+        private static readonly Regex NewLinePattern = new Regex(@"\r\n|\r|\n");
     }
 }

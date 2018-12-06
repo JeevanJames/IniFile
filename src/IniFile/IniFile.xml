@@ -566,6 +566,11 @@
                 The value of the property.
             </summary>
         </member>
+        <member name="P:IniFile.Property.MultiLineEndOfText">
+            <summary>
+                The symbol used to denote the end of a multi-line value.
+            </summary>
+        </member>
         <member name="P:IniFile.Property.Padding">
             <summary>
                 Padding details of this <see cref="T:IniFile.Property"/>.

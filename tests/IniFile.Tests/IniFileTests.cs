@@ -74,7 +74,10 @@ namespace IniFile.Tests
                 new Section("Superman", string.Empty)
                 {
                     ["Level"] = "9",
-                    ["Power"] = "Superstrength,heat vision"
+                    ["Power"] = "Superstrength,heat vision",
+                    ["MultiLine"] = @"This is line one
+This is line 2
+This is line 3 and the last line"
                 }
             };
 
@@ -101,7 +104,7 @@ namespace IniFile.Tests
             supermanSection.ShouldNotBeNull();
             supermanSection.Items.Count.ShouldBe(1);
             supermanSection.Items[0].ShouldBeOfType<BlankLine>();
-            supermanSection.Count.ShouldBe(2);
+            supermanSection.Count.ShouldBe(3);
             supermanSection["Level"].ShouldBe("9");
             supermanSection["Power"].ShouldBe("Superstrength,heat vision");
         }
