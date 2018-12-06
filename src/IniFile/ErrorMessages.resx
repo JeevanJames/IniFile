@@ -118,22 +118,22 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="IniFileDoesNotExist" xml:space="preserve">
-    <value>INI file '{0}' does not exist.</value>
+    <value>The INI file '{0}' does not exist.</value>
   </data>
   <data name="PropertyWithoutSection" xml:space="preserve">
-    <value>Property '{0}' is not in a section.</value>
+    <value>The property '{0}' is not in a section. This is not allowed; all properties must be specified under a section.</value>
   </data>
   <data name="StreamNotReadable" xml:space="preserve">
-    <value>Cannot read from specified stream.</value>
+    <value>The specified stream is not readable (CanRead = false). The INI content cannot be loaded from it.</value>
   </data>
   <data name="StreamNotWritable" xml:space="preserve">
-    <value>Cannot write to the specified stream.</value>
+    <value>The specified stream is not writable (CanWrite = false). The INI object cannot be saved to it.</value>
   </data>
   <data name="UnrecognizedLine" xml:space="preserve">
-    <value>Unrecognized line in INI
+    <value>An unrecognized line was encountered in the INI content.
 {0}</value>
   </data>
   <data name="InvalidMajorItemName" xml:space="preserve">
-    <value>Name should contain at least one alpha-numeric character.</value>
+    <value>The specified name is not valid. A valid name can start with any alphabetic character, period (.), dollar symbol ($) or semi-colon (:) and can be followed by one or more alpha-numeric characters, underscores (_), tilde (~), dash (-), period (.), semi-colon (:), dollar symbol ($), or space.</value>
   </data>
 </root>

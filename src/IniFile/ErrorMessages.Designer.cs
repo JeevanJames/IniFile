@@ -8,9 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.Reflection;
+
 namespace IniFile {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -40,10 +41,10 @@ namespace IniFile {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-#if NETSTANDARD1_3
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).GetTypeInfo().Assembly);
-#else
+#if !NETSTANDARD1_3
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).Assembly);
+#else
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).GetTypeInfo().Assembly);
 #endif
                     resourceMan = temp;
                 }
@@ -66,7 +67,7 @@ namespace IniFile {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INI file &apos;{0}&apos; does not exist..
+        ///   Looks up a localized string similar to The INI file &apos;{0}&apos; does not exist..
         /// </summary>
         internal static string IniFileDoesNotExist {
             get {
@@ -75,7 +76,7 @@ namespace IniFile {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Name should contain at least one alpha-numeric character..
+        ///   Looks up a localized string similar to The specified name is not valid. A valid name can start with any alphabetic character, period (.), dollar symbol ($) or semi-colon (:) and can be followed by one or more alpha-numeric characters, underscores (_), tilde (~), dash (-), period (.), semi-colon (:), dollar symbol ($), or space..
         /// </summary>
         internal static string InvalidMajorItemName {
             get {
@@ -84,7 +85,7 @@ namespace IniFile {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Property &apos;{0}&apos; is not in a section..
+        ///   Looks up a localized string similar to The property &apos;{0}&apos; is not in a section. This is not allowed; all properties must be specified under a section..
         /// </summary>
         internal static string PropertyWithoutSection {
             get {
@@ -93,7 +94,7 @@ namespace IniFile {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot read from specified stream..
+        ///   Looks up a localized string similar to The specified stream is not readable (CanRead = false). The INI content cannot be loaded from it..
         /// </summary>
         internal static string StreamNotReadable {
             get {
@@ -102,7 +103,7 @@ namespace IniFile {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot write to the specified stream..
+        ///   Looks up a localized string similar to The specified stream is not writable (CanWrite = false). The INI object cannot be saved to it..
         /// </summary>
         internal static string StreamNotWritable {
             get {
@@ -111,7 +112,7 @@ namespace IniFile {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unrecognized line in INI
+        ///   Looks up a localized string similar to An unrecognized line was encountered in the INI content.
         ///{0}.
         /// </summary>
         internal static string UnrecognizedLine {

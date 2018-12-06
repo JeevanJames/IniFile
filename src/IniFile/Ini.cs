@@ -25,11 +25,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using IniFile.Config;
-#if NETSTANDARD1_3
+
+#if NETSTANDARD
 using System.Threading.Tasks;
 #endif
 
+using IniFile.Config;
 using IniFile.Items;
 
 namespace IniFile
@@ -281,7 +282,7 @@ namespace IniFile
                 writer.WriteLine(trailingItem.ToString());
         }
 
-#if NETSTANDARD1_3
+#if NETSTANDARD
         /// <summary>
         ///     Saves the <see cref="Ini"/> instance to the specified stream asynchronously.
         /// </summary>
