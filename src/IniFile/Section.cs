@@ -18,11 +18,12 @@ limitations under the License.
 */
 #endregion
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-
+using System.Reflection;
 using IniFile.Items;
 
 namespace IniFile
@@ -89,6 +90,16 @@ namespace IniFile
             }
         }
 
+        public BooleanConverter AsBool => new BooleanConverter(this);
+
+        public EnumConverter<TEnum> AsEnum<TEnum>()
+            where TEnum : struct, IComparable =>
+            new EnumConverter<TEnum>(this);
+
+        public IntegerConverter AsInteger => new IntegerConverter(this);
+
+        public NumberConverter AsNumber => new NumberConverter(this);
+
         /// <summary>
         ///     The number of properties in this section.
         /// </summary>
@@ -135,5 +146,100 @@ namespace IniFile
 
         IEnumerator IEnumerable.GetEnumerator() =>
             _properties.GetEnumerator();
+    }
+
+    public sealed class BooleanConverter
+    {
+        private readonly Section _section;
+
+        internal BooleanConverter(Section section)
+        {
+            _section = section;
+        }
+
+        public bool this[string name]
+        {
+            get
+            {
+                string value = _section[name];
+                switch (value)
+                {
+                    case "0":
+                    case "f":
+                    case "n":
+                    case "off":
+                    case "no":
+                    case "disabled":
+                        return false;
+                    case "1":
+                    case "t":
+                    case "y":
+                    case "on":
+                    case "yes":
+                    case "enabled":
+                        return true;
+                    default:
+                        throw new Exception($"'value' is not a boolean value.");
+                }
+            }
+            set => _section[name] = value ? "1" : "0";
+        }
+    }
+
+    public sealed class EnumConverter<TEnum>
+        where TEnum : struct, IComparable
+    {
+        private readonly Section _section;
+
+        internal EnumConverter(Section section)
+        {
+#if NETSTANDARD1_3
+            if (!typeof(TEnum).GetTypeInfo().IsEnum)
+#else
+            if (!typeof(TEnum).IsEnum)
+#endif
+                throw new Exception($"{typeof(TEnum).FullName} is not an enum type.");
+            _section = section;
+        }
+
+        public TEnum Get(string name, bool caseSensitive = false) =>
+            (TEnum)Enum.Parse(typeof(TEnum), _section[name], !caseSensitive);
+
+        public void Set(string name, TEnum value)
+        {
+            _section[name] = value.ToString();
+        }
+    }
+
+    public sealed class IntegerConverter
+    {
+        private readonly Section _section;
+
+        internal IntegerConverter(Section section)
+        {
+            _section = section;
+        }
+
+        public long this[string name]
+        {
+            get => long.Parse(_section[name]);
+            set => _section[name] = value.ToString();
+        }
+    }
+
+    public sealed class NumberConverter
+    {
+        private readonly Section _section;
+
+        internal NumberConverter(Section section)
+        {
+            _section = section;
+        }
+
+        public double this[string name]
+        {
+            get => double.Parse(_section[name]);
+            set => _section[name] = value.ToString();
+        }
     }
 }
