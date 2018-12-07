@@ -188,7 +188,7 @@ namespace IniFile
         public static implicit operator PropertyValue(bool value) =>
             new PropertyValue(value, value ? Ini.Config.Types.TrueString : Ini.Config.Types.FalseString);
 
-        public static explicit operator bool(PropertyValue pvalue)
+        public static implicit operator bool(PropertyValue pvalue)
         {
             if (pvalue._value is bool)
                 return (bool)pvalue._value;

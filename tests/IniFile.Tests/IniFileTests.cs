@@ -113,6 +113,10 @@ This is line 3 and the last line"
             flashSection["Level"] = 10;
             int level = flashSection["Level"];
             level.ShouldBe(10);
+
+            flashSection["Masked"] = "yes";
+            bool masked = flashSection["Masked"];
+            masked.ShouldBeTrue();
         }
 
         //[Theory(Skip = "Need to handle cross-platform new line characters.")]
