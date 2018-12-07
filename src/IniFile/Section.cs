@@ -74,19 +74,24 @@ namespace IniFile
         /// </summary>
         /// <param name="name">The name of the property to get or set.</param>
         /// <returns>The value of the property.</returns>
-        public PropertyValue? this[string name]
+        public PropertyValue this[string name]
         {
-            get => _properties.FirstOrDefault(p => p.Name == name)?.Value;
+            get
+            {
+                Property property = _properties.FirstOrDefault(p => p.Name == name);
+                return property != null ? property.Value : PropertyValue.Empty;
+            }
+
             set
             {
                 Property property = _properties.FirstOrDefault(p => p.Name == name);
                 if (property == null)
                 {
-                    property = new Property(name, value.GetValueOrDefault(PropertyValue.Empty));
+                    property = new Property(name, value);
                     _properties.Add(property);
                 }
                 else
-                    property.Value = value.GetValueOrDefault(PropertyValue.Empty);
+                    property.Value = value;
             }
         }
 
@@ -168,7 +173,7 @@ namespace IniFile
         public static implicit operator PropertyValue(int value) =>
             new PropertyValue(value);
 
-        public static explicit operator int(PropertyValue pvalue)
+        public static implicit operator int(PropertyValue pvalue)
         {
             if (pvalue._value is int)
                 return (int) pvalue._value;

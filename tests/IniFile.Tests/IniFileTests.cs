@@ -99,7 +99,7 @@ This is line 3 and the last line"
             flashSection.Items.Count.ShouldBe(1);
             flashSection.Items[0].ShouldBeOfType<BlankLine>();
             flashSection.Count.ShouldBe(3);
-            flashSection["Level"].ShouldBe(9);
+            ((int)flashSection["Level"]).ShouldBe(9);
             flashSection["Power"].ShouldBe("Superspeed");
 
             Section supermanSection = ini["Superman"];
@@ -107,8 +107,12 @@ This is line 3 and the last line"
             supermanSection.Items.Count.ShouldBe(1);
             supermanSection.Items[0].ShouldBeOfType<BlankLine>();
             supermanSection.Count.ShouldBe(4);
-            supermanSection["Level"].ShouldBe(9);
+            ((int)supermanSection["Level"]).ShouldBe(9);
             supermanSection["Power"].ShouldBe("Superstrength,heat vision");
+
+            flashSection["Level"] = 10;
+            int level = flashSection["Level"];
+            level.ShouldBe(10);
         }
 
         //[Theory(Skip = "Need to handle cross-platform new line characters.")]
