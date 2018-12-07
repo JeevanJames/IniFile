@@ -32,7 +32,7 @@ namespace IniFile
     public sealed partial class Property : MajorIniItem, IPaddedItem<PropertyPadding>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private string _value;
+        private PropertyValue _value;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Property"/> class.
@@ -45,7 +45,7 @@ namespace IniFile
         ///     <see cref="BlankLine"/> object is created, otherwise a <see cref="Comment"/> is created.
         /// </param>
         /// <inheritdoc/>
-        public Property(string name, string value, params string[] items) : base(name, items)
+        public Property(string name, PropertyValue value, params string[] items) : base(name, items)
         {
             Value = value;
         }
@@ -53,10 +53,10 @@ namespace IniFile
         /// <summary>
         ///     The value of the property.
         /// </summary>
-        public string Value
+        public PropertyValue Value
         {
             get => _value;
-            set => _value = value ?? string.Empty;
+            set => _value = value;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace IniFile
         /// <inheritdoc/>
         public override string ToString()
         {
-            string[] lines = NewLinePattern.Split(Value);
+            string[] lines = NewLinePattern.Split(Value.ToString());
             if (lines.Length == 1)
                 return $"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}{Value}{Padding.Right.ToString()}";
 

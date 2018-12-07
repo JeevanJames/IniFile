@@ -68,13 +68,15 @@ namespace IniFile.Tests
                 },
                 new Section("The Flash", string.Empty)
                 {
-                    ["Level"] = "9",
-                    ["Power"] = "Superspeed"
+                    ["Level"] = 9,
+                    ["Power"] = "Superspeed",
+                    ["Masked"] = true
                 },
                 new Section("Superman", string.Empty)
                 {
-                    ["Level"] = "9",
+                    ["Level"] = 9,
                     ["Power"] = "Superstrength,heat vision",
+                    ["Masked"] = false,
                     ["MultiLine"] = @"This is line one
 This is line 2
 This is line 3 and the last line"
@@ -96,16 +98,16 @@ This is line 3 and the last line"
             flashSection.ShouldNotBeNull();
             flashSection.Items.Count.ShouldBe(1);
             flashSection.Items[0].ShouldBeOfType<BlankLine>();
-            flashSection.Count.ShouldBe(2);
-            flashSection["Level"].ShouldBe("9");
+            flashSection.Count.ShouldBe(3);
+            flashSection["Level"].ShouldBe(9);
             flashSection["Power"].ShouldBe("Superspeed");
 
             Section supermanSection = ini["Superman"];
             supermanSection.ShouldNotBeNull();
             supermanSection.Items.Count.ShouldBe(1);
             supermanSection.Items[0].ShouldBeOfType<BlankLine>();
-            supermanSection.Count.ShouldBe(3);
-            supermanSection["Level"].ShouldBe("9");
+            supermanSection.Count.ShouldBe(4);
+            supermanSection["Level"].ShouldBe(9);
             supermanSection["Power"].ShouldBe("Superstrength,heat vision");
         }
 

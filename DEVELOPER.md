@@ -16,6 +16,8 @@
 - [ ] Implement typed values for lists, numbers, booleans, etc.
 
 - [ ] Allow multiline values using the UNIX style:
+  - [x] Writing multiline values
+  - [ ] Reading multiline values
 
 ```ini
 Name = <<EOT

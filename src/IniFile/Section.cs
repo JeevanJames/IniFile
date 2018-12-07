@@ -23,7 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
+
 using IniFile.Items;
 
 namespace IniFile
@@ -74,7 +74,7 @@ namespace IniFile
         /// </summary>
         /// <param name="name">The name of the property to get or set.</param>
         /// <returns>The value of the property.</returns>
-        public string this[string name]
+        public PropertyValue? this[string name]
         {
             get => _properties.FirstOrDefault(p => p.Name == name)?.Value;
             set
@@ -82,23 +82,13 @@ namespace IniFile
                 Property property = _properties.FirstOrDefault(p => p.Name == name);
                 if (property == null)
                 {
-                    property = new Property(name, value);
+                    property = new Property(name, value.GetValueOrDefault(PropertyValue.Empty));
                     _properties.Add(property);
                 }
                 else
-                    property.Value = value;
+                    property.Value = value.GetValueOrDefault(PropertyValue.Empty);
             }
         }
-
-        public BooleanConverter AsBool => new BooleanConverter(this);
-
-        public EnumConverter<TEnum> AsEnum<TEnum>()
-            where TEnum : struct, IComparable =>
-            new EnumConverter<TEnum>(this);
-
-        public IntegerConverter AsInteger => new IntegerConverter(this);
-
-        public NumberConverter AsNumber => new NumberConverter(this);
 
         /// <summary>
         ///     The number of properties in this section.
@@ -148,98 +138,108 @@ namespace IniFile
             _properties.GetEnumerator();
     }
 
-    public sealed class BooleanConverter
+    public readonly struct PropertyValue : IEquatable<PropertyValue>
     {
-        private readonly Section _section;
+        private readonly Type _type;
+        private readonly object _value;
+        private readonly string _stringValue;
 
-        internal BooleanConverter(Section section)
+        internal PropertyValue(object value)
         {
-            _section = section;
+            _value = value;
+            _type = _value != null ? _value.GetType() : typeof(string);
+            _stringValue = null;
         }
 
-        public bool this[string name]
+        internal PropertyValue(object value, string stringValue)
         {
-            get
+            _value = value;
+            _type = _value != null ? _value.GetType() : typeof(string);
+            _stringValue = stringValue;
+        }
+
+        public override string ToString() => _stringValue ?? _value?.ToString();
+
+        public static implicit operator PropertyValue(string value) =>
+            new PropertyValue(value);
+
+        public static explicit operator string(PropertyValue pvalue) => pvalue.ToString();
+
+        public static implicit operator PropertyValue(int value) =>
+            new PropertyValue(value);
+
+        public static explicit operator int(PropertyValue pvalue)
+        {
+            if (pvalue._value is int)
+                return (int) pvalue._value;
+
+            string stringValue = pvalue.ToString();
+            if (stringValue == null)
+                throw new InvalidCastException();
+
+            return int.Parse(stringValue);
+        }
+
+        public static implicit operator PropertyValue(bool value) =>
+            new PropertyValue(value, value ? Ini.Config.Types.TrueString : Ini.Config.Types.FalseString);
+
+        public static explicit operator bool(PropertyValue pvalue)
+        {
+            if (pvalue._value is bool)
+                return (bool)pvalue._value;
+
+            string stringValue = pvalue.ToString()?.ToLowerInvariant();
+            if (stringValue == null)
+                throw new InvalidCastException();
+
+            switch (stringValue)
             {
-                string value = _section[name];
-                switch (value)
-                {
-                    case "0":
-                    case "f":
-                    case "n":
-                    case "off":
-                    case "no":
-                    case "disabled":
-                        return false;
-                    case "1":
-                    case "t":
-                    case "y":
-                    case "on":
-                    case "yes":
-                    case "enabled":
-                        return true;
-                    default:
-                        throw new Exception($"'value' is not a boolean value.");
-                }
+                case "0":
+                case "f":
+                case "n":
+                case "off":
+                case "no":
+                case "disabled":
+                    return false;
+                case "1":
+                case "t":
+                case "y":
+                case "on":
+                case "yes":
+                case "enabled":
+                    return true;
+                default:
+                    throw new Exception($"'value' is not a boolean value.");
             }
-            set => _section[name] = value ? "1" : "0";
         }
-    }
 
-    public sealed class EnumConverter<TEnum>
-        where TEnum : struct, IComparable
-    {
-        private readonly Section _section;
-
-        internal EnumConverter(Section section)
+        public static bool operator ==(PropertyValue value1, PropertyValue value2)
         {
-#if NETSTANDARD1_3
-            if (!typeof(TEnum).GetTypeInfo().IsEnum)
-#else
-            if (!typeof(TEnum).IsEnum)
-#endif
-                throw new Exception($"{typeof(TEnum).FullName} is not an enum type.");
-            _section = section;
+            return value1.Equals(value2);
         }
 
-        public TEnum Get(string name, bool caseSensitive = false) =>
-            (TEnum)Enum.Parse(typeof(TEnum), _section[name], !caseSensitive);
-
-        public void Set(string name, TEnum value)
+        public static bool operator !=(PropertyValue value1, PropertyValue value2)
         {
-            _section[name] = value.ToString();
+            return !(value1 == value2);
         }
-    }
 
-    public sealed class IntegerConverter
-    {
-        private readonly Section _section;
+        public bool IsEmpty() => _value == null && _stringValue == null;
 
-        internal IntegerConverter(Section section)
+        public override bool Equals(object obj)
         {
-            _section = section;
+            return obj is PropertyValue && Equals((PropertyValue)obj);
         }
 
-        public long this[string name]
+        public bool Equals(PropertyValue other)
         {
-            get => long.Parse(_section[name]);
-            set => _section[name] = value.ToString();
+            return EqualityComparer<Type>.Default.Equals(_type, other._type);
         }
-    }
 
-    public sealed class NumberConverter
-    {
-        private readonly Section _section;
-
-        internal NumberConverter(Section section)
+        public override int GetHashCode()
         {
-            _section = section;
+            return -331038658 + EqualityComparer<Type>.Default.GetHashCode(_type);
         }
 
-        public double this[string name]
-        {
-            get => double.Parse(_section[name]);
-            set => _section[name] = value.ToString();
-        }
+        public static readonly PropertyValue Empty = new PropertyValue(null);
     }
 }

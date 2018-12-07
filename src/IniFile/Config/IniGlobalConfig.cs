@@ -37,6 +37,8 @@ namespace IniFile.Config
         /// </summary>
         public PaddingConfig Padding { get; } = new PaddingConfig();
 
+        public TypesConfig Types { get; } = new TypesConfig();
+
         /// <summary>
         ///     Allows the hash symbol (#) to be used to prefix comments.
         /// </summary>
@@ -77,5 +79,19 @@ namespace IniFile.Config
             Padding.Comment.Right = right ?? 1;
             return this;
         }
+
+        public IniGlobalConfig SetBooleanStrings(string trueString = "1", string falseString = "0")
+        {
+            Types.TrueString = string.IsNullOrEmpty(trueString) || trueString.Trim().Length == 0 ? "1" : trueString;
+            Types.FalseString = string.IsNullOrEmpty(falseString) || falseString.Trim().Length == 0 ? "0" : falseString;
+            return this;
+        }
+    }
+
+    public sealed class TypesConfig
+    {
+        public string TrueString { get; set; } = "1";
+
+        public string FalseString { get; set; } = "0";
     }
 }
