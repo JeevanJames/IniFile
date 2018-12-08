@@ -21,6 +21,7 @@
     <None Remove="Data\EmptySections.ini" />
     <None Remove="Data\Formatted.ini" />
     <None Remove="Data\PropertyWithoutSection.ini" />
+    <None Remove="Data\TypedProperties.ini" />
     <None Remove="Data\Unformatted.ini" />
     <None Remove="Data\UnrecognizedLine.ini" />
     <None Remove="Players.ini" />
@@ -32,6 +33,7 @@
     <EmbeddedResource Include="Data\EmptySections.ini" />
     <EmbeddedResource Include="Data\Formatted.ini" />
     <EmbeddedResource Include="Data\PropertyWithoutSection.ini" />
+    <EmbeddedResource Include="Data\TypedProperties.ini" />
     <EmbeddedResource Include="Data\Unformatted.ini" />
     <EmbeddedResource Include="Data\UnrecognizedLine.ini" />
     <EmbeddedResource Include="Players.ini" />

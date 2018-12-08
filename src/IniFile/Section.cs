@@ -18,7 +18,6 @@ limitations under the License.
 */
 #endregion
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -141,110 +140,5 @@ namespace IniFile
 
         IEnumerator IEnumerable.GetEnumerator() =>
             _properties.GetEnumerator();
-    }
-
-    public readonly struct PropertyValue : IEquatable<PropertyValue>
-    {
-        private readonly Type _type;
-        private readonly object _value;
-        private readonly string _stringValue;
-
-        internal PropertyValue(object value)
-        {
-            _value = value;
-            _type = _value != null ? _value.GetType() : typeof(string);
-            _stringValue = null;
-        }
-
-        internal PropertyValue(object value, string stringValue)
-        {
-            _value = value;
-            _type = _value != null ? _value.GetType() : typeof(string);
-            _stringValue = stringValue;
-        }
-
-        public override string ToString() => _stringValue ?? _value?.ToString();
-
-        public static implicit operator PropertyValue(string value) =>
-            new PropertyValue(value);
-
-        public static explicit operator string(PropertyValue pvalue) => pvalue.ToString();
-
-        public static implicit operator PropertyValue(int value) =>
-            new PropertyValue(value);
-
-        public static implicit operator int(PropertyValue pvalue)
-        {
-            if (pvalue._value is int)
-                return (int) pvalue._value;
-
-            string stringValue = pvalue.ToString();
-            if (stringValue == null)
-                throw new InvalidCastException();
-
-            return int.Parse(stringValue);
-        }
-
-        public static implicit operator PropertyValue(bool value) =>
-            new PropertyValue(value, value ? Ini.Config.Types.TrueString : Ini.Config.Types.FalseString);
-
-        public static implicit operator bool(PropertyValue pvalue)
-        {
-            if (pvalue._value is bool)
-                return (bool)pvalue._value;
-
-            string stringValue = pvalue.ToString()?.ToLowerInvariant();
-            if (stringValue == null)
-                throw new InvalidCastException();
-
-            switch (stringValue)
-            {
-                case "0":
-                case "f":
-                case "n":
-                case "off":
-                case "no":
-                case "disabled":
-                    return false;
-                case "1":
-                case "t":
-                case "y":
-                case "on":
-                case "yes":
-                case "enabled":
-                    return true;
-                default:
-                    throw new Exception($"'value' is not a boolean value.");
-            }
-        }
-
-        public static bool operator ==(PropertyValue value1, PropertyValue value2)
-        {
-            return value1.Equals(value2);
-        }
-
-        public static bool operator !=(PropertyValue value1, PropertyValue value2)
-        {
-            return !(value1 == value2);
-        }
-
-        public bool IsEmpty() => _value == null && _stringValue == null;
-
-        public override bool Equals(object obj)
-        {
-            return obj is PropertyValue && Equals((PropertyValue)obj);
-        }
-
-        public bool Equals(PropertyValue other)
-        {
-            return EqualityComparer<Type>.Default.Equals(_type, other._type);
-        }
-
-        public override int GetHashCode()
-        {
-            return -331038658 + EqualityComparer<Type>.Default.GetHashCode(_type);
-        }
-
-        public static readonly PropertyValue Empty = new PropertyValue(null);
     }
 }

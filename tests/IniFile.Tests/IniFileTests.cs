@@ -47,8 +47,8 @@ namespace IniFile.Tests
 
             Section section = ini[0];
             section.Count.ShouldBe(2);
-            section["Player1"].ShouldBe("Ryan");
-            section["Player2"].ShouldBe("Emma");
+            section["Player1"].ToString().ShouldBe("Ryan");
+            section["Player2"].ToString().ShouldBe("Emma");
         }
 
         [Fact]
@@ -91,8 +91,8 @@ This is line 3 and the last line"
             playersSection.Items.Count.ShouldBe(1);
             playersSection.Items[0].ShouldBeOfType<Comment>();
             playersSection.Count.ShouldBe(2);
-            playersSection["Player1"].ShouldBe("The Flash");
-            playersSection["Player2"].ShouldBe("Superman");
+            playersSection["Player1"].ToString().ShouldBe("The Flash");
+            playersSection["Player2"].ToString().ShouldBe("Superman");
 
             Section flashSection = ini["The Flash"];
             flashSection.ShouldNotBeNull();
@@ -100,7 +100,7 @@ This is line 3 and the last line"
             flashSection.Items[0].ShouldBeOfType<BlankLine>();
             flashSection.Count.ShouldBe(3);
             ((int)flashSection["Level"]).ShouldBe(9);
-            flashSection["Power"].ShouldBe("Superspeed");
+            flashSection["Power"].ToString().ShouldBe("Superspeed");
 
             Section supermanSection = ini["Superman"];
             supermanSection.ShouldNotBeNull();
@@ -108,7 +108,7 @@ This is line 3 and the last line"
             supermanSection.Items[0].ShouldBeOfType<BlankLine>();
             supermanSection.Count.ShouldBe(4);
             ((int)supermanSection["Level"]).ShouldBe(9);
-            supermanSection["Power"].ShouldBe("Superstrength,heat vision");
+            supermanSection["Power"].ToString().ShouldBe("Superstrength,heat vision");
 
             flashSection["Level"] = 10;
             int level = flashSection["Level"];
@@ -160,9 +160,9 @@ This is line 3 and the last line"
             Ini ini = Ini.Load(iniContent);
 
             ini.ShouldNotBeNull();
-            ini["Section1"]["Key1"].ShouldBe(string.Empty);
-            ini["Section1"]["Key2"].ShouldBe(string.Empty);
-            ini["Section2"]["Key4"].ShouldBe(string.Empty);
+            ini["Section1"]["Key1"].ToString().ShouldBe(string.Empty);
+            ini["Section1"]["Key2"].ToString().ShouldBe(string.Empty);
+            ini["Section2"]["Key4"].ToString().ShouldBe(string.Empty);
         }
 
         [Theory]
@@ -175,6 +175,61 @@ This is line 3 and the last line"
             string formatted = ini.ToString();
 
             formatted.ShouldNotBeNull();
+        }
+
+        [Theory]
+        [EmbeddedResourceContent("IniFile.Tests.Data.TypedProperties.ini")]
+        public void Can_read_typed_properties(string iniContent)
+        {
+            Ini ini = Ini.Load(iniContent);
+
+            Section dataSection = ini["TypedData"];
+            string stringValue = dataSection["String"];
+            sbyte sbyteValue = dataSection["SByte"];
+            byte byteValue = dataSection["Byte"];
+            short shortValue = dataSection["Short"];
+            ushort ushortValue = dataSection["UShort"];
+            int intValue = dataSection["Int"];
+            uint uintValue = dataSection["UInt"];
+            long longValue = dataSection["Long"];
+            ulong ulongValue = dataSection["ULong"];
+            float floatValue = dataSection["Float"];
+            double doubleValue = dataSection["Double"];
+            decimal decimalValue = dataSection["Decimal"];
+
+            Section falseBoolSection = ini["False Booleans"];
+            bool falseBool1 = falseBoolSection["Bool1"];
+            bool falseBool2 = falseBoolSection["Bool2"];
+            bool falseBool3 = falseBoolSection["Bool3"];
+            bool falseBool4 = falseBoolSection["Bool4"];
+            bool falseBool5 = falseBoolSection["Bool5"];
+            bool falseBool6 = falseBoolSection["Bool6"];
+            bool falseBool7 = falseBoolSection["Bool7"];
+
+            Section trueBoolSection = ini["True Booleans"];
+            bool trueBool1 = trueBoolSection["Bool1"];
+            bool trueBool2 = trueBoolSection["Bool2"];
+            bool trueBool3 = trueBoolSection["Bool3"];
+            bool trueBool4 = trueBoolSection["Bool4"];
+            bool trueBool5 = trueBoolSection["Bool5"];
+            bool trueBool6 = trueBoolSection["Bool6"];
+            bool trueBool7 = trueBoolSection["Bool7"];
+
+            falseBool1.ShouldBeFalse();
+            falseBool2.ShouldBeFalse();
+            falseBool3.ShouldBeFalse();
+            falseBool4.ShouldBeFalse();
+            falseBool5.ShouldBeFalse();
+            falseBool6.ShouldBeFalse();
+            falseBool7.ShouldBeFalse();
+
+            trueBool1.ShouldBeTrue();
+            trueBool2.ShouldBeTrue();
+            trueBool3.ShouldBeTrue();
+            trueBool4.ShouldBeTrue();
+            trueBool5.ShouldBeTrue();
+            trueBool6.ShouldBeTrue();
+            trueBool7.ShouldBeTrue();
         }
     }
 }

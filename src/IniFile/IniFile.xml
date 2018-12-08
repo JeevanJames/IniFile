@@ -515,6 +515,29 @@
         <member name="M:IniFile.Items.PropertyPadding.Reset">
             <inheritdoc/>
         </member>
+        <member name="T:IniFile.Items.PropertyValue">
+            <summary>
+                <para>Represents the value of a property</para>
+                <para>Property values can be strings, numbers (both floats and integers) and booleans.</para>
+            </summary>
+        </member>
+        <member name="F:IniFile.Items.PropertyValue._value">
+            <summary>
+                The value of the property, internally using the actual type.
+            </summary>
+        </member>
+        <member name="F:IniFile.Items.PropertyValue._stringValue">
+            <summary>
+                <para>
+                    The string representation of the value. This is used if the string representation
+                    is different from the string returned by calling <c>_value.ToString()</c>.
+                </para>
+                <para>
+                    Boolean values use this, as there can be multiple string representations of a
+                    boolean value such as <c>0</c>, <c>on</c>, etc.
+                </para>
+            </summary>
+        </member>
         <member name="T:IniFile.Items.SectionPadding">
             <summary>
                 Represents the padding details for an INI section.
@@ -548,7 +571,7 @@
                 Represents a property object in an INI.
             </summary>
         </member>
-        <member name="M:IniFile.Property.#ctor(System.String,IniFile.PropertyValue,System.String[])">
+        <member name="M:IniFile.Property.#ctor(System.String,IniFile.Items.PropertyValue,System.String[])">
             <summary>
                 Initializes a new instance of the <see cref="T:IniFile.Property"/> class.
             </summary>
