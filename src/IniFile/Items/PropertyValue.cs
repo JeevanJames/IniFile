@@ -70,6 +70,13 @@ namespace IniFile.Items
 
         public override string ToString() => _stringValue ?? _value?.ToString();
 
+        public DateTime AsDateTime(string format)
+        {
+            return ConvertTo(this, s => DateTime.TryParseExact(
+                s, format, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime dt)
+                    ? new ConversionResult<DateTime>(true, dt) : new ConversionResult<DateTime>(false, default));
+        }
+
         public TEnum AsEnum<TEnum>()
             where TEnum : struct, IComparable
         {
