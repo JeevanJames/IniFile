@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace IniFile.Items
 {
@@ -67,6 +68,32 @@ namespace IniFile.Items
         }
 
         public override string ToString() => _stringValue ?? _value?.ToString();
+
+        public TEnum AsEnum<TEnum>()
+            where TEnum : struct, IComparable
+        {
+#if NETSTANDARD1_3
+            if (!typeof(TEnum).GetTypeInfo().IsEnum)
+#else
+            if (!typeof(TEnum).IsEnum)
+#endif
+                throw new InvalidOperationException();
+#if !NET35
+            if (!Enum.TryParse(ToString(), true, out TEnum value))
+                throw new InvalidCastException(string.Format(ErrorMessages.CannotCastPropertyValue, typeof(TEnum).FullName));
+            return value;
+#else
+            try
+            {
+                TEnum value = (TEnum) Enum.Parse(typeof(TEnum), ToString(), true);
+                return value;
+            }
+            catch (ArgumentException ex)
+            {
+                throw new InvalidCastException(string.Format(ErrorMessages.CannotCastPropertyValue, typeof(TEnum).FullName), ex);
+            }
+#endif
+        }
 
         public static implicit operator PropertyValue(string value) => new PropertyValue(value);
         public static implicit operator string(PropertyValue pvalue) => pvalue.ToString();

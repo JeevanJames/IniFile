@@ -215,6 +215,9 @@ This is line 3 and the last line"
             bool trueBool6 = trueBoolSection["Bool6"];
             bool trueBool7 = trueBoolSection["Bool7"];
 
+            Section enumSection = ini["Enum"];
+            DayOfWeek dow = enumSection["Enum1"].AsEnum<DayOfWeek>();
+
             falseBool1.ShouldBeFalse();
             falseBool2.ShouldBeFalse();
             falseBool3.ShouldBeFalse();
@@ -230,6 +233,34 @@ This is line 3 and the last line"
             trueBool5.ShouldBeTrue();
             trueBool6.ShouldBeTrue();
             trueBool7.ShouldBeTrue();
+
+            dow.ShouldBe(DayOfWeek.Saturday);
+        }
+
+        [Fact]
+        public void Can_write_typed_properties()
+        {
+            var ini = new Ini
+            {
+                new Section("TypedData")
+                {
+                    ["String"] = "This is a string",
+                    ["SByte"] = (sbyte) -10,
+                    ["Byte"] = (byte) 25,
+                    ["Short"] = (short) -400,
+                    ["UShort"] = (ushort) 700,
+                    ["Int"] = -30000,
+                    ["UInt"] = 50000U,
+                    ["Long"] = -1000000L,
+                    ["ULong"] = 20000000UL,
+                    ["Float"] = 12.54443F,
+                    ["Double"] = 6566123.22D,
+                    ["Decimal"] = 1000.50m,
+                    ["Boolean"] = true
+                }
+            };
+
+            ini.ShouldNotBeNull();
         }
     }
 }

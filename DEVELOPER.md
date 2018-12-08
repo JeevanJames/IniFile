@@ -10,10 +10,12 @@
   - [ ] Add doc comments for all padding configs
 - [ ] Implement a INI specification from https://github.com/SemaiCZE/inicpp/wiki/INI-format-specification
   - [x] Allow for identifier pattern for sections and property names
+  - [x] Typed property values for booleans, integral numbers and floating numbers
+  - [x] Typed property values for enums
+  - [ ] Typed property values for lists
 - [ ] Handle cross-platform newline characters when formatting. Enable the `Ensure_format_is_retained` test when done.
 - [ ] Document object model with an image in the README.md file.
 - [ ] Add more tests.
-- [ ] Implement typed values for lists, numbers, booleans, etc.
 
 - [ ] Allow multiline values using the UNIX style:
   - [x] Writing multiline values
