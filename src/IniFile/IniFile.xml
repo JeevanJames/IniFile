@@ -109,6 +109,11 @@
               resource lookups using this strongly typed resource class.
             </summary>
         </member>
+        <member name="P:IniFile.ErrorMessages.CannotCastPropertyValue">
+            <summary>
+              Looks up a localized string similar to Cannot convert the property value to a {0}..
+            </summary>
+        </member>
         <member name="P:IniFile.ErrorMessages.IniFileDoesNotExist">
             <summary>
               Looks up a localized string similar to The INI file &apos;{0}&apos; does not exist..

@@ -136,4 +136,7 @@
   <data name="InvalidMajorItemName" xml:space="preserve">
     <value>The specified name is not valid. A valid name can start with any alphabetic character, period (.), dollar symbol ($) or semi-colon (:) and can be followed by one or more alpha-numeric characters, underscores (_), tilde (~), dash (-), period (.), semi-colon (:), dollar symbol ($), or space.</value>
   </data>
+  <data name="CannotCastPropertyValue" xml:space="preserve">
+    <value>Cannot convert the property value to a {0}.</value>
+  </data>
 </root>

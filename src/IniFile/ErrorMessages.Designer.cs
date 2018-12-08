@@ -41,10 +41,10 @@ namespace IniFile {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-#if !NETSTANDARD1_3
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).Assembly);
-#else
+#if NETSTANDARD1_3
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).GetTypeInfo().Assembly);
+#else
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).Assembly);
 #endif
                     resourceMan = temp;
                 }
@@ -63,6 +63,15 @@ namespace IniFile {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot convert the property value to a {0}..
+        /// </summary>
+        internal static string CannotCastPropertyValue {
+            get {
+                return ResourceManager.GetString("CannotCastPropertyValue", resourceCulture);
             }
         }
         
