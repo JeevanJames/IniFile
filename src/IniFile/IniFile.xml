@@ -259,31 +259,6 @@
             </summary>
             <param name="writer">The text writer to write the data to.</param>
         </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.Stream)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream asynchronously.
-            </summary>
-            <param name="stream">The stream to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
-            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
-        </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.TextWriter)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer asynchronously.
-            </summary>
-            <param name="writer">The text writer to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
-        </member>
-        <member name="M:IniFile.Ini.InternalSaveAsync(System.IO.TextWriter)">
-            <summary>
-                Common method called to asynchronously  save the <see cref="T:IniFile.Ini"/> instance data to
-                various destinations such as streams, strings, files and text writers.
-            </summary>
-            <param name="writer">The text writer to write the data to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-        </member>
         <member name="P:IniFile.Ini.TrailingItems">
             <summary>
                 Any trailing comments and blank lines at the end of the INI.

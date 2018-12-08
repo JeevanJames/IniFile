@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard1.3;net35;net40;net45</TargetFrameworks>
-    <Version>1.3.0</Version>
+    <Version>1.4.0</Version>
     <Authors>Jeevan James</Authors>
     <Company>Jeevan James</Company>
     <Description>.NET library to open, modify and save .INI files</Description>
