@@ -18,10 +18,10 @@ limitations under the License.
 */
 #endregion
 
-using System;
 using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
+
 using IniFile.Items;
 
 namespace IniFile
