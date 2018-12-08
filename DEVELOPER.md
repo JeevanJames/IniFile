@@ -13,6 +13,7 @@
   - [x] Typed property values for booleans, integral numbers and floating numbers
   - [x] Typed property values for enums
   - [ ] Typed property values for lists
+  - [ ] Support space before and after names with `\`
 - [ ] Handle cross-platform newline characters when formatting. Enable the `Ensure_format_is_retained` test when done.
 - [ ] Document object model with an image in the README.md file.
 - [ ] Add more tests.
