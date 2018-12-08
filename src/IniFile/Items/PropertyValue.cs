@@ -21,6 +21,7 @@ limitations under the License.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
@@ -151,6 +152,13 @@ namespace IniFile.Items
         public static implicit operator PropertyValue(decimal value) => new PropertyValue(value);
         public static implicit operator decimal(PropertyValue pvalue) => ConvertTo(pvalue, s =>
             decimal.TryParse(s, out decimal value) ? new ConversionResult<decimal>(true, value) : new ConversionResult<decimal>(false, default)
+        );
+
+        public static implicit operator PropertyValue(DateTime value) =>
+            new PropertyValue(value, value.ToString(Ini.Config.Types.DateFormat));
+        public static implicit operator DateTime(PropertyValue pvalue) => ConvertTo(pvalue, s => 
+            DateTime.TryParseExact(s, Ini.Config.Types.DateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime value)
+                ? new ConversionResult<DateTime>(true, value) : new ConversionResult<DateTime>(false, default)
         );
 
         private static T ConvertTo<T>(PropertyValue pvalue, Func<string, ConversionResult<T>> converter)

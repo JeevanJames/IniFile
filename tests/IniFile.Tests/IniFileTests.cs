@@ -181,6 +181,8 @@ This is line 3 and the last line"
         [EmbeddedResourceContent("IniFile.Tests.Data.TypedProperties.ini")]
         public void Can_read_typed_properties(string iniContent)
         {
+            Ini.Config.Types.DateFormat = "yyyy-MM-dd";
+
             Ini ini = Ini.Load(iniContent);
 
             Section dataSection = ini["TypedData"];
@@ -196,6 +198,7 @@ This is line 3 and the last line"
             float floatValue = dataSection["Float"];
             double doubleValue = dataSection["Double"];
             decimal decimalValue = dataSection["Decimal"];
+            DateTime dateTimeValue = dataSection["DateTime"];
 
             Section falseBoolSection = ini["False Booleans"];
             bool falseBool1 = falseBoolSection["Bool1"];
@@ -217,6 +220,8 @@ This is line 3 and the last line"
 
             Section enumSection = ini["Enum"];
             DayOfWeek dow = enumSection["Enum1"].AsEnum<DayOfWeek>();
+
+            dateTimeValue.ShouldBe(new DateTime(2018, 12, 08));
 
             falseBool1.ShouldBeFalse();
             falseBool2.ShouldBeFalse();
@@ -256,7 +261,8 @@ This is line 3 and the last line"
                     ["Float"] = 12.54443F,
                     ["Double"] = 6566123.22D,
                     ["Decimal"] = 1000.50m,
-                    ["Boolean"] = true
+                    ["Boolean"] = true,
+                    ["DateTime"] = DateTime.Now
                 }
             };
 

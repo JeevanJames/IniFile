@@ -87,11 +87,4 @@ namespace IniFile.Config
             return this;
         }
     }
-
-    public sealed class TypesConfig
-    {
-        public string TrueString { get; set; } = "1";
-
-        public string FalseString { get; set; } = "0";
-    }
 }
