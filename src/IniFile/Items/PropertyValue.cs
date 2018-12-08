@@ -22,17 +22,17 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 
 namespace IniFile.Items
 {
     /// <summary>
     ///     <para>Represents the value of a property</para>
-    ///     <para>Property values can be strings, numbers (both floats and integers) and booleans.</para>
+    ///     <para>Property values can be strings, numbers (both floats and integers), date/times and booleans.</para>
     /// </summary>
     public readonly struct PropertyValue : IEquatable<PropertyValue>
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly Type _type;
 
         /// <summary>
@@ -54,6 +54,13 @@ namespace IniFile.Items
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         private readonly string _stringValue;
 
+        /// <summary>
+        ///     Initializes an instance of the <see cref="PropertyValue"/> structure.
+        /// </summary>
+        /// <param name="value">
+        ///     The value to initialize the property with. If <c>null</c>, the type is considered a
+        ///     <c>string</c>.
+        /// </param>
         internal PropertyValue(object value)
         {
             _value = value;

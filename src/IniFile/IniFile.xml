@@ -498,7 +498,7 @@
         <member name="T:IniFile.Items.PropertyValue">
             <summary>
                 <para>Represents the value of a property</para>
-                <para>Property values can be strings, numbers (both floats and integers) and booleans.</para>
+                <para>Property values can be strings, numbers (both floats and integers), date/times and booleans.</para>
             </summary>
         </member>
         <member name="F:IniFile.Items.PropertyValue._value">
@@ -517,6 +517,15 @@
                     boolean value such as <c>0</c>, <c>on</c>, etc.
                 </para>
             </summary>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.#ctor(System.Object)">
+            <summary>
+                Initializes an instance of the <see cref="T:IniFile.Items.PropertyValue"/> structure.
+            </summary>
+            <param name="value">
+                The value to initialize the property with. If <c>null</c>, the type is considered a
+                <c>string</c>.
+            </param>
         </member>
         <member name="T:IniFile.Items.SectionPadding">
             <summary>
