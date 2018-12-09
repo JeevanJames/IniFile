@@ -41,42 +41,167 @@ var ini = new Ini(stream, loadSettings);
 ```
 
 ## Creating a INI file
-This code:
+An `Ini` object is a collection of `Section` objects (`IList<Section>`) and each `Section` object is a collection of `Property` objects (`IList<Property>`), so you can use regular `IList<T>` mechanisms to add, remove and manage sections and properties.
+
+So, for example, you can create an INI from scratch, using collection initializers, as shown here:
 ```cs
-var ini = new Ini()
+var ini = new Ini
 {
-    new Section("Players", "This section defines the players")
+    new Section("Section Name")
     {
-        new Property("Player1", "The Flash"),
-        new Property("Player2", "Superman")
-    },
-    new Section("The Flash", string.Empty)
-    {
-        ["Level"] = "9",
-        ["Power"] = "Superspeed"
-    },
-    new Section("Superman", string.Empty)
-    {
-        ["Level"] = "9",
-        ["Power"] = "Superstrength,heat vision"
+        new Property("Property1 Name", "A string value"),
+        new Property("Property2 Name", 10)
     }
 };
 ```
-produces the following INI data:
-```ini
-; This section defines the players
-[Players]
-Player1 = The Flash
-Player2 = Superman
 
-[The Flash]
-Level = 9
-Power = Superspeed
-
-[Superman]
-Level = 9
-Power = Superstrength,heat vision
+Properties are also name-value pairs, so you can also use the dictionary initializer syntax to create them. So the code above can also look like this:
+```cs
+var ini = new Ini
+{
+    new Section("Section Name")
+    {
+        ["Property1 Name"] = "A string value",
+        ["Property2 Name"] = 10
+    }
+};
 ```
+
+Since they are just regular lists, you can use the regular methods and properties on `IList<T>` to manage sections and properties:
+```cs
+// Get number of sections
+int sectionCount = ini.Count;
+
+// Add a new section
+var section = new Section("New section");
+ini.Add(section);
+
+// foreach over the properties of a section
+foreach (Property property in section)
+{
+    // Your code goes here
+}
+
+// You can also use regular LINQ operations
+
+// Check if there are any properties in a section
+if (section.Any())
+{
+    // Your code goes here
+}
+```
+
+## Using properties
+INI properties are represented by the `Property` class and are name-value pairs, where the name is a `string` and the value can be a `string`, `bool`, any integral number type (`int`, `byte`, `long`, `ushort`, etc.), any floating-point number type (`float`, `double` and `decimal`) and `DateTime`.
+
+```cs
+// Write a double value to a property
+section["Pi"] = 3.14d;
+
+// Write a boolean value to a property
+var property = new Property("SendMail", true);
+section.Add(property);
+
+// Read a string value from a property
+string name = section["Name"];
+
+// Read a decimal value from a property
+decimal price = section["Price"];
+```
+
+### Gotcha when using implicitly-typed variables to read property values
+When reading property values, if you use an implicitly-typed variable (using `var`), then you will notice that the variable is of type `PropertyValue`. This is the underlying type used by the framework to allow property values to support multiple types like `string`, `int`, `bool`, etc. It does this by allowing implicit conversions between the `PropertyValue` value and all the allowed types.
+
+However, when using `var` to declare the variable, the C# compiler will not know the actual type you intend the property value to be.
+```cs
+var value = section["property-name"]; // value will be of type PropertyValue
+```
+
+To get the value as the actual type, explicitly specify the variable type:
+```cs
+int value = section["property-name"]; // value will be of type int
+```
+
+Alternatively, you can explicitly cast the `PropertyValue` value to the expected type:
+```cs
+var value = (int)section["property-value"]; // value will be of type int
+```
+
+### Boolean properties
+The IniFile framework can recognize the following string values when reading boolean properties:
+
+|Boolean value|Allowed string values|
+|-------------|---------------------|
+|`true`|`1`, `t`, `y`, `on`, `yes`, `enabled`, `true`|
+|`false`|`0`, `f`, `n`, `off`, `no`, `disabled`, `false`|
+
+When writing boolean values, the IniFile framework will use the string values configured in the `Ini.Config.Types.TrueString` and `Ini.Config.Types.FalseString` to write the `true` and `false` values respectively to the output INI file.
+
+By default, `Ini.Config.Types.TrueString` is configured to `1` and `Ini.Config.Types.FalseString` is configured to `0`. So, the following code:
+```cs
+section["HasDiscount"] = true;
+section["ValidateParking"] = false;
+```
+will generate the following properties in the INI file:
+```ini
+HasDiscount = 1
+ValidateParking = 0
+```
+
+You can assign custom strings to the `Ini.Config.Types.TrueString` and `Ini.Config.Types.FalseString` config properties.
+```cs
+Ini.Config.SetBooleanStrings("Oui", "Non");
+
+// Or the long way
+Ini.Config.Types.TrueString = "Oui";
+Ini.Config.Types.FalseString = "Non";
+```
+
+### Date/time properties
+Property values can be written as `DateTime` values:
+```cs
+section["Today"] = DateTime.Now;
+```
+
+The IniFile framework uses the `Ini.Config.Types.DateFormat` property to control how date values are represented as strings in the INI file. By default, this is defaulted to the system's short date format (`CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern`).
+```cs
+// Set date format to US style
+Ini.Config.SetDateFormats(dateFormat: "M/dd/yyyy");
+
+// Or the long way
+Ini.Config.Types.DateFormat = "M/dd/yyyy";
+
+// Reset the date format to system default
+Ini.Config.SetDateFormats();
+
+// Or the long way
+Ini.Config.Types.DateFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
+```
+
+When reading date values from a property, the framework will try to parse the property string value according to the format specified by the `Ini.Config.Types.DateFormat` config value.
+```cs
+DateTime createdDate = section["CreatedDate"];
+```
+
+If the date string value in the INI file is a different format from the config, you can use the property's `AsDateTime` method to explicitly specify the format:
+```cs
+DateTime createdDate = section["CreatedDate"].AsDateTime("yyyy/MM/dd");
+```
+
+### Enum properties
+Property values cannot be directly read or written as enum values.
+
+To write an enum value to a property, use the enum's `ToString` method to write a string representation of the value.
+```cs
+section["StartDay"] = DayOfWeek.Monday.ToString();
+```
+
+To read an enum value, the property provides an `AsEnum<T>` method:
+```cs
+DayOfWeek startDay = section["StartDay"].AsEnum<DayOfWeek>();
+```
+
+Enum values are not case-sensitive.
 
 ## Saving the INI content
 The `Ini` class provides several overloads to save the INI content to streams, text writers and files. All these overloads have synchronous and async versions.
@@ -86,6 +211,22 @@ ini.SaveTo(@"Setting.ini");
 
 // Asynchronous call
 await ini.SaveToAsync(stream);
+```
+
+## Global configuration
+Certain aspects of the IniFile framework can be configured using the static `Ini.Config` property. This has properties to configure behaviors such as:
+* Whether to allow hash symbols (`#`) to represent comments in addition to the default semi-colon (`;`).
+* The default spacings for various types of INI objects such as sections, properties and comments.
+* How to handle reading and writing of certain types of property values, such as booleans and date/times.
+
+While, you can set the configuration properties manually, the `Ini.Config` property also provides a fluent API to configure related sets of configurations:
+```cs
+Ini.Config
+    .AllowHashForComments(setAsDefault: true)
+    .SetSectionPaddingDefaults(insideLeft: 1, insideRight: 1)
+    .SetPropertyPaddingDefaults(left: 2)
+    .SetBooleanStrings(trueString: "YES", falseString: "NO")
+    .SetDateFormats(dateFormat: "M/dd/yy");
 ```
 
 ## Formatting the INI content
