@@ -213,6 +213,22 @@ ini.SaveTo(@"Setting.ini");
 await ini.SaveToAsync(stream);
 ```
 
+## Global configuration
+Certain aspects of the IniFile framework can be configured using the static `Ini.Config` property. This has properties to configure behaviors such as:
+* Whether to allow hash symbols (`#`) to represent comments in addition to the default semi-colon (`;`).
+* The default spacings for various types of INI objects such as sections, properties and comments.
+* How to handle reading and writing of certain types of property values, such as booleans and date/times.
+
+While, you can set the configuration properties manually, the `Ini.Config` property also provides a fluent API to configure related sets of configurations:
+```cs
+Ini.Config
+    .AllowHashForComments(setAsDefault: true)
+    .SetSectionPaddingDefaults(insideLeft: 1, insideRight: 1)
+    .SetPropertyPaddingDefaults(left: 2)
+    .SetBooleanStrings(trueString: "YES", falseString: "NO")
+    .SetDateFormats(dateFormat: "M/dd/yy");
+```
+
 ## Formatting the INI content
 The `Ini` class retains the exact formatting from the source .INI file content. It provides a `Format` method to correctly format the contents.
 
