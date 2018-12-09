@@ -18,6 +18,7 @@ limitations under the License.
 */
 #endregion
 
+using System.Globalization;
 using IniFile.Items;
 
 namespace IniFile.Config
@@ -84,6 +85,14 @@ namespace IniFile.Config
         {
             Types.TrueString = string.IsNullOrEmpty(trueString) || trueString.Trim().Length == 0 ? "1" : trueString;
             Types.FalseString = string.IsNullOrEmpty(falseString) || falseString.Trim().Length == 0 ? "0" : falseString;
+            return this;
+        }
+
+        public IniGlobalConfig SetDateFormats(string dateFormat = null)
+        {
+            Types.DateFormat = string.IsNullOrEmpty(dateFormat) || dateFormat.Trim().Length == 0
+                ? CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern
+                : dateFormat;
             return this;
         }
     }
