@@ -150,7 +150,7 @@ Property values cannot be directly read or written as enum values.
 
 To write an enum value to a property, use the enum's `ToString` method to write a string representation of the value.
 ```cs
-section["StartDay"] = DayOfWeek.Monday;
+section["StartDay"] = DayOfWeek.Monday.ToString();
 ```
 
 To read an enum value, the property provides an `AsEnum<T>` method:
