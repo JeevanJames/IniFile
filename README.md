@@ -112,7 +112,7 @@ decimal price = section["Price"];
 ### Gotcha when using implicitly-typed variables to read property values
 TBD
 
-### Using boolean properties
+### Boolean properties
 The IniFile framework can recognize the following string values when reading boolean properties:
 
 |Boolean value|Allowed string values|
@@ -142,10 +142,10 @@ Ini.Config.Types.TrueString = "Oui";
 Ini.Config.Types.FalseString = "Non";
 ```
 
-### Using properties as date/time values
+### Date/time properties
 TBD
 
-### Using properties as enums
+### Enum properties
 Property values cannot be directly read or written as enum values.
 
 To write an enum value to a property, use the enum's `ToString` method to write a string representation of the value.
