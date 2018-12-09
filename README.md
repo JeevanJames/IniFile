@@ -143,7 +143,29 @@ Ini.Config.Types.FalseString = "Non";
 ```
 
 ### Date/time properties
-TBD
+Property values can be written as `DateTime` values:
+```cs
+section["Today"] = DateTime.Now;
+```
+
+The IniFile framework uses the `Ini.Config.Types.DateFormat` property to control how date values are represented as strings in the INI file. By default, this is defaulted to the system's short date format (`CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern`).
+```cs
+// Set date format to US style
+Ini.Config.SetDateFormats(dateFormat: "M/dd/yyyy");
+
+// Or the long way
+Ini.Config.Types.DateFormat = "M/dd/yyyy";
+```
+
+When reading date values from a property, the framework will try to parse the property string value according to the format specified by the `Ini.Config.Types.DateFormat` config value.
+```cs
+DateTime createdDate = section["CreatedDate"];
+```
+
+If the date string value in the INI file is a different format from the config, you can use the property's `AsDateTime` method to explicitly specify the format:
+```cs
+DateTime createdDate = section["CreatedDate"].AsDateTime("yyyy/MM/dd");
+```
 
 ### Enum properties
 Property values cannot be directly read or written as enum values.
