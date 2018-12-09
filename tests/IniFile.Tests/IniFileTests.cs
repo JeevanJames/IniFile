@@ -51,7 +51,7 @@ namespace IniFile.Tests
             section["Player2"].ToString().ShouldBe("Emma");
         }
 
-        [Fact]
+        [Fact(DisplayName = "Basic INI creation test")]
         public void Basic_create_test()
         {
             Ini.Config
@@ -128,21 +128,21 @@ This is line 3 and the last line"
         //    iniContent.ShouldBe(validIni);
         //}
 
-        [Theory]
+        [Theory(DisplayName = "Throws on unrecognized line")]
         [EmbeddedResourceContent("IniFile.Tests.Data.UnrecognizedLine.ini")]
         public void Unrecognized_line_throws(string iniContent)
         {
             Should.Throw<FormatException>(() => Ini.Load(iniContent));
         }
 
-        [Theory]
+        [Theory(DisplayName = "Throwns on a property without a section")]
         [EmbeddedResourceContent("IniFile.Tests.Data.PropertyWithoutSection.ini")]
         public void Property_without_section_throws(string iniContent)
         {
             Should.Throw<FormatException>(() => Ini.Load(iniContent));
         }
 
-        [Theory]
+        [Theory(DisplayName = "Allows empty sections")]
         [EmbeddedResourceContent("IniFile.Tests.Data.EmptySections.ini")]
         public void Empty_sections_are_allowed(string iniContent)
         {
@@ -153,7 +153,7 @@ This is line 3 and the last line"
             ini.ShouldAllBe(section => section.Count == 0);
         }
 
-        [Theory]
+        [Theory(DisplayName = "Properties without values are allowed")]
         [EmbeddedResourceContent("IniFile.Tests.Data.EmptyProperties.ini")]
         public void Empty_properties_are_allowed(string iniContent)
         {
@@ -177,7 +177,7 @@ This is line 3 and the last line"
             formatted.ShouldNotBeNull();
         }
 
-        [Theory]
+        [Theory(DisplayName = "Can read typed properties")]
         [EmbeddedResourceContent("IniFile.Tests.Data.TypedProperties.ini")]
         public void Can_read_typed_properties(string iniContent)
         {
@@ -242,7 +242,7 @@ This is line 3 and the last line"
             dow.ShouldBe(DayOfWeek.Saturday);
         }
 
-        [Fact]
+        [Fact(DisplayName = "Can write typed properties")]
         public void Can_write_typed_properties()
         {
             var ini = new Ini
