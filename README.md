@@ -186,6 +186,8 @@ To read an enum value, the property provides an `AsEnum<T>` method:
 DayOfWeek startDay = section["StartDay"].AsEnum<DayOfWeek>();
 ```
 
+Enum values are not case-sensitive.
+
 ## Saving the INI content
 The `Ini` class provides several overloads to save the INI content to streams, text writers and files. All these overloads have synchronous and async versions.
 ```cs
