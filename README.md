@@ -110,7 +110,22 @@ decimal price = section["Price"];
 ```
 
 ### Gotcha when using implicitly-typed variables to read property values
-TBD
+When reading property values, if you use an implicitly-typed variable (using `var`), then you will notice that the variable is of type `PropertyValue`. This is the underlying type used by the framework to allow property values to support multiple types like `string`, `int`, `bool`, etc. It does this by allowing implicit conversions between the `PropertyValue` value and all the allowed types.
+
+However, when using `var` to declare the variable, the C# compiler will not know the actual type you intend the property value to be.
+```cs
+var value = section["property-name"]; // value will be of type PropertyValue
+```
+
+To get the value as the actual type, explicitly specify the variable type:
+```cs
+int value = section["property-name"]; // value will be of type int
+```
+
+Alternatively, you can explicitly cast the `PropertyValue` value to the expected type:
+```cs
+var value = (int)section["property-value"]; // value will be of type int
+```
 
 ### Boolean properties
 The IniFile framework can recognize the following string values when reading boolean properties:
