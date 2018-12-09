@@ -41,7 +41,7 @@ var ini = new Ini(stream, loadSettings);
 ```
 
 ## Creating a INI file
-An `Ini` object is an `IList<Section>` and each `Section` object in an `Ini` object is an `IList<Property>`, so you can use regular `IList<T>` mechanisms to add, remove and manage sections and properties.
+An `Ini` object is a collection of `Section` objects (`IList<Section>`) and each `Section` object is a collection of `Property` objects (`IList<Property>`), so you can use regular `IList<T>` mechanisms to add, remove and manage sections and properties.
 
 So, for example, you can create an INI from scratch, using collection initializers, as shown here:
 ```cs
