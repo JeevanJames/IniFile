@@ -17,7 +17,7 @@
     <PackageId>IniFile.NET</PackageId>
     <Product>IniFile.NET</Product>
     <PackageIconUrl>https://github.com/JeevanJames/IniFile/raw/master/logo.png</PackageIconUrl>
-    <LangVersion>7.2</LangVersion>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

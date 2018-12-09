@@ -61,13 +61,22 @@ namespace IniFile.Items
         ///     The value to initialize the property with. If <c>null</c>, the type is considered a
         ///     <c>string</c>.
         /// </param>
-        internal PropertyValue(object value)
+        internal PropertyValue(object value) : this(value, null)
         {
-            _value = value;
-            _type = _value != null ? _value.GetType() : typeof(string);
-            _stringValue = null;
         }
 
+        /// <summary>
+        ///     Initializes an instance of the <see cref="PropertyValue"/> structure where the string
+        ///     representation of the underlying object is different from the string representation
+        ///     of the value in the INI file.
+        /// </summary>
+        /// <param name="value">
+        ///     The value to initialize the property with. If <c>null</c>, the type is considered a
+        ///     <c>string</c>.
+        /// </param>
+        /// <param name="stringValue">
+        ///     The different string representation of the value in the INI file.
+        /// </param>
         internal PropertyValue(object value, string stringValue)
         {
             _value = value;
@@ -75,17 +84,41 @@ namespace IniFile.Items
             _stringValue = stringValue;
         }
 
-        public override string ToString() => _stringValue ?? _value?.ToString();
+        /// <summary>
+        ///     Returns the string value, if it exists, otherwise returns the <see cref="ToString"/>
+        ///     result of the object value. If the object value is <c>null</c>, then the returned
+        ///     value is also <c>null</c>.
+        /// </summary>
+        /// <returns>String that represents the current property value.</returns>
+        public override string ToString() =>
+            _stringValue ?? _value?.ToString();
 
-        public DateTime AsDateTime(string format)
+        /// <summary>
+        ///     Returns the property value as a <see cref="DateTime"/>.
+        /// </summary>
+        /// <param name="format">
+        ///     A format specifier that defines the required format of the property string value.
+        /// </param>
+        /// <param name="provider">
+        ///     An object that specifies the culture-specific formatting information about the
+        ///     property string value.
+        /// </param>
+        /// <returns>The property value as a <see cref="DateTime"/>.</returns>
+        public DateTime AsDateTime(string format, IFormatProvider provider = null)
         {
+            provider = provider ?? CultureInfo.CurrentCulture;
             return ConvertTo(this, s => DateTime.TryParseExact(
-                s, format, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime dt)
+                s, format, provider, DateTimeStyles.None, out DateTime dt)
                     ? new ConversionResult<DateTime>(true, dt) : new ConversionResult<DateTime>(false, default));
         }
 
+        /// <summary>
+        ///     Returns the property value as the specified enum.
+        /// </summary>
+        /// <typeparam name="TEnum">The type of enum to convert the property value to.</typeparam>
+        /// <returns>The property value as the specified enum.</returns>
         public TEnum AsEnum<TEnum>()
-            where TEnum : struct, IComparable
+            where TEnum : struct, IConvertible
         {
 #if NETSTANDARD1_3
             if (!typeof(TEnum).GetTypeInfo().IsEnum)

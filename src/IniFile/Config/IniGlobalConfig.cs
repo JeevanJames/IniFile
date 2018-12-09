@@ -19,6 +19,7 @@ limitations under the License.
 #endregion
 
 using System.Globalization;
+
 using IniFile.Items;
 
 namespace IniFile.Config
@@ -38,6 +39,9 @@ namespace IniFile.Config
         /// </summary>
         public PaddingConfig Padding { get; } = new PaddingConfig();
 
+        /// <summary>
+        ///     Configuration for handling certain data types when reading and writing INI properties.
+        /// </summary>
         public TypesConfig Types { get; } = new TypesConfig();
 
         /// <summary>

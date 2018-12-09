@@ -86,6 +86,11 @@
                 Configuration for padding defaults for sections, properties and comments in INI files.
             </summary>
         </member>
+        <member name="P:IniFile.Config.IniGlobalConfig.Types">
+            <summary>
+                Configuration for handling certain data types when reading and writing INI properties.
+            </summary>
+        </member>
         <member name="M:IniFile.Config.IniGlobalConfig.AllowHashForComments(System.Boolean)">
             <summary>
                 Allows the hash symbol (#) to be used to prefix comments.
@@ -526,6 +531,48 @@
                 The value to initialize the property with. If <c>null</c>, the type is considered a
                 <c>string</c>.
             </param>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.#ctor(System.Object,System.String)">
+            <summary>
+                Initializes an instance of the <see cref="T:IniFile.Items.PropertyValue"/> structure where the string
+                representation of the underlying object is different from the string representation
+                of the value in the INI file.
+            </summary>
+            <param name="value">
+                The value to initialize the property with. If <c>null</c>, the type is considered a
+                <c>string</c>.
+            </param>
+            <param name="stringValue">
+                The different string representation of the value in the INI file.
+            </param>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.ToString">
+            <summary>
+                Returns the string value, if it exists, otherwise returns the <see cref="M:IniFile.Items.PropertyValue.ToString"/>
+                result of the object value. If the object value is <c>null</c>, then the returned
+                value is also <c>null</c>.
+            </summary>
+            <returns>String that represents the current property value.</returns>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.AsDateTime(System.String,System.IFormatProvider)">
+            <summary>
+                Returns the property value as a <see cref="T:System.DateTime"/>.
+            </summary>
+            <param name="format">
+                A format specifier that defines the required format of the property string value.
+            </param>
+            <param name="provider">
+                An object that specifies the culture-specific formatting information about the
+                property string value.
+            </param>
+            <returns>The property value as a <see cref="T:System.DateTime"/>.</returns>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.AsEnum``1">
+            <summary>
+                Returns the property value as the specified enum.
+            </summary>
+            <typeparam name="TEnum">The type of enum to convert the property value to.</typeparam>
+            <returns>The property value as the specified enum.</returns>
         </member>
         <member name="T:IniFile.Items.SectionPadding">
             <summary>

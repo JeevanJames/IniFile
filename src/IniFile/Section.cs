@@ -80,7 +80,6 @@ namespace IniFile
                 Property property = _properties.FirstOrDefault(p => p.Name == name);
                 return property != null ? property.Value : PropertyValue.Empty;
             }
-
             set
             {
                 Property property = _properties.FirstOrDefault(p => p.Name == name);
