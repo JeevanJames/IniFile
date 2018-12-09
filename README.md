@@ -146,7 +146,17 @@ Ini.Config.Types.FalseString = "Non";
 TBD
 
 ### Using properties as enums
-TBD
+Property values cannot be directly read or written as enum values.
+
+To write an enum value to a property, use the enum's `ToString` method to write a string representation of the value.
+```cs
+section["StartDay"] = DayOfWeek.Monday;
+```
+
+To read an enum value, the property provides an `AsEnum<T>` method:
+```cs
+DayOfWeek startDay = section["StartDay"].AsEnum<DayOfWeek>();
+```
 
 ## Saving the INI content
 The `Ini` class provides several overloads to save the INI content to streams, text writers and files. All these overloads have synchronous and async versions.
