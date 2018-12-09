@@ -155,6 +155,12 @@ Ini.Config.SetDateFormats(dateFormat: "M/dd/yyyy");
 
 // Or the long way
 Ini.Config.Types.DateFormat = "M/dd/yyyy";
+
+// Reset the date format to system default
+Ini.Config.SetDateFormats();
+
+// Or the long way
+Ini.Config.Types.DateFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern;
 ```
 
 When reading date values from a property, the framework will try to parse the property string value according to the format specified by the `Ini.Config.Types.DateFormat` config value.
