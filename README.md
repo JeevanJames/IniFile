@@ -41,42 +41,112 @@ var ini = new Ini(stream, loadSettings);
 ```
 
 ## Creating a INI file
-This code:
+An `Ini` object is an `IList<Section>` and each `Section` object in an `Ini` object is an `IList<Property>`, so you can use regular `IList<T>` mechanisms to add, remove and manage sections and properties.
+
+So, for example, you can create an INI from scratch, using collection initializers, as shown here:
 ```cs
-var ini = new Ini()
+var ini = new Ini
 {
-    new Section("Players", "This section defines the players")
+    new Section("Section Name")
     {
-        new Property("Player1", "The Flash"),
-        new Property("Player2", "Superman")
-    },
-    new Section("The Flash", string.Empty)
-    {
-        ["Level"] = "9",
-        ["Power"] = "Superspeed"
-    },
-    new Section("Superman", string.Empty)
-    {
-        ["Level"] = "9",
-        ["Power"] = "Superstrength,heat vision"
+        new Property("Property1 Name", "A string value"),
+        new Property("Property2 Name", 10)
     }
 };
 ```
-produces the following INI data:
-```ini
-; This section defines the players
-[Players]
-Player1 = The Flash
-Player2 = Superman
 
-[The Flash]
-Level = 9
-Power = Superspeed
-
-[Superman]
-Level = 9
-Power = Superstrength,heat vision
+Properties are also name-value pairs, so you can also use the dictionary initializer syntax to create them. So the code above can also look like this:
+```cs
+var ini = new Ini
+{
+    new Section("Section Name")
+    {
+        ["Property1 Name"] = "A string value",
+        ["Property2 Name"] = 10
+    }
+};
 ```
+
+Since they are just regular lists, you can use the regular methods and properties on `IList<T>` to manage sections and properties:
+```cs
+// Get number of sections
+int sectionCount = ini.Count;
+
+// Add a new section
+var section = new Section("New section");
+ini.Add(section);
+
+// foreach over the properties of a section
+foreach (Property property in section)
+{
+    // Your code goes here
+}
+
+// You can also use regular LINQ operations
+
+// Check if there are any properties in a section
+if (section.Any())
+{
+    // Your code goes here
+}
+```
+
+## Using properties
+INI properties are represented by the `Property` class and are name-value pairs, where the name is a `string` and the value can be a `string`, `bool`, any integral number type (`int`, `byte`, `long`, `ushort`, etc.), any floating-point number type (`float`, `double` and `decimal`) and `DateTime`.
+
+```cs
+// Write a double value to a property
+section["Pi"] = 3.14d;
+
+// Write a boolean value to a property
+var property = new Property("SendMail", true);
+section.Add(property);
+
+// Read a string value from a property
+string name = section["Name"];
+
+// Read a decimal value from a property
+decimal price = section["Price"];
+```
+
+### Gotcha when using implicitly-typed variables to read property values
+TBD
+
+### Using boolean properties
+The IniFile framework can recognize the following string values when reading boolean properties:
+
+|Boolean value|Allowed string values|
+|-------------|---------------------|
+|`true`|`1`, `t`, `y`, `on`, `yes`, `enabled`, `true`|
+|`false`|`0`, `f`, `n`, `off`, `no`, `disabled`, `false`|
+
+When writing boolean values, the IniFile framework will use the string values configured in the `Ini.Config.Types.TrueString` and `Ini.Config.Types.FalseString` to write the `true` and `false` values respectively to the output INI file.
+
+By default, `Ini.Config.Types.TrueString` is configured to `1` and `Ini.Config.Types.FalseString` is configured to `0`. So, the following code:
+```cs
+section["HasDiscount"] = true;
+section["ValidateParking"] = false;
+```
+will generate the following properties in the INI file:
+```ini
+HasDiscount = 1
+ValidateParking = 0
+```
+
+You can assign custom strings to the `Ini.Config.Types.TrueString` and `Ini.Config.Types.FalseString` config properties.
+```cs
+Ini.Config.SetBooleanStrings("Oui", "Non");
+
+// Or the long way
+Ini.Config.Types.TrueString = "Oui";
+Ini.Config.Types.FalseString = "Non";
+```
+
+### Using properties as date/time values
+TBD
+
+### Using properties as enums
+TBD
 
 ## Saving the INI content
 The `Ini` class provides several overloads to save the INI content to streams, text writers and files. All these overloads have synchronous and async versions.
