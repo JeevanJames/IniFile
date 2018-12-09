@@ -116,8 +116,9 @@ namespace IniFile.Items
         ///     Returns the property value as the specified enum.
         /// </summary>
         /// <typeparam name="TEnum">The type of enum to convert the property value to.</typeparam>
+        /// <param name="caseSensitive">Indicates whether the property value is case-sensitive.</param>
         /// <returns>The property value as the specified enum.</returns>
-        public TEnum AsEnum<TEnum>()
+        public TEnum AsEnum<TEnum>(bool caseSensitive = false)
             where TEnum : struct, IConvertible
         {
 #if NETSTANDARD1_3
@@ -127,13 +128,13 @@ namespace IniFile.Items
 #endif
                 throw new InvalidOperationException();
 #if !NET35
-            if (!Enum.TryParse(ToString(), true, out TEnum value))
+            if (!Enum.TryParse(ToString(), !caseSensitive, out TEnum value))
                 throw new InvalidCastException(string.Format(ErrorMessages.CannotCastPropertyValue, typeof(TEnum).FullName));
             return value;
 #else
             try
             {
-                TEnum value = (TEnum) Enum.Parse(typeof(TEnum), ToString(), true);
+                TEnum value = (TEnum) Enum.Parse(typeof(TEnum), ToString(), !caseSensitive);
                 return value;
             }
             catch (ArgumentException ex)
