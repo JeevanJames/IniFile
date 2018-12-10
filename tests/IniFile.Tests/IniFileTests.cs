@@ -268,5 +268,17 @@ This is line 3 and the last line"
 
             ini.ShouldNotBeNull();
         }
+
+        [Theory(DisplayName = "Can read a multiline property value")]
+        [EmbeddedResourceContent("IniFile.Tests.Data.MultilinePropertyValue.ini")]
+        public void Can_read_multiline_property_value(string iniContent)
+        {
+            Ini ini = Ini.Load(iniContent);
+
+            string expectedValue = "This is a " + Environment.NewLine +
+                                   "multiline" + Environment.NewLine +
+                                   " value.";
+            ini["Section"]["Multiline"].ToString().ShouldBe(expectedValue);
+        }
     }
 }

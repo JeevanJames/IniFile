@@ -20,6 +20,7 @@
     <None Remove="Data\EmptyProperties.ini" />
     <None Remove="Data\EmptySections.ini" />
     <None Remove="Data\Formatted.ini" />
+    <None Remove="Data\MultilinePropertyValue.ini" />
     <None Remove="Data\PropertyWithoutSection.ini" />
     <None Remove="Data\TypedProperties.ini" />
     <None Remove="Data\Unformatted.ini" />
@@ -32,6 +33,7 @@
     <EmbeddedResource Include="Data\EmptyProperties.ini" />
     <EmbeddedResource Include="Data\EmptySections.ini" />
     <EmbeddedResource Include="Data\Formatted.ini" />
+    <EmbeddedResource Include="Data\MultilinePropertyValue.ini" />
     <EmbeddedResource Include="Data\PropertyWithoutSection.ini" />
     <EmbeddedResource Include="Data\TypedProperties.ini" />
     <EmbeddedResource Include="Data\Unformatted.ini" />

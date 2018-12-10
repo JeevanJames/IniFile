@@ -25,7 +25,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-
+using System.Text.RegularExpressions;
 #if NETSTANDARD
 using System.Threading.Tasks;
 #endif
@@ -152,11 +152,7 @@ namespace IniFile
         /// <param name="reader">The INI content.</param>
         private void ParseIniFile(TextReader reader)
         {
-            // Read all lines from the INI content and transform to one of the registered objects -
-            // section, property, comment or blank line.
-            var allItems = new List<IniItem>();
-            for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
-                allItems.Add(IniItemFactory.CreateItem(line));
+            IList<IniItem> allItems = ParseLines(reader).ToList();
 
             // Go through each line object and construct a hierarchical object model, with properties
             // under sections and comments/blank lines under respective sections and properties.
@@ -186,6 +182,63 @@ namespace IniFile
             if (minorItems.Count > 0)
                 AddRangeAndClear(TrailingItems, minorItems);
         }
+
+        /// <summary>
+        ///     Read all lines from the given text reader, parse and generate INI objects such as
+        ///     section, properties, comments and blank lines.
+        /// </summary>
+        /// <param name="reader">The <see cref="TextReader"/> instance to read the INI lines from.</param>
+        /// <returns></returns>
+        private static IEnumerable<IniItem> ParseLines(TextReader reader)
+        {
+            // These variables track multiline values
+            Property mlProperty = null;
+            string mlValue = null;
+            string mlEot = null;
+
+            for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
+            {
+                // Are we in the middle of a multi-line property value
+                if (mlProperty != null)
+                {
+                    // Have we reached the end of the multi-line value (end-of-text)
+                    if (line.Trim() == mlEot) // EOT is case-sensitive
+                    {
+                        mlProperty.Value = mlValue;
+                        mlProperty = null;
+                    }
+                    else
+                    {
+                        if (mlValue.Length > 0)
+                            mlValue += Environment.NewLine;
+                        mlValue += line;
+                    }
+
+                    continue;
+                }
+
+                IniItem iniItem = IniItemFactory.CreateItem(line);
+
+                if (iniItem is Property property)
+                {
+                    // If the property value matches the start of a multiline value, enable multiline
+                    // mode (mlProperty != null) and add all subsequent lines until the end-of-text
+                    // marker is found.
+                    Match match = MultilineStartPattern.Match(property.Value);
+                    if (match.Success)
+                    {
+                        // Start tracking the multiline value until we encounter an end-of-text (EOT) line
+                        mlProperty = property;
+                        mlValue = string.Empty;
+                        mlEot = match.Groups[1].Value;
+                    }
+                }
+
+                yield return iniItem;
+            }
+        }
+
+        private static readonly Regex MultilineStartPattern = new Regex(@"^<<(\w+)$");
 
         private static void AddRangeAndClear(IList<MinorIniItem> source, IList<MinorIniItem> minorItems)
         {

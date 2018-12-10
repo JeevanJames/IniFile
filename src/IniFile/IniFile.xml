@@ -223,6 +223,14 @@
             </summary>
             <param name="reader">The INI content.</param>
         </member>
+        <member name="M:IniFile.Ini.ParseLines(System.IO.TextReader)">
+            <summary>
+                Read all lines from the given text reader, parse and generate INI objects such as
+                section, properties, comments and blank lines.
+            </summary>
+            <param name="reader">The <see cref="T:System.IO.TextReader"/> instance to read the INI lines from.</param>
+            <returns></returns>
+        </member>
         <member name="M:IniFile.Ini.SaveTo(System.String)">
             <summary>
                 Saves the <see cref="T:IniFile.Ini"/> instance to a file at the specified file path.
