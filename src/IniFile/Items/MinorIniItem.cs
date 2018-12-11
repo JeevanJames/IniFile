@@ -32,5 +32,12 @@ namespace IniFile.Items
         protected MinorIniItem()
         {
         }
+
+        public static implicit operator MinorIniItem(string str)
+        {
+            if (string.IsNullOrEmpty(str) || str.Trim().Length == 0)
+                return new BlankLine();
+            return new Comment(str);
+        }
     }
 }

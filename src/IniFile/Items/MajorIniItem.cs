@@ -21,6 +21,7 @@ limitations under the License.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 
 namespace IniFile.Items
 {
@@ -81,6 +82,11 @@ namespace IniFile.Items
         ///     The collection of comments and blank lines that are associated with this major INI item.
         /// </summary>
         public IList<MinorIniItem> Items { get; } = new List<MinorIniItem>();
+
+        /// <summary>
+        ///     Returns just the <see cref="Comment"/> objects belonging to this INI item.
+        /// </summary>
+        public IEnumerable<Comment> Comments => Items.OfType<Comment>();
 
         /// <summary>
         ///     Shortcut method to adding a <see cref="Comment"/> class to the <see cref="Items"/>
