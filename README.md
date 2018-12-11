@@ -110,7 +110,7 @@ The `Items` property is a regular `IList<>` collection, and can contain a mix of
 ```cs
 // Two ways to add a comment to a section.
 section.AddComment("This is a comment");
-section.Items.Add(new Comment("This is a comment.));
+section.Items.Add(new Comment("This is a comment."));
 
 // Adding a comment to a property.
 property.Items.Add(new Comment("No need to specify the ; prefix. It is added automatically"));
