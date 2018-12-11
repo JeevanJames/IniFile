@@ -124,9 +124,16 @@ IEnumerable<Comment> comments = property.Comments;
 IEnumerable<Comment> comments = property.Items.OfType<Comment>();
 ```
 
-`Section` and `Property` constructors also accept a range of strings to denote comments or blank lines. If the string is `null`, empty or just whitespace, then it is considered a blank line, otherwise it is considered a comment.
+`Section` and `Property` constructors also accept a range of strings to denote comments or blank lines. If the string is `null`, empty or just whitespace, then it is considered a blank line, otherwise it is considered a comment. This code:
 ```cs
 var section = new Section("SectionName", null, "This is a comment surrounded by blank lines", null);
+```
+will generate:
+```ini
+
+; This is a comment surrounded by blank lines
+
+[SectionName]
 ```
 
 ## Using properties
