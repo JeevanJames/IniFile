@@ -91,6 +91,44 @@ if (section.Any())
 }
 ```
 
+### Comments and blank lines
+Any comments and blank lines appearing before a section or property belong to the respective `Section` or `Property` instance, and are stored in an `Items` property.
+```ini
+; This comment and the following blank line
+; belong to the Connections section.
+
+[Connections]
+
+; The blank line directly above, this comment
+; and this comment belong to the SqlDb property
+SqlDb = Db=Server;User=admin;Pwd=passw0rd1
+```
+
+Comments and blank lines are represented by the `Comment` and `BlankLine` classes, respectively.
+
+The `Items` property is a regular `IList<>` collection, and can contain a mix of `Comment` and `BlankLine` instances.
+```cs
+// Two ways to add a comment to a section.
+section.AddComment("This is a comment");
+section.Items.Add(new Comment("This is a comment.));
+
+// Adding a comment to a property.
+property.Items.Add(new Comment("No need to specify the ; prefix. It is added automatically"));
+
+// Two ways to add a blank line to a section
+section.AddBlankLine();
+section.Items.Add(new BlankLine());
+
+// Find all comments for a property
+IEnumerable<Comment> comments = property.Comments;
+IEnumerable<Comment> comments = property.Items.OfType<Comment>();
+```
+
+`Section` and `Property` constructors also accept a range of strings to denote comments or blank lines. If the string is `null`, empty or just whitespace, then it is considered a blank line, otherwise it is considered a comment.
+```cs
+var section = new Section("SectionName", null, "This is a comment surrounded by blank lines", null);
+```
+
 ## Using properties
 INI properties are represented by the `Property` class and are name-value pairs, where the name is a `string` and the value can be a `string`, `bool`, any integral number type (`int`, `byte`, `long`, `ushort`, etc.), any floating-point number type (`float`, `double` and `decimal`) and `DateTime`.
 
