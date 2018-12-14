@@ -63,6 +63,16 @@ namespace IniFile
         public bool CaseSensitive { get; set; }
 
         /// <summary>
+        ///     Gets or sets whether to ignore blank lines when loading the INI data.
+        /// </summary>
+        public bool IgnoreBlankLines { get; set; }
+
+        /// <summary>
+        ///     Gets or sets whether to ignore comments when loading the INI data.
+        /// </summary>
+        public bool IgnoreComments { get; set; }
+
+        /// <summary>
         ///     Default settings to use to load INI data.
         /// </summary>
         public static readonly IniLoadSettings Default = new IniLoadSettings();

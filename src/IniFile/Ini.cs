@@ -76,7 +76,7 @@ namespace IniFile
 
             using (var stream = new FileStream(iniFile.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
-                ParseIniFile(reader);
+                ParseIniFile(reader, settings);
         }
 
         /// <summary>
@@ -96,7 +96,7 @@ namespace IniFile
 
             using (var stream = new FileStream(iniFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
-                ParseIniFile(reader);
+                ParseIniFile(reader, settings);
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace IniFile
                 throw new ArgumentException(ErrorMessages.StreamNotReadable, nameof(stream));
 
             using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
-                ParseIniFile(reader);
+                ParseIniFile(reader, settings);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace IniFile
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
-            ParseIniFile(reader);
+            ParseIniFile(reader, settings);
         }
 
         /// <summary>
@@ -150,8 +150,11 @@ namespace IniFile
         ///     Transforms the INI content into an in-memory object model.
         /// </summary>
         /// <param name="reader">The INI content.</param>
-        private void ParseIniFile(TextReader reader)
+        /// <param name="settings">Optional Ini file settings.</param>
+        private void ParseIniFile(TextReader reader, IniLoadSettings settings)
         {
+            settings = settings ?? IniLoadSettings.Default;
+
             IList<IniItem> allItems = ParseLines(reader).ToList();
 
             // Go through each line object and construct a hierarchical object model, with properties
@@ -164,8 +167,16 @@ namespace IniFile
                 if (item is Property prop && currentSection == null)
                     throw new FormatException(string.Format(ErrorMessages.PropertyWithoutSection, prop.Name));
 
-                if (item is MinorIniItem minorItem)
-                    minorItems.Add(minorItem);
+                if (item is BlankLine blankLine)
+                {
+                    if (!settings.IgnoreBlankLines)
+                        minorItems.Add(blankLine);
+                }
+                else if (item is Comment comment)
+                {
+                    if (!settings.IgnoreComments)
+                        minorItems.Add(comment);
+                }
                 else if (item is Section section)
                 {
                     currentSection = section;

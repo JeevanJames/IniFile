@@ -217,11 +217,12 @@
             <param name="settings">Optional Ini file settings.</param>
             <returns>An instance of the <see cref="T:IniFile.Ini"/> class.</returns>
         </member>
-        <member name="M:IniFile.Ini.ParseIniFile(System.IO.TextReader)">
+        <member name="M:IniFile.Ini.ParseIniFile(System.IO.TextReader,IniFile.IniLoadSettings)">
             <summary>
                 Transforms the INI content into an in-memory object model.
             </summary>
             <param name="reader">The INI content.</param>
+            <param name="settings">Optional Ini file settings.</param>
         </member>
         <member name="M:IniFile.Ini.ParseLines(System.IO.TextReader)">
             <summary>
@@ -271,6 +272,31 @@
                 such as streams, strings, files and text writers.
             </summary>
             <param name="writer">The text writer to write the data to.</param>
+        </member>
+        <member name="M:IniFile.Ini.SaveToAsync(System.IO.Stream)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream asynchronously.
+            </summary>
+            <param name="stream">The stream to save to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
+        </member>
+        <member name="M:IniFile.Ini.SaveToAsync(System.IO.TextWriter)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer asynchronously.
+            </summary>
+            <param name="writer">The text writer to save to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
+        </member>
+        <member name="M:IniFile.Ini.InternalSaveAsync(System.IO.TextWriter)">
+            <summary>
+                Common method called to asynchronously  save the <see cref="T:IniFile.Ini"/> instance data to
+                various destinations such as streams, strings, files and text writers.
+            </summary>
+            <param name="writer">The text writer to write the data to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
         </member>
         <member name="P:IniFile.Ini.TrailingItems">
             <summary>
@@ -337,6 +363,16 @@
             <summary>
                 Gets or sets whether to consider section and property key names as case sensitive,
                 when searching for them by name.
+            </summary>
+        </member>
+        <member name="P:IniFile.IniLoadSettings.IgnoreBlankLines">
+            <summary>
+                Gets or sets whether to ignore blank lines when loading the INI data.
+            </summary>
+        </member>
+        <member name="P:IniFile.IniLoadSettings.IgnoreComments">
+            <summary>
+                Gets or sets whether to ignore comments when loading the INI data.
             </summary>
         </member>
         <member name="F:IniFile.IniLoadSettings.Default">
