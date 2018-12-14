@@ -26,9 +26,11 @@ All `Ini` constructors and the `Load` static factory method accept an optional `
 
 |Property|Description|Default|
 |--------|-----------|-------|
-|`Encoding`|The character encoding to use when reading or writing data to the INI file.|`UTF-8`|
-|`DetectEncoding`|A `bool` indicating whether the character encoding should be automatically detected when the INI file is loaded.|`false`|
 |`CaseSensitive`|A `bool` indicating whether the section names and property key names in the INI file are case sensitive.|`false`|
+|`DetectEncoding`|A `bool` indicating whether the character encoding should be automatically detected when the INI file is loaded.|`false`|
+|`Encoding`|The character encoding to use when reading or writing data to the INI file.|`UTF-8`|
+|`IgnoreBlankLines`|A `bool` indicating whether to ignore blank lines when loading the INI file content.|`false`|
+|`IgnoreComments`|A `bool` indicating whether to ignore comments when loading the INI file content.|`false`|
 
 ```cs
 var loadSettings = new IniLoadSettings
