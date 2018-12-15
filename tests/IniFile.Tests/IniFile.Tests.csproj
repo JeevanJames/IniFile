@@ -25,6 +25,7 @@
     <None Remove="Data\TypedProperties.ini" />
     <None Remove="Data\Unformatted.ini" />
     <None Remove="Data\UnrecognizedLine.ini" />
+    <None Remove="Data\Valid.ini" />
     <None Remove="Players.ini" />
     <None Remove="Sample.json" />
   </ItemGroup>
@@ -38,6 +39,7 @@
     <EmbeddedResource Include="Data\TypedProperties.ini" />
     <EmbeddedResource Include="Data\Unformatted.ini" />
     <EmbeddedResource Include="Data\UnrecognizedLine.ini" />
+    <EmbeddedResource Include="Data\Valid.ini" />
     <EmbeddedResource Include="Players.ini" />
   </ItemGroup>
 
