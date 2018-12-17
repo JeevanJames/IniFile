@@ -3,6 +3,7 @@
 IniFile.NET is a .NET library to open, modify and save .INI files.
 
 1. [Installation](#installation)
+1. [Ini object model](#ini-object-model)
 1. [Loading an existing .INI](#loading-an-existing-ini)
     1. [IniLoadSettings](#iniloadsettings)
 1. [Creating an INI file](#creating-a-ini-file)
@@ -27,7 +28,7 @@ Install using `dotnet` CLI:
 dotnet add package IniFile.NET
 ```
 
-## Object model
+## Ini object model
 ![Ini object model](/docs/object-model.png)
 
 The `IniFile.Ini` class maintains the structure of an .INI file as an in-memory object model, with objects for sections, properties (key-value pairs), comments and blank lines, allowing it to model the exact structure of a .INI file.
