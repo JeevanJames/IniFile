@@ -33,6 +33,9 @@ Install using `dotnet` CLI:
 dotnet add package IniFile.NET
 ```
 
+## Object model
+![Ini object model](/docs/object-model.png)
+
 ## Loading an existing .INI
 The `Ini` class provides several constructor overloads to load .INI data from streams, text readers and files.
 ```cs
