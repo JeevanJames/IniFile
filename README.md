@@ -20,12 +20,12 @@ IniFile.NET is a .NET library to open, modify and save .INI files.
 ## Installation
 Install using NuGet:
 ```ps
-Install-Package IniFile.NET
+PM> Install-Package IniFile.NET
 ```
 
 Install using `dotnet` CLI:
 ```sh
-dotnet add package IniFile.NET
+> dotnet add package IniFile.NET
 ```
 
 ## Ini object model
