@@ -8,6 +8,7 @@ The `IniFile.Ini` class is a collection of `Section` objects (`IList<Section>`).
 
 Both `Section` and `Property` objects contain a collection of minor objects, namely `Comment` and `BlankLine` objects, which are the comments and blank lines that appear before the respective sections and properties.
 
+1. [Installation](#installation)
 1. [Loading an existing .INI](#loading-an-existing-ini)
     1. [IniLoadSettings](#iniloadsettings)
 1. [Creating an INI file](#creating-a-ini-file)
@@ -20,6 +21,17 @@ Both `Section` and `Property` objects contain a collection of minor objects, nam
 1. [Saving the INI content](#saving-the-ini-content)
 1. [Global configuration](#global-configuration)
 1. [Formatting the INI content](#formatting-the-ini-content)
+
+## Installation
+Install using NuGet:
+```ps
+Install-Package IniFile.NET
+```
+
+Install using `dotnet` CLI:
+```sh
+dotnet add package IniFile.NET
+```
 
 ## Loading an existing .INI
 The `Ini` class provides several constructor overloads to load .INI data from streams, text readers and files.
