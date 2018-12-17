@@ -2,12 +2,6 @@
 
 IniFile.NET is a .NET library to open, modify and save .INI files.
 
-The `IniFile.Ini` class maintains the structure of an .INI file as an in-memory object model, with objects for sections, properties (key-value pairs), comments and blank lines, allowing it to model the exact structure of a .INI file.
-
-The `IniFile.Ini` class is a collection of `Section` objects (`IList<Section>`). Each `Section` is additionally a collection of `Property` objects (`IList<Property>`).
-
-Both `Section` and `Property` objects contain a collection of minor objects, namely `Comment` and `BlankLine` objects, which are the comments and blank lines that appear before the respective sections and properties.
-
 1. [Installation](#installation)
 1. [Loading an existing .INI](#loading-an-existing-ini)
     1. [IniLoadSettings](#iniloadsettings)
@@ -35,6 +29,12 @@ dotnet add package IniFile.NET
 
 ## Object model
 ![Ini object model](/docs/object-model.png)
+
+The `IniFile.Ini` class maintains the structure of an .INI file as an in-memory object model, with objects for sections, properties (key-value pairs), comments and blank lines, allowing it to model the exact structure of a .INI file.
+
+The `IniFile.Ini` class is a collection of `Section` objects (`IList<Section>`). Each `Section` is additionally a collection of `Property` objects (`IList<Property>`).
+
+Both `Section` and `Property` objects contain a collection of minor objects, namely `Comment` and `BlankLine` objects, which are the comments and blank lines that appear before the respective sections and properties.
 
 ## Loading an existing .INI
 The `Ini` class provides several constructor overloads to load .INI data from streams, text readers and files.
