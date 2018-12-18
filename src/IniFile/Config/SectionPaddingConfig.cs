@@ -22,10 +22,21 @@ using IniFile.Items;
 
 namespace IniFile.Config
 {
+    /// <summary>
+    ///     Configuration for padding defaults in sections.
+    /// </summary>
     public sealed class SectionPaddingConfig : ItemPaddingConfig
     {
+        /// <summary>
+        ///     The default padding between the opening square bracket of a section and the start of
+        ///     the section name. Default is 0.
+        /// </summary>
         public PaddingValue InsideLeft { get; set; }
 
+        /// <summary>
+        ///     The default padding between the end of the section name and the closing square
+        ///     bracket of a section. Default is 0.
+        /// </summary>
         public PaddingValue InsideRight { get; set; }
     }
 }

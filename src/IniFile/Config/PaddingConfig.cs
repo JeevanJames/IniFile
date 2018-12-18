@@ -20,12 +20,24 @@ limitations under the License.
 
 namespace IniFile.Config
 {
+    /// <summary>
+    ///     Configuration for padding defaults for sections, properties and comments.
+    /// </summary>
     public sealed class PaddingConfig
     {
+        /// <summary>
+        ///     Configuration for padding defaults of sections.
+        /// </summary>
         public SectionPaddingConfig Section { get; } = new SectionPaddingConfig();
 
+        /// <summary>
+        ///     Configuration for padding defaults of properties.
+        /// </summary>
         public PropertyPaddingConfig Property { get; } = new PropertyPaddingConfig();
 
+        /// <summary>
+        ///     Configuration for padding defaults of comments.
+        /// </summary>
         public CommentPaddingConfig Comment { get; } = new CommentPaddingConfig();
     }
 }

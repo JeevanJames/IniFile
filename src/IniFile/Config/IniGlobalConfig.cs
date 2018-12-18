@@ -18,6 +18,7 @@ limitations under the License.
 */
 #endregion
 
+using System;
 using System.Globalization;
 
 using IniFile.Items;
@@ -48,7 +49,9 @@ namespace IniFile.Config
         ///     Allows the hash symbol (#) to be used to prefix comments.
         /// </summary>
         /// <param name="setAsDefault">Sets the default comment prefix to the hash symbol (#).</param>
-        /// <returns>The same <see cref="IniGlobalConfig"/> instance so that multiple calls can be chained.</returns>
+        /// <returns>
+        ///     The same <see cref="IniGlobalConfig"/> instance so that multiple calls can be chained.
+        /// </returns>
         public IniGlobalConfig AllowHashForComments(bool setAsDefault = false)
         {
             HashForComments.Allow = true;
@@ -85,6 +88,15 @@ namespace IniFile.Config
             return this;
         }
 
+        /// <summary>
+        ///     Sets the default string values to represent <c>true</c> and <c>false</c> when writing
+        ///     boolean properties.
+        /// </summary>
+        /// <param name="trueString">The string value to represent <c>true</c>.</param>
+        /// <param name="falseString">The string value to represent <c>false</c>.</param>
+        /// <returns>
+        ///     The same <see cref="IniGlobalConfig"/> instance so that multiple calls can be chained.
+        /// </returns>
         public IniGlobalConfig SetBooleanStrings(string trueString = "1", string falseString = "0")
         {
             Types.TrueString = string.IsNullOrEmpty(trueString) || trueString.Trim().Length == 0 ? "1" : trueString;
@@ -92,6 +104,17 @@ namespace IniFile.Config
             return this;
         }
 
+        /// <summary>
+        ///     Sets the default date and time formats when reading and writing <see cref="DateTime"/>
+        ///     and <see cref="TimeSpan"/> values.
+        /// </summary>
+        /// <param name="dateFormat">
+        ///     The format for dates. If this value is <c>null</c>, then the current culture short
+        ///     date format is used.
+        /// </param>
+        /// <returns>
+        ///     The same <see cref="IniGlobalConfig"/> instance so that multiple calls can be chained.
+        /// </returns>
         public IniGlobalConfig SetDateFormats(string dateFormat = null)
         {
             Types.DateFormat = string.IsNullOrEmpty(dateFormat) || dateFormat.Trim().Length == 0

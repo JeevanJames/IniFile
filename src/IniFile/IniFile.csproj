@@ -7,8 +7,6 @@
     <Company>Jeevan James</Company>
     <Description>.NET library to open, modify and save .INI files</Description>
     <Copyright>Copyright (c) 2018 Jeevan James</Copyright>
-    <!--
-    <PackageLicenseUrl>https://github.com/JeevanJames/IniFile/blob/master/LICENSE</PackageLicenseUrl>-->
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/JeevanJames/IniFile</PackageProjectUrl>
     <RepositoryUrl>https://github.com/JeevanJames/IniFile.git</RepositoryUrl>

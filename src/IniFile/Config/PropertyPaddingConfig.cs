@@ -22,10 +22,21 @@ using IniFile.Items;
 
 namespace IniFile.Config
 {
+    /// <summary>
+    ///     Configuration for padding defaults in properties.
+    /// </summary>
     public sealed class PropertyPaddingConfig : ItemPaddingConfig
     {
+        /// <summary>
+        ///     The default padding between the end of the property name and the equals symbol.
+        ///     Default is 1.
+        /// </summary>
         public PaddingValue InsideLeft { get; set; }
 
+        /// <summary>
+        ///     The default padding between the equals symbol and the start of the property value.
+        ///     Default is 1.
+        /// </summary>
         public PaddingValue InsideRight { get; set; }
     }
 }

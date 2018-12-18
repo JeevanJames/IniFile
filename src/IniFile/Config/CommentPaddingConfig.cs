@@ -22,8 +22,15 @@ using IniFile.Items;
 
 namespace IniFile.Config
 {
+    /// <summary>
+    ///     Configuration for padding defaults in comments.
+    /// </summary>
     public sealed class CommentPaddingConfig : ItemPaddingConfig
     {
+        /// <summary>
+        ///     The default padding between the comment character (; or #) and the start of the
+        ///     comment text. Defaults to 1.
+        /// </summary>
         public PaddingValue Inside { get; set; }
     }
 }

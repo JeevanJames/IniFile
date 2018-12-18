@@ -22,10 +22,19 @@ using IniFile.Items;
 
 namespace IniFile.Config
 {
+    /// <summary>
+    ///     Base class for the common padding configurations for sections, properties and comments.
+    /// </summary>
     public abstract class ItemPaddingConfig
     {
+        /// <summary>
+        ///     The default padding on the left margin. Default is 0.
+        /// </summary>
         public PaddingValue Left { get; set; }
 
+        /// <summary>
+        ///     The default padding on the right margin. Default is 0.
+        /// </summary>
         public PaddingValue Right { get; set; }
     }
 }
