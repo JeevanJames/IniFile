@@ -109,7 +109,7 @@ namespace IniFile.Items
             provider = provider ?? CultureInfo.CurrentCulture;
             return ConvertTo(this, s => DateTime.TryParseExact(
                 s, format, provider, DateTimeStyles.None, out DateTime dt)
-                    ? new ConversionResult<DateTime>(true, dt) : new ConversionResult<DateTime>(false, default));
+                    ? new ConversionResult<DateTime>(dt) : default);
         }
 
         /// <summary>
@@ -149,64 +149,64 @@ namespace IniFile.Items
 
         public static implicit operator PropertyValue(sbyte value) => new PropertyValue(value);
         public static implicit operator sbyte(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            sbyte.TryParse(s, out sbyte value) ? new ConversionResult<sbyte>(true, value) : new ConversionResult<sbyte>(false, default)
+            sbyte.TryParse(s, out sbyte value) ? new ConversionResult<sbyte>(value) : default
         );
 
         public static implicit operator PropertyValue(byte value) => new PropertyValue(value);
         public static implicit operator byte(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            byte.TryParse(s, out byte value) ? new ConversionResult<byte>(true, value) : new ConversionResult<byte>(false, default)
+            byte.TryParse(s, out byte value) ? new ConversionResult<byte>(value) : default
         );
 
         public static implicit operator PropertyValue(short value) => new PropertyValue(value);
         public static implicit operator short(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            short.TryParse(s, out short value) ? new ConversionResult<short>(true, value) : new ConversionResult<short>(false, default)
+            short.TryParse(s, out short value) ? new ConversionResult<short>(value) : default
         );
 
         public static implicit operator PropertyValue(ushort value) => new PropertyValue(value);
         public static implicit operator ushort(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            ushort.TryParse(s, out ushort value) ? new ConversionResult<ushort>(true, value) : new ConversionResult<ushort>(false, default)
+            ushort.TryParse(s, out ushort value) ? new ConversionResult<ushort>(value) : default
         );
 
         public static implicit operator PropertyValue(int value) => new PropertyValue(value);
         public static implicit operator int(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            int.TryParse(s, out int value) ? new ConversionResult<int>(true, value) : new ConversionResult<int>(false, default)
+            int.TryParse(s, out int value) ? new ConversionResult<int>(value) : default
         );
 
         public static implicit operator PropertyValue(uint value) => new PropertyValue(value);
         public static implicit operator uint(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            uint.TryParse(s, out uint value) ? new ConversionResult<uint>(true, value) : new ConversionResult<uint>(false, default)
+            uint.TryParse(s, out uint value) ? new ConversionResult<uint>(value) : default
         );
 
         public static implicit operator PropertyValue(long value) => new PropertyValue(value);
         public static implicit operator long(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            long.TryParse(s, out long value) ? new ConversionResult<long>(true, value) : new ConversionResult<long>(false, default)
+            long.TryParse(s, out long value) ? new ConversionResult<long>(value) : default
         );
 
         public static implicit operator PropertyValue(ulong value) => new PropertyValue(value);
         public static implicit operator ulong(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            ulong.TryParse(s, out ulong value) ? new ConversionResult<ulong>(true, value) : new ConversionResult<ulong>(false, default)
+            ulong.TryParse(s, out ulong value) ? new ConversionResult<ulong>(value) : default
         );
 
         public static implicit operator PropertyValue(float value) => new PropertyValue(value);
         public static implicit operator float(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            float.TryParse(s, out float value) ? new ConversionResult<float>(true, value) : new ConversionResult<float>(false, default)
+            float.TryParse(s, out float value) ? new ConversionResult<float>(value) : default
         );
 
         public static implicit operator PropertyValue(double value) => new PropertyValue(value);
         public static implicit operator double(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            double.TryParse(s, out double value) ? new ConversionResult<double>(true, value) : new ConversionResult<double>(false, default)
+            double.TryParse(s, out double value) ? new ConversionResult<double>(value) : default
         );
 
         public static implicit operator PropertyValue(decimal value) => new PropertyValue(value);
         public static implicit operator decimal(PropertyValue pvalue) => ConvertTo(pvalue, s =>
-            decimal.TryParse(s, out decimal value) ? new ConversionResult<decimal>(true, value) : new ConversionResult<decimal>(false, default)
+            decimal.TryParse(s, out decimal value) ? new ConversionResult<decimal>(value) : default
         );
 
         public static implicit operator PropertyValue(DateTime value) =>
             new PropertyValue(value, value.ToString(Ini.Config.Types.DateFormat));
         public static implicit operator DateTime(PropertyValue pvalue) => ConvertTo(pvalue, s => 
             DateTime.TryParseExact(s, Ini.Config.Types.DateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime value)
-                ? new ConversionResult<DateTime>(true, value) : new ConversionResult<DateTime>(false, default)
+                ? new ConversionResult<DateTime>(value) : default
         );
 
         private static T ConvertTo<T>(PropertyValue pvalue, Func<string, ConversionResult<T>> converter)
@@ -266,42 +266,54 @@ namespace IniFile.Items
             throw new Exception($"'value' is not a boolean value.");
         }
 
+        /// <inheritdoc/>
         public static bool operator ==(PropertyValue value1, PropertyValue value2)
         {
             return value1.Equals(value2);
         }
 
+        /// <inheritdoc/>
         public static bool operator !=(PropertyValue value1, PropertyValue value2)
         {
             return !(value1 == value2);
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             return obj is PropertyValue && Equals((PropertyValue)obj);
         }
 
+        /// <inheritdoc/>
         public bool Equals(PropertyValue other)
         {
             return EqualityComparer<Type>.Default.Equals(_type, other._type);
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return -331038658 + EqualityComparer<Type>.Default.GetHashCode(_type);
         }
 
+        /// <summary>
+        ///     Returns whether the property has no value.
+        /// </summary>
+        /// <returns><c>True</c>, if the value is empty; otherwise <c>false</c>.</returns>
         public bool IsEmpty() => _value == null && _stringValue == null;
 
+        /// <summary>
+        ///     Represents an empty property value.
+        /// </summary>
         public static readonly PropertyValue Empty = new PropertyValue(null);
     }
 
     internal readonly struct ConversionResult<T>
         where T : struct
     {
-        internal ConversionResult(bool canConvert, T value)
+        internal ConversionResult(T value)
         {
-            CanConvert = canConvert;
+            CanConvert = true;
             Value = value;
         }
 

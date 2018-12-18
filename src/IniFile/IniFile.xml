@@ -387,31 +387,6 @@
             </summary>
             <param name="writer">The text writer to write the data to.</param>
         </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.Stream)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream asynchronously.
-            </summary>
-            <param name="stream">The stream to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
-            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
-        </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.TextWriter)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer asynchronously.
-            </summary>
-            <param name="writer">The text writer to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
-        </member>
-        <member name="M:IniFile.Ini.InternalSaveAsync(System.IO.TextWriter)">
-            <summary>
-                Common method called to asynchronously  save the <see cref="T:IniFile.Ini"/> instance data to
-                various destinations such as streams, strings, files and text writers.
-            </summary>
-            <param name="writer">The text writer to write the data to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-        </member>
         <member name="P:IniFile.Ini.TrailingItems">
             <summary>
                 Any trailing comments and blank lines at the end of the INI.
@@ -757,6 +732,32 @@
             <typeparam name="TEnum">The type of enum to convert the property value to.</typeparam>
             <param name="caseSensitive">Indicates whether the property value is case-sensitive.</param>
             <returns>The property value as the specified enum.</returns>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.op_Equality(IniFile.Items.PropertyValue,IniFile.Items.PropertyValue)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.op_Inequality(IniFile.Items.PropertyValue,IniFile.Items.PropertyValue)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.Equals(IniFile.Items.PropertyValue)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.Items.PropertyValue.IsEmpty">
+            <summary>
+                Returns whether the property has no value.
+            </summary>
+            <returns><c>True</c>, if the value is empty; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="F:IniFile.Items.PropertyValue.Empty">
+            <summary>
+                Represents an empty property value.
+            </summary>
         </member>
         <member name="T:IniFile.Items.SectionPadding">
             <summary>
