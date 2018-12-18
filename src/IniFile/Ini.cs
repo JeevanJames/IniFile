@@ -482,6 +482,13 @@ namespace IniFile
             FormatMinorItems(TrailingItems, options.RemoveSuccessiveBlankLines);
         }
 
+        /// <summary>
+        ///     Formats a collection of minor INI items (i.e. <see cref="Comment"/> and
+        ///     <see cref="BlankLine"/>). By default, the paddings for these items are reset, but the
+        ///     method can also optionally remove consecutive blank lines.
+        /// </summary>
+        /// <param name="minorItems">The collection of items to format.</param>
+        /// <param name="removeSuccessiveBlankLines">Whether to remove consecutive blank lines.</param>
         private static void FormatMinorItems(IList<MinorIniItem> minorItems, bool removeSuccessiveBlankLines)
         {
             foreach (MinorIniItem minorItem in minorItems)
@@ -499,6 +506,9 @@ namespace IniFile
             }
         }
 
+        /// <summary>
+        ///     Global configuration for the framework.
+        /// </summary>
         public static readonly IniGlobalConfig Config = new IniGlobalConfig();
     }
 
