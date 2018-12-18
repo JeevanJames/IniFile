@@ -24,7 +24,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 
-namespace IniFile.Items
+namespace IniFile
 {
     /// <summary>
     ///     <para>Represents the value of a property</para>

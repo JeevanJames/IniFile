@@ -387,6 +387,31 @@
             </summary>
             <param name="writer">The text writer to write the data to.</param>
         </member>
+        <member name="M:IniFile.Ini.SaveToAsync(System.IO.Stream)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream asynchronously.
+            </summary>
+            <param name="stream">The stream to save to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
+        </member>
+        <member name="M:IniFile.Ini.SaveToAsync(System.IO.TextWriter)">
+            <summary>
+                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer asynchronously.
+            </summary>
+            <param name="writer">The text writer to save to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
+        </member>
+        <member name="M:IniFile.Ini.InternalSaveAsync(System.IO.TextWriter)">
+            <summary>
+                Common method called to asynchronously  save the <see cref="T:IniFile.Ini"/> instance data to
+                various destinations such as streams, strings, files and text writers.
+            </summary>
+            <param name="writer">The text writer to write the data to.</param>
+            <returns>A task representing the asynchronous save operation.</returns>
+        </member>
         <member name="P:IniFile.Ini.TrailingItems">
             <summary>
                 Any trailing comments and blank lines at the end of the INI.
@@ -658,107 +683,6 @@
         <member name="M:IniFile.Items.PropertyPadding.Reset">
             <inheritdoc/>
         </member>
-        <member name="T:IniFile.Items.PropertyValue">
-            <summary>
-                <para>Represents the value of a property</para>
-                <para>Property values can be strings, numbers (both floats and integers), date/times and booleans.</para>
-            </summary>
-        </member>
-        <member name="F:IniFile.Items.PropertyValue._value">
-            <summary>
-                The value of the property, internally using the actual type.
-            </summary>
-        </member>
-        <member name="F:IniFile.Items.PropertyValue._stringValue">
-            <summary>
-                <para>
-                    The string representation of the value. This is used if the string representation
-                    is different from the string returned by calling <c>_value.ToString()</c>.
-                </para>
-                <para>
-                    Boolean values use this, as there can be multiple string representations of a
-                    boolean value such as <c>0</c>, <c>on</c>, etc.
-                </para>
-            </summary>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.#ctor(System.Object)">
-            <summary>
-                Initializes an instance of the <see cref="T:IniFile.Items.PropertyValue"/> structure.
-            </summary>
-            <param name="value">
-                The value to initialize the property with. If <c>null</c>, the type is considered a
-                <c>string</c>.
-            </param>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.#ctor(System.Object,System.String)">
-            <summary>
-                Initializes an instance of the <see cref="T:IniFile.Items.PropertyValue"/> structure where the string
-                representation of the underlying object is different from the string representation
-                of the value in the INI file.
-            </summary>
-            <param name="value">
-                The value to initialize the property with. If <c>null</c>, the type is considered a
-                <c>string</c>.
-            </param>
-            <param name="stringValue">
-                The different string representation of the value in the INI file.
-            </param>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.ToString">
-            <summary>
-                Returns the string value, if it exists, otherwise returns the <see cref="M:IniFile.Items.PropertyValue.ToString"/>
-                result of the object value. If the object value is <c>null</c>, then the returned
-                value is also <c>null</c>.
-            </summary>
-            <returns>String that represents the current property value.</returns>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.AsDateTime(System.String,System.IFormatProvider)">
-            <summary>
-                Returns the property value as a <see cref="T:System.DateTime"/>.
-            </summary>
-            <param name="format">
-                A format specifier that defines the required format of the property string value.
-            </param>
-            <param name="provider">
-                An object that specifies the culture-specific formatting information about the
-                property string value.
-            </param>
-            <returns>The property value as a <see cref="T:System.DateTime"/>.</returns>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.AsEnum``1(System.Boolean)">
-            <summary>
-                Returns the property value as the specified enum.
-            </summary>
-            <typeparam name="TEnum">The type of enum to convert the property value to.</typeparam>
-            <param name="caseSensitive">Indicates whether the property value is case-sensitive.</param>
-            <returns>The property value as the specified enum.</returns>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.op_Equality(IniFile.Items.PropertyValue,IniFile.Items.PropertyValue)">
-            <inheritdoc/>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.op_Inequality(IniFile.Items.PropertyValue,IniFile.Items.PropertyValue)">
-            <inheritdoc/>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.Equals(System.Object)">
-            <inheritdoc/>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.Equals(IniFile.Items.PropertyValue)">
-            <inheritdoc/>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.GetHashCode">
-            <inheritdoc/>
-        </member>
-        <member name="M:IniFile.Items.PropertyValue.IsEmpty">
-            <summary>
-                Returns whether the property has no value.
-            </summary>
-            <returns><c>True</c>, if the value is empty; otherwise <c>false</c>.</returns>
-        </member>
-        <member name="F:IniFile.Items.PropertyValue.Empty">
-            <summary>
-                Represents an empty property value.
-            </summary>
-        </member>
         <member name="T:IniFile.Items.SectionPadding">
             <summary>
                 Represents the padding details for an INI section.
@@ -792,7 +716,7 @@
                 Represents a property object in an INI.
             </summary>
         </member>
-        <member name="M:IniFile.Property.#ctor(System.String,IniFile.Items.PropertyValue,System.String[])">
+        <member name="M:IniFile.Property.#ctor(System.String,IniFile.PropertyValue,System.String[])">
             <summary>
                 Initializes a new instance of the <see cref="T:IniFile.Property"/> class.
             </summary>
@@ -822,6 +746,107 @@
         </member>
         <member name="M:IniFile.Property.ToString">
             <inheritdoc/>
+        </member>
+        <member name="T:IniFile.PropertyValue">
+            <summary>
+                <para>Represents the value of a property</para>
+                <para>Property values can be strings, numbers (both floats and integers), date/times and booleans.</para>
+            </summary>
+        </member>
+        <member name="F:IniFile.PropertyValue._value">
+            <summary>
+                The value of the property, internally using the actual type.
+            </summary>
+        </member>
+        <member name="F:IniFile.PropertyValue._stringValue">
+            <summary>
+                <para>
+                    The string representation of the value. This is used if the string representation
+                    is different from the string returned by calling <c>_value.ToString()</c>.
+                </para>
+                <para>
+                    Boolean values use this, as there can be multiple string representations of a
+                    boolean value such as <c>0</c>, <c>on</c>, etc.
+                </para>
+            </summary>
+        </member>
+        <member name="M:IniFile.PropertyValue.#ctor(System.Object)">
+            <summary>
+                Initializes an instance of the <see cref="T:IniFile.PropertyValue"/> structure.
+            </summary>
+            <param name="value">
+                The value to initialize the property with. If <c>null</c>, the type is considered a
+                <c>string</c>.
+            </param>
+        </member>
+        <member name="M:IniFile.PropertyValue.#ctor(System.Object,System.String)">
+            <summary>
+                Initializes an instance of the <see cref="T:IniFile.PropertyValue"/> structure where the string
+                representation of the underlying object is different from the string representation
+                of the value in the INI file.
+            </summary>
+            <param name="value">
+                The value to initialize the property with. If <c>null</c>, the type is considered a
+                <c>string</c>.
+            </param>
+            <param name="stringValue">
+                The different string representation of the value in the INI file.
+            </param>
+        </member>
+        <member name="M:IniFile.PropertyValue.ToString">
+            <summary>
+                Returns the string value, if it exists, otherwise returns the <see cref="M:IniFile.PropertyValue.ToString"/>
+                result of the object value. If the object value is <c>null</c>, then the returned
+                value is also <c>null</c>.
+            </summary>
+            <returns>String that represents the current property value.</returns>
+        </member>
+        <member name="M:IniFile.PropertyValue.AsDateTime(System.String,System.IFormatProvider)">
+            <summary>
+                Returns the property value as a <see cref="T:System.DateTime"/>.
+            </summary>
+            <param name="format">
+                A format specifier that defines the required format of the property string value.
+            </param>
+            <param name="provider">
+                An object that specifies the culture-specific formatting information about the
+                property string value.
+            </param>
+            <returns>The property value as a <see cref="T:System.DateTime"/>.</returns>
+        </member>
+        <member name="M:IniFile.PropertyValue.AsEnum``1(System.Boolean)">
+            <summary>
+                Returns the property value as the specified enum.
+            </summary>
+            <typeparam name="TEnum">The type of enum to convert the property value to.</typeparam>
+            <param name="caseSensitive">Indicates whether the property value is case-sensitive.</param>
+            <returns>The property value as the specified enum.</returns>
+        </member>
+        <member name="M:IniFile.PropertyValue.op_Equality(IniFile.PropertyValue,IniFile.PropertyValue)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.PropertyValue.op_Inequality(IniFile.PropertyValue,IniFile.PropertyValue)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.PropertyValue.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.PropertyValue.Equals(IniFile.PropertyValue)">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.PropertyValue.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="M:IniFile.PropertyValue.IsEmpty">
+            <summary>
+                Returns whether the property has no value.
+            </summary>
+            <returns><c>True</c>, if the value is empty; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="F:IniFile.PropertyValue.Empty">
+            <summary>
+                Represents an empty property value.
+            </summary>
         </member>
         <member name="T:IniFile.Section">
             <summary>
