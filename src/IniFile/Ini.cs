@@ -155,43 +155,11 @@ namespace IniFile
         {
             settings = settings ?? IniLoadSettings.Default;
 
-            IList<IniItem> allItems = ParseLines(reader).ToList();
+            // Go through all the lines and build a flat collection of INI objects.
+            IList<IniItem> lineItems = ParseLines(reader).ToList();
 
-            // Go through each line object and construct a hierarchical object model, with properties
-            // under sections and comments/blank lines under respective sections and properties.
-            Section currentSection = null;
-            var minorItems = new List<MinorIniItem>();
-            foreach (IniItem item in allItems)
-            {
-                // If the current line is a property, but we're not in a section, then this is invalid.
-                if (item is Property prop && currentSection == null)
-                    throw new FormatException(string.Format(ErrorMessages.PropertyWithoutSection, prop.Name));
-
-                if (item is BlankLine blankLine)
-                {
-                    if (!settings.IgnoreBlankLines)
-                        minorItems.Add(blankLine);
-                }
-                else if (item is Comment comment)
-                {
-                    if (!settings.IgnoreComments)
-                        minorItems.Add(comment);
-                }
-                else if (item is Section section)
-                {
-                    currentSection = section;
-                    AddRangeAndClear(currentSection.Items, minorItems);
-                    Add(currentSection);
-                }
-                else if (item is Property property)
-                {
-                    AddRangeAndClear(property.Items, minorItems);
-                    currentSection.Add(property);
-                }
-            }
-
-            if (minorItems.Count > 0)
-                AddRangeAndClear(TrailingItems, minorItems);
+            // Go through the line objects and construct an object model.
+            CreateObjectModel(settings, lineItems);
         }
 
         /// <summary>
@@ -209,10 +177,12 @@ namespace IniFile
 
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
             {
-                // Are we in the middle of a multi-line property value
+                // Are we in the middle of a multi-line property value?
+                // If so, continue adding the line strings to the mlValue variable until the EOT
+                // string is found.
                 if (mlProperty != null)
                 {
-                    // Have we reached the end of the multi-line value (end-of-text)
+                    // Have we reached the end of the multi-line value (end-of-text)?
                     if (line.Trim() == mlEot) // EOT is case-sensitive
                     {
                         mlProperty.Value = mlValue;
@@ -224,32 +194,72 @@ namespace IniFile
                             mlValue += Environment.NewLine;
                         mlValue += line;
                     }
-
-                    continue;
                 }
-
-                IniItem iniItem = IniItemFactory.CreateItem(line);
-
-                if (iniItem is Property property)
+                else
                 {
-                    // If the property value matches the start of a multiline value, enable multiline
-                    // mode (mlProperty != null) and add all subsequent lines until the end-of-text
-                    // marker is found.
-                    Match match = MultilineStartPattern.Match(property.Value);
-                    if (match.Success)
-                    {
-                        // Start tracking the multiline value until we encounter an end-of-text (EOT) line
-                        mlProperty = property;
-                        mlValue = string.Empty;
-                        mlEot = match.Groups[1].Value;
-                    }
-                }
+                    IniItem iniItem = IniItemFactory.CreateItem(line);
 
-                yield return iniItem;
+                    if (iniItem is Property property)
+                    {
+                        // If the property value matches the start of a multiline value, enable multiline
+                        // mode (mlProperty != null) and add all subsequent lines until the end-of-text
+                        // marker is found.
+                        Match match = MultilineStartPattern.Match(property.Value);
+                        if (match.Success)
+                        {
+                            // Start tracking the multiline value until we encounter an end-of-text (EOT) line
+                            mlProperty = property;
+                            mlValue = string.Empty;
+                            mlEot = match.Groups[1].Value;
+                        }
+                    }
+
+                    yield return iniItem;
+                }
             }
         }
 
         private static readonly Regex MultilineStartPattern = new Regex(@"^<<(\w+)$");
+
+        /// <summary>
+        ///     Go through each line object and construct a hierarchical object model, with properties
+        ///     under sections and comments/blank lines under respective sections and properties.
+        /// </summary>
+        /// <param name="settings">The INI load settings that control the load behavior.</param>
+        /// <param name="lineItems"></param>
+        private void CreateObjectModel(IniLoadSettings settings, IList<IniItem> lineItems)
+        {
+            Section currentSection = null;
+            var minorItems = new List<MinorIniItem>();
+            foreach (IniItem item in lineItems)
+            {
+                switch (item)
+                {
+                    case BlankLine blankLine when !settings.IgnoreBlankLines:
+                        minorItems.Add(blankLine);
+                        break;
+                    case Comment comment when !settings.IgnoreComments:
+                        minorItems.Add(comment);
+                        break;
+                    case Section section:
+                        currentSection = section;
+                        AddRangeAndClear(currentSection.Items, minorItems);
+                        Add(currentSection);
+                        break;
+                    case Property property when currentSection == null:
+                        throw new FormatException(string.Format(ErrorMessages.PropertyWithoutSection, property.Name));
+                    case Property property:
+                        AddRangeAndClear(property.Items, minorItems);
+                        currentSection.Add(property);
+                        break;
+                }
+            }
+
+            // If there are comments or blank lines at the end of the INI, which cannot be assigned
+            // to any section or property, assign them to the TrailingItems collection.
+            if (minorItems.Count > 0)
+                AddRangeAndClear(TrailingItems, minorItems);
+        }
 
         private static void AddRangeAndClear(IList<MinorIniItem> source, IList<MinorIniItem> minorItems)
         {

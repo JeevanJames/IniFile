@@ -51,6 +51,17 @@
         <member name="M:IniFile.Comment.ToString">
             <inheritdoc/>
         </member>
+        <member name="T:IniFile.Config.CommentPaddingConfig">
+            <summary>
+                Configuration for padding defaults in comments.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.CommentPaddingConfig.Inside">
+            <summary>
+                The default padding between the comment character (; or #) and the start of the
+                comment text. Defaults to 1.
+            </summary>
+        </member>
         <member name="T:IniFile.Config.HashCommentConfig">
             <summary>
                 Configuration on whether the hash symbol (#) can be used for comments.
@@ -96,7 +107,102 @@
                 Allows the hash symbol (#) to be used to prefix comments.
             </summary>
             <param name="setAsDefault">Sets the default comment prefix to the hash symbol (#).</param>
-            <returns>The same <see cref="T:IniFile.Config.IniGlobalConfig"/> instance so that multiple calls can be chained.</returns>
+            <returns>
+                The same <see cref="T:IniFile.Config.IniGlobalConfig"/> instance so that multiple calls can be chained.
+            </returns>
+        </member>
+        <member name="M:IniFile.Config.IniGlobalConfig.SetBooleanStrings(System.String,System.String)">
+            <summary>
+                Sets the default string values to represent <c>true</c> and <c>false</c> when writing
+                boolean properties.
+            </summary>
+            <param name="trueString">The string value to represent <c>true</c>.</param>
+            <param name="falseString">The string value to represent <c>false</c>.</param>
+            <returns>
+                The same <see cref="T:IniFile.Config.IniGlobalConfig"/> instance so that multiple calls can be chained.
+            </returns>
+        </member>
+        <member name="M:IniFile.Config.IniGlobalConfig.SetDateFormats(System.String)">
+            <summary>
+                Sets the default date and time formats when reading and writing <see cref="T:System.DateTime"/>
+                and <see cref="T:System.TimeSpan"/> values.
+            </summary>
+            <param name="dateFormat">
+                The format for dates. If this value is <c>null</c>, then the current culture short
+                date format is used.
+            </param>
+            <returns>
+                The same <see cref="T:IniFile.Config.IniGlobalConfig"/> instance so that multiple calls can be chained.
+            </returns>
+        </member>
+        <member name="T:IniFile.Config.ItemPaddingConfig">
+            <summary>
+                Base class for the common padding configurations for sections, properties and comments.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.ItemPaddingConfig.Left">
+            <summary>
+                The default padding on the left margin. Default is 0.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.ItemPaddingConfig.Right">
+            <summary>
+                The default padding on the right margin. Default is 0.
+            </summary>
+        </member>
+        <member name="T:IniFile.Config.PaddingConfig">
+            <summary>
+                Configuration for padding defaults for sections, properties and comments.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.PaddingConfig.Section">
+            <summary>
+                Configuration for padding defaults of sections.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.PaddingConfig.Property">
+            <summary>
+                Configuration for padding defaults of properties.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.PaddingConfig.Comment">
+            <summary>
+                Configuration for padding defaults of comments.
+            </summary>
+        </member>
+        <member name="T:IniFile.Config.PropertyPaddingConfig">
+            <summary>
+                Configuration for padding defaults in properties.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.PropertyPaddingConfig.InsideLeft">
+            <summary>
+                The default padding between the end of the property name and the equals symbol.
+                Default is 1.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.PropertyPaddingConfig.InsideRight">
+            <summary>
+                The default padding between the equals symbol and the start of the property value.
+                Default is 1.
+            </summary>
+        </member>
+        <member name="T:IniFile.Config.SectionPaddingConfig">
+            <summary>
+                Configuration for padding defaults in sections.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.SectionPaddingConfig.InsideLeft">
+            <summary>
+                The default padding between the opening square bracket of a section and the start of
+                the section name. Default is 0.
+            </summary>
+        </member>
+        <member name="P:IniFile.Config.SectionPaddingConfig.InsideRight">
+            <summary>
+                The default padding between the end of the section name and the closing square
+                bracket of a section. Default is 0.
+            </summary>
         </member>
         <member name="T:IniFile.ErrorMessages">
             <summary>
@@ -232,6 +338,14 @@
             <param name="reader">The <see cref="T:System.IO.TextReader"/> instance to read the INI lines from.</param>
             <returns></returns>
         </member>
+        <member name="M:IniFile.Ini.CreateObjectModel(IniFile.IniLoadSettings,System.Collections.Generic.IList{IniFile.Items.IniItem})">
+            <summary>
+                Go through each line object and construct a hierarchical object model, with properties
+                under sections and comments/blank lines under respective sections and properties.
+            </summary>
+            <param name="settings">The INI load settings that control the load behavior.</param>
+            <param name="lineItems"></param>
+        </member>
         <member name="M:IniFile.Ini.SaveTo(System.String)">
             <summary>
                 Saves the <see cref="T:IniFile.Ini"/> instance to a file at the specified file path.
@@ -272,31 +386,6 @@
                 such as streams, strings, files and text writers.
             </summary>
             <param name="writer">The text writer to write the data to.</param>
-        </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.Stream)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream asynchronously.
-            </summary>
-            <param name="stream">The stream to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
-            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
-        </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.TextWriter)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer asynchronously.
-            </summary>
-            <param name="writer">The text writer to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
-        </member>
-        <member name="M:IniFile.Ini.InternalSaveAsync(System.IO.TextWriter)">
-            <summary>
-                Common method called to asynchronously  save the <see cref="T:IniFile.Ini"/> instance data to
-                various destinations such as streams, strings, files and text writers.
-            </summary>
-            <param name="writer">The text writer to write the data to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
         </member>
         <member name="P:IniFile.Ini.TrailingItems">
             <summary>
@@ -375,9 +464,15 @@
                 Gets or sets whether to ignore comments when loading the INI data.
             </summary>
         </member>
-        <member name="F:IniFile.IniLoadSettings.Default">
+        <member name="P:IniFile.IniLoadSettings.Default">
             <summary>
                 Default settings to use to load INI data.
+            </summary>
+        </member>
+        <member name="P:IniFile.IniLoadSettings.ReadOnly">
+            <summary>
+                Preconfigured settings to use if you plan to only read from the INI file without making
+                changes and saving.
             </summary>
         </member>
         <member name="T:IniFile.Items.CommentPadding">

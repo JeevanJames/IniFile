@@ -75,6 +75,16 @@ namespace IniFile
         /// <summary>
         ///     Default settings to use to load INI data.
         /// </summary>
-        public static readonly IniLoadSettings Default = new IniLoadSettings();
+        public static IniLoadSettings Default { get; }= new IniLoadSettings();
+
+        /// <summary>
+        ///     Preconfigured settings to use if you plan to only read from the INI file without making
+        ///     changes and saving.
+        /// </summary>
+        public static IniLoadSettings ReadOnly { get; } = new IniLoadSettings
+        {
+            IgnoreBlankLines = true,
+            IgnoreComments = true
+        };
     }
 }
