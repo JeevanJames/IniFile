@@ -20,18 +20,18 @@ IniFile.NET is a .NET library to open, modify and save .INI files.
 ## Installation
 Install using NuGet:
 ```ps
-Install-Package IniFile.NET
+PM> Install-Package IniFile.NET
 ```
 
 Install using `dotnet` CLI:
 ```sh
-dotnet add package IniFile.NET
+> dotnet add package IniFile.NET
 ```
 
 ## Ini object model
 ![Ini object model](/docs/object-model.png)
 
-The `IniFile.Ini` class maintains the structure of an .INI file as an in-memory object model, with objects for sections, properties (key-value pairs), comments and blank lines, allowing it to model the exact structure of a .INI file.
+The primary class in this library is the `IniFile.Ini` class and it maintains the structure of an .INI file as an in-memory object model, with objects for sections, properties (key-value pairs), comments and blank lines, allowing it to model the exact structure of a .INI file.
 
 The `IniFile.Ini` class is a collection of `Section` objects (`IList<Section>`). Each `Section` is additionally a collection of `Property` objects (`IList<Property>`).
 
@@ -41,12 +41,12 @@ Both `Section` and `Property` objects contain a collection of minor objects, nam
 The `Ini` class provides several constructor overloads to load .INI data from streams, text readers and files.
 ```cs
 // Load INI data from a file
-var ini = new Ini(@"Settings.ini");
+var ini = new Ini("Settings.ini");
 ```
 
 The class also provides a static factory method `Load` to create an `Ini` object from a string.
 ```cs
-const iniStr = File.ReadAllText(@"Settings.ini");
+const iniStr = File.ReadAllText("Settings.ini");
 Ini ini = Ini.Load(iniStr);
 ```
 
@@ -72,7 +72,7 @@ var ini = new Ini(stream, loadSettings);
 ```
 
 ## Creating a INI file
-An `Ini` object is a collection of `Section` objects (`IList<Section>`) and each `Section` object is a collection of `Property` objects (`IList<Property>`), so you can use regular `IList<T>` mechanisms to add, remove and manage sections and properties.
+Since the `Ini` class is a collection of `Section` objects (`IList<Section>`) and each `Section` object is a collection of `Property` objects (`IList<Property>`), so you can use regular `IList<T>` mechanisms to add, remove and manage sections and properties.
 
 So, for example, you can create an INI from scratch, using collection initializers, as shown here:
 ```cs
