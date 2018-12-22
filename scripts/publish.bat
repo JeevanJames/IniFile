@@ -1,4 +1,5 @@
 @echo off
+setlocal
 
 if ("%1"=="") goto error
 
