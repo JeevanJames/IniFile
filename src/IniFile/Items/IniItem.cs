@@ -21,7 +21,7 @@ limitations under the License.
 namespace IniFile.Items
 {
     /// <summary>
-    ///     Base class for all INI item classes.
+    ///     Base class for all INI items, such as sections, properties, comments and blank lines.
     /// </summary>
     public abstract class IniItem
     {

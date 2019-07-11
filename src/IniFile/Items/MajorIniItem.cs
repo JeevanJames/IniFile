@@ -26,11 +26,10 @@ using System.Linq;
 namespace IniFile.Items
 {
     /// <summary>
-    ///     <para>
-    ///         Base class for the major INI items, namely the <see cref="Section"/> and
-    ///         <see cref="Property"/>.
-    ///     </para>
-    ///     <para>Each major INI item can have zero or more comments and blank lines.</para>
+    ///     Base class for the major INI items, namely the <see cref="Section"/> and
+    ///     <see cref="Property"/>.
+    ///     <para/>
+    ///     Each major INI item can have zero or more comments and blank lines.
     /// </summary>
     public abstract class MajorIniItem : IniItem
     {
@@ -52,15 +51,12 @@ namespace IniFile.Items
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
             Name = name;
-            if (items != null)
+            foreach (string item in items)
             {
-                foreach (string item in items)
-                {
-                    if (string.IsNullOrEmpty(item) || item.Trim().Length == 0)
-                        Items.Add(new BlankLine {Padding = {Left = (item ?? string.Empty).Length}});
-                    else
-                        Items.Add(new Comment(item));
-                }
+                if (string.IsNullOrEmpty(item) || item.Trim().Length == 0)
+                    Items.Add(new BlankLine {Padding = {Left = (item ?? string.Empty).Length}});
+                else
+                    Items.Add(new Comment(item));
             }
         }
 
@@ -79,7 +75,7 @@ namespace IniFile.Items
         }
 
         /// <summary>
-        ///     The collection of comments and blank lines that are associated with this major INI item.
+        ///     The collection of comments and blank lines that are associated with this INI item.
         /// </summary>
         public IList<MinorIniItem> Items { get; } = new List<MinorIniItem>();
 
