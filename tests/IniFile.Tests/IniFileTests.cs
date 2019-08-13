@@ -281,13 +281,13 @@ This is line 3 and the last line"
             ini["Section"]["Multiline"].ToString().ShouldBe(expectedValue);
         }
 
-        [Fact]
-        public void Can_load_from_file()
-        {
-            var ini = new Ini(@"D:\Temp\Data.ini");
-            string ip = ini["tcp"]["ip2"];
+        //[Fact]
+        //public void Can_load_from_file()
+        //{
+        //    var ini = new Ini(@"D:\Temp\Data.ini");
+        //    string ip = ini["tcp"]["ip"];
 
-            ip.ShouldNotBeNull();
-        }
+        //    ip.ShouldNotBeNull();
+        //}
     }
 }
