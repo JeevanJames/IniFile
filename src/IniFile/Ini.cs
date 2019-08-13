@@ -74,6 +74,9 @@ namespace IniFile
             if (!iniFile.Exists)
                 throw new FileNotFoundException(string.Format(ErrorMessages.IniFileDoesNotExist, iniFile.FullName), iniFile.FullName);
 
+            if (settings == null)
+                settings = IniLoadSettings.Default;
+
             using (var stream = new FileStream(iniFile.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
                 ParseIniFile(reader, settings);
@@ -93,6 +96,9 @@ namespace IniFile
                 throw new ArgumentNullException(nameof(iniFilePath));
             if (!File.Exists(iniFilePath))
                 throw new FileNotFoundException(string.Format(ErrorMessages.IniFileDoesNotExist, iniFilePath), iniFilePath);
+
+            if (settings == null)
+                settings = IniLoadSettings.Default;
 
             using (var stream = new FileStream(iniFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
@@ -114,6 +120,9 @@ namespace IniFile
             if (!stream.CanRead)
                 throw new ArgumentException(ErrorMessages.StreamNotReadable, nameof(stream));
 
+            if (settings == null)
+                settings = IniLoadSettings.Default;
+
             using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
                 ParseIniFile(reader, settings);
         }
@@ -129,6 +138,9 @@ namespace IniFile
         {
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
+
+            if (settings == null)
+                settings = IniLoadSettings.Default;
 
             ParseIniFile(reader, settings);
         }
