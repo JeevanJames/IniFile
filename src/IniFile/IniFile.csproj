@@ -17,20 +17,20 @@
     <PackageId>IniFile.NET</PackageId>
     <Product>IniFile.NET</Product>
     <PackageIconUrl>https://github.com/JeevanJames/IniFile/raw/master/logo.png</PackageIconUrl>
-    <LangVersion>7.3</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <DocumentationFile>IniFile.xml</DocumentationFile>
+    <DocumentationFile>Properties\IniFile.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors />
-    <DocumentationFile>IniFile.xml</DocumentationFile>
+    <DocumentationFile>Properties\IniFile.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
@@ -41,10 +41,6 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3'">
     <DefineConstants>NETSTANDARD1_3</DefineConstants>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Include="..\..\IniFile.licenseheader" Link="IniFile.licenseheader" />
-  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="ErrorMessages.Designer.cs">

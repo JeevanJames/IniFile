@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -41,10 +41,6 @@
     <EmbeddedResource Include="Data\UnrecognizedLine.ini" />
     <EmbeddedResource Include="Data\Valid.ini" />
     <EmbeddedResource Include="Players.ini" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="..\..\IniFile.licenseheader" Link="IniFile.licenseheader" />
   </ItemGroup>
 
   <ItemGroup>
