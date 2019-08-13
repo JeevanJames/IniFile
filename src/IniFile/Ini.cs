@@ -42,6 +42,9 @@ namespace IniFile
     [DebuggerDisplay("INI file - {Count} sections")]
     public sealed partial class Ini
     {
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly IniLoadSettings _settings;
+
         /// <summary>
         ///     Initializes a new empty instance of the <see cref="Ini"/> class with the default
         ///     settings.
@@ -74,12 +77,11 @@ namespace IniFile
             if (!iniFile.Exists)
                 throw new FileNotFoundException(string.Format(ErrorMessages.IniFileDoesNotExist, iniFile.FullName), iniFile.FullName);
 
-            if (settings == null)
-                settings = IniLoadSettings.Default;
+            _settings = settings ?? IniLoadSettings.Default;
 
             using (var stream = new FileStream(iniFile.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
-                ParseIniFile(reader, settings);
+            using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
+                ParseIniFile(reader);
         }
 
         /// <summary>
@@ -97,12 +99,11 @@ namespace IniFile
             if (!File.Exists(iniFilePath))
                 throw new FileNotFoundException(string.Format(ErrorMessages.IniFileDoesNotExist, iniFilePath), iniFilePath);
 
-            if (settings == null)
-                settings = IniLoadSettings.Default;
+            _settings = settings ?? IniLoadSettings.Default;
 
             using (var stream = new FileStream(iniFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
-                ParseIniFile(reader, settings);
+            using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
+                ParseIniFile(reader);
         }
 
         /// <summary>
@@ -120,11 +121,10 @@ namespace IniFile
             if (!stream.CanRead)
                 throw new ArgumentException(ErrorMessages.StreamNotReadable, nameof(stream));
 
-            if (settings == null)
-                settings = IniLoadSettings.Default;
+            _settings = settings ?? IniLoadSettings.Default;
 
-            using (var reader = new StreamReader(stream, settings.Encoding ?? Encoding.UTF8, settings.DetectEncoding))
-                ParseIniFile(reader, settings);
+            using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
+                ParseIniFile(reader);
         }
 
         /// <summary>
@@ -139,10 +139,9 @@ namespace IniFile
             if (reader == null)
                 throw new ArgumentNullException(nameof(reader));
 
-            if (settings == null)
-                settings = IniLoadSettings.Default;
+            _settings = settings ?? IniLoadSettings.Default;
 
-            ParseIniFile(reader, settings);
+            ParseIniFile(reader);
         }
 
         /// <summary>
@@ -162,16 +161,13 @@ namespace IniFile
         ///     Transforms the INI content into an in-memory object model.
         /// </summary>
         /// <param name="reader">The INI content.</param>
-        /// <param name="settings">Optional Ini file settings.</param>
-        private void ParseIniFile(TextReader reader, IniLoadSettings settings)
+        private void ParseIniFile(TextReader reader)
         {
-            settings = settings ?? IniLoadSettings.Default;
-
             // Go through all the lines and build a flat collection of INI objects.
             IList<IniItem> lineItems = ParseLines(reader).ToList();
 
             // Go through the line objects and construct an object model.
-            CreateObjectModel(settings, lineItems);
+            CreateObjectModel(_settings, lineItems);
         }
 
         /// <summary>
@@ -526,6 +522,23 @@ namespace IniFile
 
     public sealed partial class Ini : KeyedCollection<string, Section>
     {
+        public new Section this[string key]
+        {
+            get
+            {
+                if (key == null)
+                    throw new ArgumentNullException(nameof(key));
+
+                IEqualityComparer<string> comparer = GetEqualityComparer(_settings);
+                foreach (Section section in this)
+                {
+                    if (comparer.Equals(key, section.Name))
+                        return section;
+                }
+                return null;
+            }
+        }
+
         protected override string GetKeyForItem(Section item) =>
             item.Name;
 
