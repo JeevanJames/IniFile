@@ -139,4 +139,7 @@
   <data name="CannotCastPropertyValue" xml:space="preserve">
     <value>Cannot convert the property value to a {0}.</value>
   </data>
+  <data name="CreateObjectModelInvalidCurrentSection" xml:space="preserve">
+    <value>Unexpected error: currentSection variable should not be null.</value>
+  </data>
 </root>

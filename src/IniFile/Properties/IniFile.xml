@@ -225,6 +225,11 @@
               Looks up a localized string similar to Cannot convert the property value to a {0}..
             </summary>
         </member>
+        <member name="P:IniFile.ErrorMessages.CreateObjectModelInvalidCurrentSection">
+            <summary>
+              Looks up a localized string similar to Unexpected error: currentSection variable should not be null..
+            </summary>
+        </member>
         <member name="P:IniFile.ErrorMessages.IniFileDoesNotExist">
             <summary>
               Looks up a localized string similar to The INI file &apos;{0}&apos; does not exist..
@@ -426,14 +431,13 @@
                 (<see cref="F:IniFile.IniFormatOptions.Default"/>) if not specified.
             </param>
         </member>
-        <member name="M:IniFile.Ini.FormatMinorItems(System.Collections.Generic.IList{IniFile.Items.MinorIniItem},System.Boolean)">
+        <member name="M:IniFile.Ini.FormatMinorItems(System.Collections.Generic.IList{IniFile.Items.MinorIniItem})">
             <summary>
                 Formats a collection of minor INI items (i.e. <see cref="T:IniFile.Comment"/> and
                 <see cref="T:IniFile.BlankLine"/>). By default, the paddings for these items are reset, but the
                 method can also optionally remove consecutive blank lines.
             </summary>
             <param name="minorItems">The collection of items to format.</param>
-            <param name="removeSuccessiveBlankLines">Whether to remove consecutive blank lines.</param>
         </member>
         <member name="F:IniFile.Ini.Config">
             <summary>

@@ -22,6 +22,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -62,6 +64,7 @@ namespace IniFile
         {
         }
 
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="Ini"/> class and loads the data from
         ///     the specified file.
@@ -70,19 +73,23 @@ namespace IniFile
         /// <param name="settings">Optional Ini file settings.</param>
         /// <exception cref="ArgumentNullException">Thrown if the <c>iniFile</c> is <c>null</c>.</exception>
         /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
+        [SuppressMessage("Critical Code Smell", "S3966:Objects should not be disposed more than once", Justification = "<Pending>")]
         public Ini(FileInfo iniFile, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (iniFile == null)
                 throw new ArgumentNullException(nameof(iniFile));
             if (!iniFile.Exists)
-                throw new FileNotFoundException(string.Format(ErrorMessages.IniFileDoesNotExist, iniFile.FullName), iniFile.FullName);
+                throw new FileNotFoundException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.IniFileDoesNotExist, iniFile.FullName), iniFile.FullName);
 
             _settings = settings ?? IniLoadSettings.Default;
 
             using (var stream = new FileStream(iniFile.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
-                ParseIniFile(reader);
+            {
+                using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
+                    ParseIniFile(reader);
+            }
         }
+
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Ini"/> class and loads the data from
@@ -92,18 +99,21 @@ namespace IniFile
         /// <param name="settings">Optional Ini file settings.</param>
         /// <exception cref="ArgumentNullException">Thrown if the <c>iniFilePath</c> is <c>null</c>.</exception>
         /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
+        [SuppressMessage("Critical Code Smell", "S3966:Objects should not be disposed more than once", Justification = "<Pending>")]
         public Ini(string iniFilePath, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
         {
             if (iniFilePath == null)
                 throw new ArgumentNullException(nameof(iniFilePath));
             if (!File.Exists(iniFilePath))
-                throw new FileNotFoundException(string.Format(ErrorMessages.IniFileDoesNotExist, iniFilePath), iniFilePath);
+                throw new FileNotFoundException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.IniFileDoesNotExist, iniFilePath), iniFilePath);
 
             _settings = settings ?? IniLoadSettings.Default;
 
             using (var stream = new FileStream(iniFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
-                ParseIniFile(reader);
+            {
+                using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
+                    ParseIniFile(reader);
+            }
         }
 
         /// <summary>
@@ -180,7 +190,7 @@ namespace IniFile
         {
             // These variables track multiline values
             Property mlProperty = null;
-            string mlValue = null;
+            var mlValue = new StringBuilder();
             string mlEot = null;
 
             for (string line = reader.ReadLine(); line != null; line = reader.ReadLine())
@@ -193,14 +203,14 @@ namespace IniFile
                     // Have we reached the end of the multi-line value (end-of-text)?
                     if (line.Trim() == mlEot) // EOT is case-sensitive
                     {
-                        mlProperty.Value = mlValue;
+                        mlProperty.Value = mlValue.ToString();
                         mlProperty = null;
                     }
                     else
                     {
                         if (mlValue.Length > 0)
-                            mlValue += Environment.NewLine;
-                        mlValue += line;
+                            mlValue.AppendLine();
+                        mlValue.Append(line);
                     }
                 }
                 else
@@ -217,7 +227,11 @@ namespace IniFile
                         {
                             // Start tracking the multiline value until we encounter an end-of-text (EOT) line
                             mlProperty = property;
-                            mlValue = string.Empty;
+#if NET35
+                            mlValue = new StringBuilder();
+#else
+                            mlValue.Clear();
+#endif
                             mlEot = match.Groups[1].Value;
                         }
                     }
@@ -255,9 +269,11 @@ namespace IniFile
                         Add(currentSection);
                         break;
                     case Property property when currentSection == null:
-                        throw new FormatException(string.Format(ErrorMessages.PropertyWithoutSection, property.Name));
+                        throw new FormatException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.PropertyWithoutSection, property.Name));
                     case Property property:
                         AddRangeAndClear(property.Items, minorItems);
+                        if (currentSection == null)
+                            throw new InvalidOperationException(ErrorMessages.CreateObjectModelInvalidCurrentSection);
                         currentSection.Add(property);
                         break;
                 }
@@ -372,14 +388,19 @@ namespace IniFile
         /// <returns>A task representing the asynchronous save operation.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the specified stream is null.</exception>
         /// <exception cref="ArgumentException">Thrown if the stream cannot be written to.</exception>
-        public async Task SaveToAsync(Stream stream)
+        public Task SaveToAsync(Stream stream)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
             if (!stream.CanWrite)
                 throw new ArgumentException(ErrorMessages.StreamNotWritable, nameof(stream));
+            return SaveToAsyncInternal(stream);
+        }
+
+        private async Task SaveToAsyncInternal(Stream stream)
+        {
             using (var writer = new StreamWriter(stream))
-                await SaveToAsync(writer);
+                await SaveToAsync(writer).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -388,11 +409,16 @@ namespace IniFile
         /// <param name="writer">The text writer to save to.</param>
         /// <returns>A task representing the asynchronous save operation.</returns>
         /// <exception cref="ArgumentNullException">Thrown if the specified text writer is null.</exception>
-        public async Task SaveToAsync(TextWriter writer)
+        public Task SaveToAsync(TextWriter writer)
         {
             if (writer == null)
                 throw new ArgumentNullException(nameof(writer));
-            await InternalSaveAsync(writer);
+            return SaveToAsyncInternal(writer);
+        }
+
+        private async Task SaveToAsyncInternal(TextWriter writer)
+        {
+            await InternalSaveAsync(writer).ConfigureAwait(false);
             writer.Flush();
         }
 
@@ -407,18 +433,18 @@ namespace IniFile
             foreach (Section section in this)
             {
                 foreach (MinorIniItem minorItem in section.Items)
-                    await writer.WriteLineAsync(minorItem.ToString());
+                    await writer.WriteLineAsync(minorItem.ToString()).ConfigureAwait(false);
                 writer.WriteLine(section.ToString());
                 foreach (Property property in section)
                 {
                     foreach (MinorIniItem minorItem in property.Items)
-                        await writer.WriteLineAsync(minorItem.ToString());
+                        await writer.WriteLineAsync(minorItem.ToString()).ConfigureAwait(false);
                     writer.WriteLine(property.ToString());
                 }
             }
 
             foreach (MinorIniItem trailingItem in TrailingItems)
-                await writer.WriteLineAsync(trailingItem.ToString());
+                await writer.WriteLineAsync(trailingItem.ToString()).ConfigureAwait(false);
         }
 #endif
 
@@ -426,6 +452,7 @@ namespace IniFile
         ///     Any trailing comments and blank lines at the end of the INI.
         /// </summary>
         public IList<MinorIniItem> TrailingItems { get; } = new List<MinorIniItem>();
+
 
         /// <summary>
         ///     Formats the INI content by resetting all padding and applying any formatting rules
@@ -435,6 +462,7 @@ namespace IniFile
         ///     Optional rules for formatting the INI content. Uses default rules
         ///     (<see cref="IniFormatOptions.Default"/>) if not specified.
         /// </param>
+        [SuppressMessage("Major Code Smell", "S1066:Collapsible \"if\" statements should be merged", Justification = "<Pending>")]
         public void Format(IniFormatOptions options = null)
         {
             options = options ?? IniFormatOptions.Default;
@@ -444,7 +472,7 @@ namespace IniFile
                 Section section = this[s];
 
                 // Reset padding for each minor item in the section
-                FormatMinorItems(section.Items, options.RemoveSuccessiveBlankLines);
+                FormatMinorItems(section.Items);
 
                 // Insert blank line between sections, if specified by options
                 if (options.EnsureBlankLineBetweenSections)
@@ -461,7 +489,7 @@ namespace IniFile
                     Property property = section[p];
 
                     // Reset padding for each minor item in the property
-                    FormatMinorItems(property.Items, options.RemoveSuccessiveBlankLines);
+                    FormatMinorItems(property.Items);
 
                     // Insert blank line between properties, if specified
                     if (options.EnsureBlankLineBetweenProperties)
@@ -487,8 +515,9 @@ namespace IniFile
             }
 
             // Format any remaining trailing items
-            FormatMinorItems(TrailingItems, options.RemoveSuccessiveBlankLines);
+            FormatMinorItems(TrailingItems);
         }
+
 
         /// <summary>
         ///     Formats a collection of minor INI items (i.e. <see cref="Comment"/> and
@@ -496,8 +525,7 @@ namespace IniFile
         ///     method can also optionally remove consecutive blank lines.
         /// </summary>
         /// <param name="minorItems">The collection of items to format.</param>
-        /// <param name="removeSuccessiveBlankLines">Whether to remove consecutive blank lines.</param>
-        private static void FormatMinorItems(IList<MinorIniItem> minorItems, bool removeSuccessiveBlankLines)
+        private static void FormatMinorItems(IList<MinorIniItem> minorItems)
         {
             foreach (MinorIniItem minorItem in minorItems)
             {
@@ -539,8 +567,12 @@ namespace IniFile
             }
         }
 
-        protected override string GetKeyForItem(Section item) =>
-            item.Name;
+        protected override string GetKeyForItem(Section item)
+        {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+            return item.Name;
+        }
 
         private static IEqualityComparer<string> GetEqualityComparer(IniLoadSettings settings)
         {

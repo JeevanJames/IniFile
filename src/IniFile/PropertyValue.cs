@@ -129,7 +129,7 @@ namespace IniFile
                 throw new InvalidOperationException();
 #if !NET35
             if (!Enum.TryParse(ToString(), !caseSensitive, out TEnum value))
-                throw new InvalidCastException(string.Format(ErrorMessages.CannotCastPropertyValue, typeof(TEnum).FullName));
+                throw new InvalidCastException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.CannotCastPropertyValue, typeof(TEnum).FullName));
             return value;
 #else
             try
@@ -139,7 +139,7 @@ namespace IniFile
             }
             catch (ArgumentException ex)
             {
-                throw new InvalidCastException(string.Format(ErrorMessages.CannotCastPropertyValue, typeof(TEnum).FullName), ex);
+                throw new InvalidCastException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.CannotCastPropertyValue, typeof(TEnum).FullName), ex);
             }
 #endif
         }
@@ -203,7 +203,7 @@ namespace IniFile
         );
 
         public static implicit operator PropertyValue(DateTime value) =>
-            new PropertyValue(value, value.ToString(Ini.Config.Types.DateFormat));
+            new PropertyValue(value, value.ToString(Ini.Config.Types.DateFormat, CultureInfo.InvariantCulture));
         public static implicit operator DateTime(PropertyValue pvalue) => ConvertTo(pvalue, s => 
             DateTime.TryParseExact(s, Ini.Config.Types.DateFormat, CultureInfo.CurrentCulture, DateTimeStyles.None, out DateTime value)
                 ? new ConversionResult<DateTime>(value) : default
@@ -217,12 +217,12 @@ namespace IniFile
 
             string stringValue = pvalue.ToString();
             if (stringValue == null)
-                throw new InvalidCastException(string.Format(ErrorMessages.CannotCastPropertyValue, typeof(T).Name));
+                throw new InvalidCastException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.CannotCastPropertyValue, typeof(T).Name));
 
             ConversionResult<T> result = converter(stringValue);
 
             if (!result.CanConvert)
-                throw new InvalidCastException(string.Format(ErrorMessages.CannotCastPropertyValue, typeof(T).Name));
+                throw new InvalidCastException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.CannotCastPropertyValue, typeof(T).Name));
             return result.Value;
         }
 
@@ -231,39 +231,41 @@ namespace IniFile
 
         public static implicit operator bool(PropertyValue pvalue)
         {
-            if (pvalue._value is bool)
-                return (bool)pvalue._value;
+            if (pvalue._value is bool boolValue)
+                return boolValue;
 
-            string stringValue = pvalue.ToString()?.ToLowerInvariant();
-            if (stringValue == null)
-                throw new InvalidCastException();
+            string stringValue = pvalue.ToString()?.ToUpperInvariant() ?? string.Empty;
 
             switch (stringValue)
             {
                 case "0":
-                case "f":
-                case "n":
-                case "off":
-                case "no":
-                case "disabled":
-                case "false":
+                case "F":
+                case "N":
+                case "OFF":
+                case "NO":
+                case "DISABLED":
+                case "FALSE":
                     return false;
                 case "1":
-                case "t":
-                case "y":
-                case "on":
-                case "yes":
-                case "enabled":
-                case "true":
+                case "T":
+                case "Y":
+                case "ON":
+                case "YES":
+                case "ENABLED":
+                case "TRUE":
                     return true;
             }
 
-            if (stringValue == Ini.Config.Types.TrueString.ToLowerInvariant())
+            if (stringValue == Ini.Config.Types.TrueString.ToUpperInvariant())
                 return true;
-            if (stringValue == Ini.Config.Types.FalseString.ToLowerInvariant())
+            if (stringValue == Ini.Config.Types.FalseString.ToUpperInvariant())
                 return false;
 
-            throw new Exception($"'value' is not a boolean value.");
+#pragma warning disable S3877 // Exceptions should not be thrown from unexpected methods
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
+            throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.CannotCastPropertyValue, "boolean"), nameof(pvalue));
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
+#pragma warning restore S3877 // Exceptions should not be thrown from unexpected methods
         }
 
         /// <inheritdoc/>

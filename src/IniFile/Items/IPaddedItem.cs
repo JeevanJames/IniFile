@@ -24,7 +24,7 @@ namespace IniFile.Items
     ///     Represents a INI item that has padding.
     /// </summary>
     /// <typeparam name="TPadding">The type of padding for the item.</typeparam>
-    public interface IPaddedItem<TPadding>
+    public interface IPaddedItem<out TPadding>
         where TPadding : Padding
     {
         TPadding Padding { get; }
