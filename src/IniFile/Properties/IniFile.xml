@@ -391,31 +391,6 @@
             </summary>
             <param name="writer">The text writer to write the data to.</param>
         </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.Stream)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified stream asynchronously.
-            </summary>
-            <param name="stream">The stream to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified stream is null.</exception>
-            <exception cref="T:System.ArgumentException">Thrown if the stream cannot be written to.</exception>
-        </member>
-        <member name="M:IniFile.Ini.SaveToAsync(System.IO.TextWriter)">
-            <summary>
-                Saves the <see cref="T:IniFile.Ini"/> instance to the specified text writer asynchronously.
-            </summary>
-            <param name="writer">The text writer to save to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-            <exception cref="T:System.ArgumentNullException">Thrown if the specified text writer is null.</exception>
-        </member>
-        <member name="M:IniFile.Ini.InternalSaveAsync(System.IO.TextWriter)">
-            <summary>
-                Common method called to asynchronously  save the <see cref="T:IniFile.Ini"/> instance data to
-                various destinations such as streams, strings, files and text writers.
-            </summary>
-            <param name="writer">The text writer to write the data to.</param>
-            <returns>A task representing the asynchronous save operation.</returns>
-        </member>
         <member name="P:IniFile.Ini.TrailingItems">
             <summary>
                 Any trailing comments and blank lines at the end of the INI.
@@ -602,6 +577,37 @@
             <param name="text">The comment text.</param>
             <returns>The newly-added comment.</returns>
         </member>
+        >
+            <param name="items">
+                Collection of strings that represent the comments and blank lines of the INI item.
+                If the string is <c>null</c>, an empty string or a whitespace string, then a
+                <see cref="T:IniFile.BlankLine"/> object is created, otherwise a <see cref="T:IniFile.Comment"/> is created.
+            </param>
+            <exception cref="T:System.ArgumentNullException">Thrown if the specified name is <c>null</c>.</exception>
+        </member>
+        <member name="P:IniFile.Items.MajorIniItem.Name">
+            <summary>
+                The unique name of the <see cref="T:IniFile.Section"/> or the <see cref="T:IniFile.Property"/>.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.MajorIniItem.Items">
+            <summary>
+                The collection of comments and blank lines that are associated with this INI item.
+            </summary>
+        </member>
+        <member name="P:IniFile.Items.MajorIniItem.Comments">
+            <summary>
+                Returns just the <see cref="T:IniFile.Comment"/> objects belonging to this INI item.
+            </summary>
+        </member>
+        <member name="M:IniFile.Items.MajorIniItem.AddComment(System.String)">
+            <summary>
+                Shortcut method to adding a <see cref="T:IniFile.Comment"/> class to the <see cref="P:IniFile.Items.MajorIniItem.Items"/>
+                property.
+            </summary>
+            <param name="text">The comment text.</param>
+            <returns>The newly-added comment.</returns>
+        </member>
         <member name="M:IniFile.Items.MajorIniItem.AddBlankLine">
             <summary>
                 Shortcut method to adding a <see cref="T:IniFile.BlankLine"/> class to the <see cref="P:IniFile.Items.MajorIniItem.Items"/>
@@ -751,39 +757,7 @@
         </member>
         <member name="T:IniFile.PropertyValue">
             <summary>
-                <para>Represents the value of a property</para>
-                <para>Property values can be strings, numbers (both floats and integers), date/times and booleans.</para>
-            </summary>
-        </member>
-        <member name="F:IniFile.PropertyValue._value">
-            <summary>
-                The value of the property, internally using the actual type.
-            </summary>
-        </member>
-        <member name="F:IniFile.PropertyValue._stringValue">
-            <summary>
-                <para>
-                    The string representation of the value. This is used if the string representation
-                    is different from the string returned by calling <c>_value.ToString()</c>.
-                </para>
-                <para>
-                    Boolean values use this, as there can be multiple string representations of a
-                    boolean value such as <c>0</c>, <c>on</c>, etc.
-                </para>
-            </summary>
-        </member>
-        <member name="M:IniFile.PropertyValue.#ctor(System.Object)">
-            <summary>
-                Initializes an instance of the <see cref="T:IniFile.PropertyValue"/> structure.
-            </summary>
-            <param name="value">
-                The value to initialize the property with. If <c>null</c>, the type is considered a
-                <c>string</c>.
-            </param>
-        </member>
-        <member name="M:IniFile.PropertyValue.#ctor(System.Object,System.String)">
-            <summary>
-                Initializes an instance of the <see cref="T:IniFile.PropertyValue"/> structure where the string
+                <p
                 representation of the underlying object is different from the string representation
                 of the value in the INI file.
             </summary>
@@ -854,6 +828,43 @@
             <summary>
                 <para>Represents a section object in an INI.</para>
                 <para>A section is also a collection of <see cref="T:IniFile.Property"/> instances.</para>
+            </summary>
+        </member>
+        <member name="M:IniFile.Section.#ctor(System.String,System.String[])">
+            <summary>
+                Initializes a new instance of the <see cref="T:IniFile.Section"/> class.
+            </summary>
+            <param name="name">The name of the section.</param>
+            <param name="items">
+                Collection of strings that represent the comments and blank lines of the section.
+                If the string is <c>null</c>, an empty string or a whitespace string, then a
+                <see cref="T:IniFile.BlankLine"/> object is created, otherwise a <see cref="T:IniFile.Comment"/> is created.
+            </param>
+            <inheritdoc/>
+        </member>
+        <member name="P:IniFile.Section.Padding">
+            <summary>
+                Padding details of this <see cref="T:IniFile.Section"/>.
+            </summary>
+        </member>
+        <member name="M:IniFile.Section.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="P:IniFile.Section.Item(System.String)">
+            <summary>
+                Gets or sets the value of the property given its name.
+            </summary>
+            <param name="name">The name of the property to get or set.</param>
+            <returns>The value of the property.</returns>
+        </member>
+        <member name="P:IniFile.Section.Count">
+            <summary>
+                The number of properties in this section.
+            </summary>
+        </member>
+    </members>
+</doc>
+ also a collection of <see cref="T:IniFile.Property"/> instances.</para>
             </summary>
         </member>
         <member name="M:IniFile.Section.#ctor(System.String,System.String[])">

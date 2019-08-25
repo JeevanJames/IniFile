@@ -10,8 +10,9 @@
 
 namespace IniFile {
     using System;
-    
-    
+    using System.Reflection;
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -39,7 +40,11 @@ namespace IniFile {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
+#if NETSTANDARD1_3
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).GetTypeInfo().Assembly);
+#else
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("IniFile.ErrorMessages", typeof(ErrorMessages).Assembly);
+#endif
                     resourceMan = temp;
                 }
                 return resourceMan;
