@@ -61,18 +61,18 @@ namespace IniFile.Tests
 
             var ini = new Ini
             {
-                new Section("Players", "This section defines the players")
+                new("Players", "This section defines the players")
                 {
                     new Property("Player1", "The Flash"),
                     new Property("Player2", "Superman")
                 },
-                new Section("The Flash", string.Empty)
+                new("The Flash", string.Empty)
                 {
                     ["Level"] = 9,
                     ["Power"] = "Superspeed",
                     ["Masked"] = true
                 },
-                new Section("Superman", string.Empty)
+                new("Superman", string.Empty)
                 {
                     ["Level"] = 9,
                     ["Power"] = "Superstrength,heat vision",

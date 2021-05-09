@@ -1,42 +1,39 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <IsPackable>false</IsPackable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <WarningsAsErrors />
+    </PropertyGroup>
 
-  <PropertyGroup>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningsAsErrors />
-  </PropertyGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Data\EmptyProperties.ini" />
+        <EmbeddedResource Include="Data\EmptySections.ini" />
+        <EmbeddedResource Include="Data\Formatted.ini" />
+        <EmbeddedResource Include="Data\MultilinePropertyValue.ini" />
+        <EmbeddedResource Include="Data\PropertyWithoutSection.ini" />
+        <EmbeddedResource Include="Data\TypedProperties.ini" />
+        <EmbeddedResource Include="Data\Unformatted.ini" />
+        <EmbeddedResource Include="Data\UnrecognizedLine.ini" />
+        <EmbeddedResource Include="Data\Valid.ini" />
+        <EmbeddedResource Include="Players.ini" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Include="Data\EmptyProperties.ini" />
-    <EmbeddedResource Include="Data\EmptySections.ini" />
-    <EmbeddedResource Include="Data\Formatted.ini" />
-    <EmbeddedResource Include="Data\MultilinePropertyValue.ini" />
-    <EmbeddedResource Include="Data\PropertyWithoutSection.ini" />
-    <EmbeddedResource Include="Data\TypedProperties.ini" />
-    <EmbeddedResource Include="Data\Unformatted.ini" />
-    <EmbeddedResource Include="Data\UnrecognizedLine.ini" />
-    <EmbeddedResource Include="Data\Valid.ini" />
-    <EmbeddedResource Include="Players.ini" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.9.4" />
+        <PackageReference Include="Moq" Version="4.16.1" />
+        <PackageReference Include="Shouldly" Version="4.0.3" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="Xunit.DataAttributes" Version="1.0.0" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-    <PackageReference Include="Moq" Version="4.13.1" />
-    <PackageReference Include="Shouldly" Version="3.0.2" />
-    <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="Xunit.DataAttributes" Version="1.0.0" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\IniFile\IniFile.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\IniFile\IniFile.csproj" />
+    </ItemGroup>
 
 </Project>

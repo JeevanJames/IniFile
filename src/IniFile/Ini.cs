@@ -1,7 +1,7 @@
 ﻿#region --- License & Copyright Notice ---
 /*
 IniFile Library for .NET
-Copyright (c) 2018 Jeevan James
+Copyright (c) 2018-2021 Jeevan James
 All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -51,7 +51,8 @@ namespace IniFile
         ///     Initializes a new empty instance of the <see cref="Ini"/> class with the default
         ///     settings.
         /// </summary>
-        public Ini() : this(null)
+        public Ini()
+            : this(null)
         {
         }
 
@@ -60,7 +61,8 @@ namespace IniFile
         ///     settings.
         /// </summary>
         /// <param name="settings">The Ini file settings.</param>
-        public Ini(IniLoadSettings settings) : base(GetEqualityComparer(settings))
+        public Ini(IniLoadSettings settings)
+            : base(GetEqualityComparer(settings))
         {
         }
 
@@ -73,21 +75,19 @@ namespace IniFile
         /// <param name="settings">Optional Ini file settings.</param>
         /// <exception cref="ArgumentNullException">Thrown if the <c>iniFile</c> is <c>null</c>.</exception>
         /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
-        [SuppressMessage("Critical Code Smell", "S3966:Objects should not be disposed more than once", Justification = "<Pending>")]
-        public Ini(FileInfo iniFile, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
+        public Ini(FileInfo iniFile, IniLoadSettings settings = null)
+            : base(GetEqualityComparer(settings))
         {
-            if (iniFile == null)
+            if (iniFile is null)
                 throw new ArgumentNullException(nameof(iniFile));
             if (!iniFile.Exists)
                 throw new FileNotFoundException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.IniFileDoesNotExist, iniFile.FullName), iniFile.FullName);
 
             _settings = settings ?? IniLoadSettings.Default;
 
-            using (var stream = new FileStream(iniFile.FullName, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
-                    ParseIniFile(reader);
-            }
+            using var stream = new FileStream(iniFile.FullName, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding);
+            ParseIniFile(reader);
         }
 
 
@@ -99,21 +99,19 @@ namespace IniFile
         /// <param name="settings">Optional Ini file settings.</param>
         /// <exception cref="ArgumentNullException">Thrown if the <c>iniFilePath</c> is <c>null</c>.</exception>
         /// <exception cref="FileNotFoundException">Thrown if the specified file does not exist.</exception>
-        [SuppressMessage("Critical Code Smell", "S3966:Objects should not be disposed more than once", Justification = "<Pending>")]
-        public Ini(string iniFilePath, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
+        public Ini(string iniFilePath, IniLoadSettings settings = null)
+            : base(GetEqualityComparer(settings))
         {
-            if (iniFilePath == null)
+            if (iniFilePath is null)
                 throw new ArgumentNullException(nameof(iniFilePath));
             if (!File.Exists(iniFilePath))
                 throw new FileNotFoundException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.IniFileDoesNotExist, iniFilePath), iniFilePath);
 
             _settings = settings ?? IniLoadSettings.Default;
 
-            using (var stream = new FileStream(iniFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
-                    ParseIniFile(reader);
-            }
+            using var stream = new FileStream(iniFilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding);
+            ParseIniFile(reader);
         }
 
         /// <summary>
@@ -124,17 +122,18 @@ namespace IniFile
         /// <param name="settings">Optional Ini file settings.</param>
         /// <exception cref="ArgumentNullException">Thrown if the specified stream is null.</exception>
         /// <exception cref="ArgumentException">Thrown if the stream cannot be read.</exception>
-        public Ini(Stream stream, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
+        public Ini(Stream stream, IniLoadSettings settings = null)
+            : base(GetEqualityComparer(settings))
         {
-            if (stream == null)
+            if (stream is null)
                 throw new ArgumentNullException(nameof(stream));
             if (!stream.CanRead)
                 throw new ArgumentException(ErrorMessages.StreamNotReadable, nameof(stream));
 
             _settings = settings ?? IniLoadSettings.Default;
 
-            using (var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding))
-                ParseIniFile(reader);
+            using var reader = new StreamReader(stream, _settings.Encoding ?? Encoding.UTF8, _settings.DetectEncoding);
+            ParseIniFile(reader);
         }
 
         /// <summary>
@@ -144,9 +143,10 @@ namespace IniFile
         /// <param name="reader">The <see cref="TextReader"/> to load from.</param>
         /// <param name="settings">Optional Ini file settings.</param>
         /// <exception cref="ArgumentNullException">Thrown if the specified text reader is null.</exception>
-        public Ini(TextReader reader, IniLoadSettings settings = null) : base(GetEqualityComparer(settings))
+        public Ini(TextReader reader, IniLoadSettings settings = null)
+            : base(GetEqualityComparer(settings))
         {
-            if (reader == null)
+            if (reader is null)
                 throw new ArgumentNullException(nameof(reader));
 
             _settings = settings ?? IniLoadSettings.Default;
@@ -163,8 +163,8 @@ namespace IniFile
         /// <returns>An instance of the <see cref="Ini"/> class.</returns>
         public static Ini Load(string content, IniLoadSettings settings = null)
         {
-            using (var reader = new StringReader(content))
-                return new Ini(reader, settings);
+            using var reader = new StringReader(content);
+            return new Ini(reader, settings);
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace IniFile
             }
         }
 
-        private static readonly Regex MultilineStartPattern = new Regex(@"^<<(\w+)$");
+        private static readonly Regex MultilineStartPattern = new(@"^<<(\w+)$");
 
         /// <summary>
         ///     Go through each line object and construct a hierarchical object model, with properties
@@ -268,11 +268,11 @@ namespace IniFile
                         AddRangeAndClear(currentSection.Items, minorItems);
                         Add(currentSection);
                         break;
-                    case Property property when currentSection == null:
+                    case Property property when currentSection is null:
                         throw new FormatException(string.Format(CultureInfo.CurrentCulture, ErrorMessages.PropertyWithoutSection, property.Name));
                     case Property property:
                         AddRangeAndClear(property.Items, minorItems);
-                        if (currentSection == null)
+                        if (currentSection is null)
                             throw new InvalidOperationException(ErrorMessages.CreateObjectModelInvalidCurrentSection);
                         currentSection.Add(property);
                         break;
@@ -298,8 +298,8 @@ namespace IniFile
         /// <param name="filePath">The path of the file to save to.</param>
         public void SaveTo(string filePath)
         {
-            using (StreamWriter writer = File.CreateText(filePath))
-                SaveTo(writer);
+            using StreamWriter writer = File.CreateText(filePath);
+            SaveTo(writer);
         }
 
         /// <summary>
@@ -309,10 +309,10 @@ namespace IniFile
         /// <exception cref="ArgumentNullException">Thrown if the specified file is null.</exception>
         public void SaveTo(FileInfo file)
         {
-            if (file == null)
+            if (file is null)
                 throw new ArgumentNullException(nameof(file));
-            using (StreamWriter writer = File.CreateText(file.FullName))
-                SaveTo(writer);
+            using StreamWriter writer = File.CreateText(file.FullName);
+            SaveTo(writer);
         }
 
         /// <summary>
@@ -323,12 +323,12 @@ namespace IniFile
         /// <exception cref="ArgumentException">Thrown if the stream cannot be written to.</exception>
         public void SaveTo(Stream stream)
         {
-            if (stream == null)
+            if (stream is null)
                 throw new ArgumentNullException(nameof(stream));
             if (!stream.CanWrite)
                 throw new ArgumentException(ErrorMessages.StreamNotWritable, nameof(stream));
-            using (var writer = new StreamWriter(stream))
-                SaveTo(writer);
+            using var writer = new StreamWriter(stream);
+            SaveTo(writer);
         }
 
         /// <summary>
@@ -338,7 +338,7 @@ namespace IniFile
         /// <exception cref="ArgumentNullException">Thrown if the specified text writer is null.</exception>
         public void SaveTo(TextWriter writer)
         {
-            if (writer == null)
+            if (writer is null)
                 throw new ArgumentNullException(nameof(writer));
             InternalSave(writer);
             writer.Flush();
@@ -351,8 +351,8 @@ namespace IniFile
         public override string ToString()
         {
             var sb = new StringBuilder();
-            using (var writer = new StringWriter(sb))
-                InternalSave(writer);
+            using var writer = new StringWriter(sb);
+            InternalSave(writer);
             return sb.ToString();
         }
 
@@ -390,7 +390,7 @@ namespace IniFile
         /// <exception cref="ArgumentException">Thrown if the stream cannot be written to.</exception>
         public Task SaveToAsync(Stream stream)
         {
-            if (stream == null)
+            if (stream is null)
                 throw new ArgumentNullException(nameof(stream));
             if (!stream.CanWrite)
                 throw new ArgumentException(ErrorMessages.StreamNotWritable, nameof(stream));
@@ -399,8 +399,8 @@ namespace IniFile
 
         private async Task SaveToAsyncInternal(Stream stream)
         {
-            using (var writer = new StreamWriter(stream))
-                await SaveToAsync(writer).ConfigureAwait(false);
+            using var writer = new StreamWriter(stream);
+            await SaveToAsync(writer).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -411,7 +411,7 @@ namespace IniFile
         /// <exception cref="ArgumentNullException">Thrown if the specified text writer is null.</exception>
         public Task SaveToAsync(TextWriter writer)
         {
-            if (writer == null)
+            if (writer is null)
                 throw new ArgumentNullException(nameof(writer));
             return SaveToAsyncInternal(writer);
         }
@@ -419,7 +419,7 @@ namespace IniFile
         private async Task SaveToAsyncInternal(TextWriter writer)
         {
             await InternalSaveAsync(writer).ConfigureAwait(false);
-            writer.Flush();
+            await writer.FlushAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -434,12 +434,12 @@ namespace IniFile
             {
                 foreach (MinorIniItem minorItem in section.Items)
                     await writer.WriteLineAsync(minorItem.ToString()).ConfigureAwait(false);
-                writer.WriteLine(section.ToString());
+                await writer.WriteLineAsync(section.ToString()).ConfigureAwait(false);
                 foreach (Property property in section)
                 {
                     foreach (MinorIniItem minorItem in property.Items)
                         await writer.WriteLineAsync(minorItem.ToString()).ConfigureAwait(false);
-                    writer.WriteLine(property.ToString());
+                    await writer.WriteLineAsync(property.ToString()).ConfigureAwait(false);
                 }
             }
 
@@ -465,9 +465,9 @@ namespace IniFile
         [SuppressMessage("Major Code Smell", "S1066:Collapsible \"if\" statements should be merged", Justification = "<Pending>")]
         public void Format(IniFormatOptions options = null)
         {
-            options = options ?? IniFormatOptions.Default;
+            options ??= IniFormatOptions.Default;
 
-            for (int s = 0; s < this.Count; s++)
+            for (int s = 0; s < Count; s++)
             {
                 Section section = this[s];
 
@@ -477,7 +477,7 @@ namespace IniFile
                 // Insert blank line between sections, if specified by options
                 if (options.EnsureBlankLineBetweenSections)
                 {
-                    if (s > 0 && (!section.Items.Any() || !(section.Items[0] is BlankLine)))
+                    if (s > 0 && (section.Items.Count == 0 || !(section.Items[0] is BlankLine)))
                         section.Items.Insert(0, new BlankLine());
                 }
 
@@ -494,7 +494,7 @@ namespace IniFile
                     // Insert blank line between properties, if specified
                     if (options.EnsureBlankLineBetweenProperties)
                     {
-                        if (p > 0 && (!property.Items.Any() || !(property.Items[0] is BlankLine)))
+                        if (p > 0 && (property.Items.Count == 0 || !(property.Items[0] is BlankLine)))
                             property.Items.Insert(0, new BlankLine());
                     }
 
@@ -545,7 +545,7 @@ namespace IniFile
         /// <summary>
         ///     Global configuration for the framework.
         /// </summary>
-        public static readonly IniGlobalConfig Config = new IniGlobalConfig();
+        public static readonly IniGlobalConfig Config = new();
     }
 
     public sealed partial class Ini : KeyedCollection<string, Section>
@@ -554,7 +554,7 @@ namespace IniFile
         {
             get
             {
-                if (key == null)
+                if (key is null)
                     throw new ArgumentNullException(nameof(key));
 
                 IEqualityComparer<string> comparer = GetEqualityComparer(_settings);
@@ -569,14 +569,14 @@ namespace IniFile
 
         protected override string GetKeyForItem(Section item)
         {
-            if (item == null)
+            if (item is null)
                 throw new ArgumentNullException(nameof(item));
             return item.Name;
         }
 
         private static IEqualityComparer<string> GetEqualityComparer(IniLoadSettings settings)
         {
-            settings = settings ?? IniLoadSettings.Default;
+            settings ??= IniLoadSettings.Default;
             return settings.CaseSensitive ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
         }
     }

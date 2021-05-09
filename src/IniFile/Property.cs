@@ -1,7 +1,7 @@
 ﻿#region --- License & Copyright Notice ---
 /*
 IniFile Library for .NET
-Copyright (c) 2018 Jeevan James
+Copyright (c) 2018-2021 Jeevan James
 All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,6 @@ limitations under the License.
 */
 #endregion
 
-using System.Diagnostics;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -29,11 +28,8 @@ namespace IniFile
     /// <summary>
     ///     Represents a property object in an INI.
     /// </summary>
-    public sealed partial class Property : MajorIniItem, IPaddedItem<PropertyPadding>
+    public sealed class Property : MajorIniItem, IPaddedItem<PropertyPadding>
     {
-        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private PropertyValue _value;
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="Property"/> class.
         /// </summary>
@@ -53,11 +49,7 @@ namespace IniFile
         /// <summary>
         ///     The value of the property.
         /// </summary>
-        public PropertyValue Value
-        {
-            get => _value;
-            set => _value = value;
-        }
+        public PropertyValue Value { get; set; }
 
         /// <summary>
         ///     The symbol used to denote the end of a multi-line value.
@@ -67,25 +59,25 @@ namespace IniFile
         /// <summary>
         ///     Padding details of this <see cref="Property"/>.
         /// </summary>
-        public PropertyPadding Padding { get; } = new PropertyPadding();
+        public PropertyPadding Padding { get; } = new();
 
         /// <inheritdoc/>
         public override string ToString()
         {
             string[] lines = NewLinePattern.Split(Value.ToString());
             if (lines.Length == 1)
-                return $"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}{Value}{Padding.Right.ToString()}";
+                return $"{Padding.Left}{Name}{Padding.InsideLeft}={Padding.InsideRight}{Value}{Padding.Right}";
 
             string eot = string.IsNullOrEmpty(MultiLineEndOfText) || MultiLineEndOfText.Trim().Length == 0
                 ? "EOT" : MultiLineEndOfText.Trim();
             var sb = new StringBuilder();
-            sb.AppendLine($"{Padding.Left.ToString()}{Name}{Padding.InsideLeft.ToString()}={Padding.InsideRight.ToString()}<<{eot}");
+            sb.AppendLine($"{Padding.Left}{Name}{Padding.InsideLeft}={Padding.InsideRight}<<{eot}");
             foreach (string line in lines)
                 sb.AppendLine(line);
             sb.AppendLine(eot);
             return sb.ToString();
         }
 
-        private static readonly Regex NewLinePattern = new Regex(@"\r\n|\r|\n");
+        private static readonly Regex NewLinePattern = new(@"\r\n|\r|\n");
     }
 }

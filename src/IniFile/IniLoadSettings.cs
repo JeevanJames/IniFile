@@ -1,7 +1,7 @@
 ﻿#region --- License & Copyright Notice ---
 /*
 IniFile Library for .NET
-Copyright (c) 2018 Jeevan James
+Copyright (c) 2018-2021 Jeevan James
 All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,13 +75,13 @@ namespace IniFile
         /// <summary>
         ///     Default settings to use to load INI data.
         /// </summary>
-        public static IniLoadSettings Default { get; }= new IniLoadSettings();
+        public static IniLoadSettings Default { get; }= new();
 
         /// <summary>
         ///     Preconfigured settings to use if you plan to only read from the INI file without making
         ///     changes and saving.
         /// </summary>
-        public static IniLoadSettings ReadOnly { get; } = new IniLoadSettings
+        public static IniLoadSettings ReadOnly { get; } = new()
         {
             IgnoreBlankLines = true,
             IgnoreComments = true

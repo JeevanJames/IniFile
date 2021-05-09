@@ -6,20 +6,3 @@ updates:
     interval: daily
     time: "23:30"
   open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: SonarAnalyzer.CSharp
-    versions:
-    - 8.17.0.26580
-    - 8.18.0.27296
-    - 8.19.0.28253
-    - 8.20.0.28934
-  - dependency-name: Microsoft.NET.Test.Sdk
-    versions:
-    - 16.8.3
-    - 16.9.1
-  - dependency-name: Moq
-    versions:
-    - 4.16.0
-  - dependency-name: Roslynator.Analyzers
-    versions:
-    - 3.0.0

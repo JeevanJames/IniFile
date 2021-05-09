@@ -1,7 +1,7 @@
 ﻿#region --- License & Copyright Notice ---
 /*
 IniFile Library for .NET
-Copyright (c) 2018 Jeevan James
+Copyright (c) 2018-2021 Jeevan James
 All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,10 +40,12 @@ namespace IniFile
         /// <summary>
         ///     Padding details of this <see cref="BlankLine"/>.
         /// </summary>
-        public Padding Padding { get; } = new Padding();
+        public Padding Padding { get; } = new();
 
         /// <inheritdoc/>
-        public override string ToString() =>
-            Padding.Left.ToString();
+        public override string ToString()
+        {
+            return Padding.Left.ToString();
+        }
     }
 }

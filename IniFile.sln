@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1DC9EAB0-885D-4551-BD75-48C72B52575C}"
 EndProject
@@ -13,9 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IniFile.Tests", "tests\IniF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7113BA74-EBBD-40C8-B6C1-48D73935851C}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		.gitignore = .gitignore
 		DEVELOPER.md = DEVELOPER.md
-		IniFile.licenseheader = IniFile.licenseheader
+		IniFile.sln.licenseheader = IniFile.sln.licenseheader
 		LICENSE = LICENSE
 		logo.png = logo.png
 		README.md = README.md

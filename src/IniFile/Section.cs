@@ -1,7 +1,7 @@
 ﻿#region --- License & Copyright Notice ---
 /*
 IniFile Library for .NET
-Copyright (c) 2018 Jeevan James
+Copyright (c) 2018-2021 Jeevan James
 All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@ limitations under the License.
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 using IniFile.Items;
 
@@ -50,17 +49,19 @@ namespace IniFile
         /// <summary>
         ///     Padding details of this <see cref="Section"/>.
         /// </summary>
-        public SectionPadding Padding { get; } = new SectionPadding();
+        public SectionPadding Padding { get; } = new();
 
         /// <inheritdoc/>
-        public override string ToString() =>
-            $"{Padding.Left.ToString()}[{Padding.InsideLeft.ToString()}{Name}{Padding.InsideRight.ToString()}]{Padding.Right.ToString()}";
+        public override string ToString()
+        {
+            return $"{Padding.Left}[{Padding.InsideLeft}{Name}{Padding.InsideRight}]{Padding.Right}";
+        }
     }
 
     public sealed partial class Section : IList<Property>
     {
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-        private readonly List<Property> _properties = new List<Property>();
+        private readonly List<Property> _properties = new();
 
         public Property this[int index]
         {
@@ -77,12 +78,12 @@ namespace IniFile
         {
             get
             {
-                Property property = _properties.FirstOrDefault(p => p.Name == name);
-                return property != null ? property.Value : PropertyValue.Empty;
+                Property property = _properties.Find(p => p.Name == name);
+                return property?.Value ?? PropertyValue.Empty;
             }
             set
             {
-                Property property = _properties.FirstOrDefault(p => p.Name == name);
+                Property property = _properties.Find(p => p.Name == name);
                 if (property == null)
                 {
                     property = new Property(name, value);
@@ -110,34 +111,44 @@ namespace IniFile
             _properties.Clear();
         }
 
-        public bool Contains(Property item) =>
-            _properties.Contains(item);
+        public bool Contains(Property item)
+        {
+            return _properties.Contains(item);
+        }
 
         public void CopyTo(Property[] array, int arrayIndex)
         {
             _properties.CopyTo(array, arrayIndex);
         }
 
-        public IEnumerator<Property> GetEnumerator() =>
-            _properties.GetEnumerator();
+        public IEnumerator<Property> GetEnumerator()
+        {
+            return _properties.GetEnumerator();
+        }
 
-        public int IndexOf(Property item) =>
-            _properties.IndexOf(item);
+        public int IndexOf(Property item)
+        {
+            return _properties.IndexOf(item);
+        }
 
         public void Insert(int index, Property item)
         {
             _properties.Insert(index, item);
         }
 
-        public bool Remove(Property item) =>
-            _properties.Remove(item);
+        public bool Remove(Property item)
+        {
+            return _properties.Remove(item);
+        }
 
         public void RemoveAt(int index)
         {
             _properties.RemoveAt(index);
         }
 
-        IEnumerator IEnumerable.GetEnumerator() =>
-            _properties.GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _properties.GetEnumerator();
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿#region --- License & Copyright Notice ---
 /*
 IniFile Library for .NET
-Copyright (c) 2018 Jeevan James
+Copyright (c) 2018-2021 Jeevan James
 All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,7 +46,7 @@ namespace IniFile
         public Comment(string text)
         {
             Text = text;
-            CommentChar = (Ini.Config.HashForComments.Allow && Ini.Config.HashForComments.IsDefault)
+            CommentChar = Ini.Config.HashForComments.Allow && Ini.Config.HashForComments.IsDefault
                 ? CommentChar.Hash
                 : CommentChar.Semicolon;
         }
@@ -65,13 +65,13 @@ namespace IniFile
         /// <summary>
         ///     Padding details of this <see cref="Comment"/>.
         /// </summary>
-        public CommentPadding Padding { get; } = new CommentPadding();
+        public CommentPadding Padding { get; } = new();
 
         /// <inheritdoc/>
         public override string ToString()
         {
             char commentChar = CommentChar == CommentChar.Semicolon ? ';' : '#';
-            return $"{Padding.Left.ToString()}{commentChar}{Padding.Inside.ToString()}{Text}{Padding.Right.ToString()}";
+            return $"{Padding.Left}{commentChar}{Padding.Inside}{Text}{Padding.Right}";
         }
     }
 
